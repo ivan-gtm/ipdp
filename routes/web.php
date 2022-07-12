@@ -2,16 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\IPDPController;
+Route::get('/ipdp', [IPDPController::class, 'index'])->name('ipdp.home');
+Route::get('/ipdp/login', [IPDPController::class, 'login'])->name('ipdp.login');
+Route::get('/ipdp/recupera-contrasena', [IPDPController::class, 'recuperaContrasena'])->name('ipdp.recupera_contrasena');
+Route::get('/ipdp/consulta-indigena', [IPDPController::class, 'consultaIndigena'])->name('ipdp.consulta_indigena');
+Route::get('/ipdp/registra-cedula', [IPDPController::class, 'registraCedula'])->name('ipdp.registra_cedula');
 
 Route::get('/', function () {
     return view('welcome');

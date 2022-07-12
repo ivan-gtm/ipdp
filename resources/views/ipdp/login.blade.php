@@ -1334,6 +1334,10 @@
                     <div class="col-md-8 col-lg-6 col-xl-5">
                         <div class="card mt-4">
 
+
+<form method="POST" action="/login">
+@csrf
+
                             <div class="card-body p-4">
                                 <!-- <div class="text-center mt-2">
                                     <h5 class="text-primary">Welcome Back !</h5>
@@ -1344,7 +1348,7 @@
 
                                         <div class="mb-3">
                                             <label for="username" class="form-label">Usuario</label>
-                                            <input type="text" class="form-control" id="username"
+                                            <input name="email" type="text" class="form-control" id="username"
                                                 placeholder="Ingresa usuario">
                                         </div>
 
@@ -1354,7 +1358,7 @@
                                             </div>
                                             <label class="form-label" for="password-input">Contraseña</label>
                                             <div class="position-relative auth-pass-inputgroup mb-3">
-                                                <input type="password" class="form-control pe-5"
+                                                <input name="password" type="password" class="form-control pe-5"
                                                     placeholder="Ingresa contraseña" id="password-input">
                                                 <button
                                                     class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
@@ -1395,6 +1399,10 @@
                                     </form>
                                 </div>
                             </div>
+
+</form>
+
+
                             <!-- end card body -->
                         </div>
                         <!-- end card -->

@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>Expedición de actas certificadas digitales del estado civil de las personas</title>
-    <meta name="description" content="Portal de la Ciudad de México donde podrás consultar el listado de trámites y servicios disponibles">
+    <title>Registro de Cédulas o Formatos de Participación Ciudadana</title>
+    <meta name="description" content="Portal de la Ciudad de México donde podrás realizar el registro de Cédulas o Formatos de Participación Ciudadana">
     <meta name="keywords" content="CDMX, Trámites, Servicios, Ciudad de México">
 
 
@@ -21,7 +21,7 @@
     <meta property="og:url" content="https://www.cdmx.gob.mx">
     <meta property="og:type" content="website">
     <meta property="og:title" content="CDMX - Portal de Trámites y Servicios">
-    <meta property="og:description" content="Portal de la Ciudad de México donde podrás consultar el listado de trámites y servicios disponibles">
+    <meta property="og:description" content="Portal de la Ciudad de México donde podrás realizar el registro de Cédulas o Formatos de Participación Ciudadana">
     <meta property="og:image" content="https://cdmx.gob.mx/resources/img/img_redes.png">
     <meta property="og:image:height" content="734">
     <meta property="og:image:width" content="907">
@@ -29,7 +29,7 @@
 
     <meta property="twitter:url" content="https://www.cdmx.gob.mx">
     <meta name="twitter:title" content="CDMX - Portal de Trámites y Servicios">
-    <meta name="twitter:description" content="Portal de la Ciudad de México donde podrás consultar el listado de trámites y servicios disponibles">
+    <meta name="twitter:description" content="Portal de la Ciudad de México donde podrás realizar el registro de Cédulas o Formatos de Participación Ciudadana">
     <meta name="twitter:image" content="https://cdmx.gob.mx/resources/img/img_redes.png">
     <meta name="robots" content="all">
 
@@ -41,6 +41,7 @@
         .btn-primary {
             background-color: #9f2442;
             border-color: #9f2442;
+            padding: 14px 0px;
         }
         
         body {
@@ -327,6 +328,11 @@
                 border-width: .2rem;
             }
         }
+
+        .btn:hover{
+            background-color: #f4295a;
+            border-color: #f4295a;
+        }
     </style>
 </head>
 
@@ -346,13 +352,13 @@
                                 <div class="flex-8 ">
                                     <div class="flex flex-wrap card-container yellow-container " style="float:right !important;">
                                         <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
-                                            <a href="https://cdmx.gob.mx/" class="ui-link ui-widget menu-header-principal" target="_blank">Seguimiento a Folios</a>
+                                            <a href="/buscar_folio.html" class="ui-link ui-widget menu-header-principal">Seguimiento a Folios</a>
                                         </div>
                                         <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
-                                            <a href="https://siapem.cdmx.gob.mx/" class="ui-link ui-widget menu-header" target="_blank">Preguntas Frecuentes</a>
-                                        </div>
-                                        <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
-                                            <a href="{{ route('ipdp.login') }}" class="ui-link ui-widget menu-header">Login</a>
+                                            <a href="/login.html" class="btn btn-sm btn-outline-primary mr-1" data-icon="fa-sign-in-alt"><i class="fa fa-sign-in-alt"></i> 
+                                                <i class="fa fa-sign-in"></i>
+                                                Ingresar
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -377,7 +383,7 @@
                 </div>
 
                 <div class="col-12 text-center" style="background-color: #00312d; color: white; padding: 15px;">
-                    <div class="container" style="background-color: #00312d; color: white;">CÉDULA PARA LA PRESENTACIÓN DE RECOMENDACIONES, OPINIONES O PROPUESTAS A LOS PROYECTOS DEL PLAN GENERAL DE DE SARROLLO Y DEL PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL. AMBOS DE LA CIUDAD DE MÉXICO</div>
+                    <div class="container" style="background-color: #00312d; color: white;">CÉDULA PARA LA PRESENTACIÓN DE RECOMENDACIONES, OPINIONES O PROPUESTAS A LOS PROYECTOS DEL PLAN GENERAL DE DESARROLLO Y DEL PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL. AMBOS DE LA CIUDAD DE MÉXICO</div>
                 </div>
                 <!-- <div class="col-12 p-3 text-center">
                     <h4>Consultar estado de solicitud</h4>
@@ -431,51 +437,50 @@
         <div class="row">
             <div class="col-12">
                 <div class="bd-example">
-                    <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-                            <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
-                            <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
-                        </ol>
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img class="d-block w-100" src="https://via.placeholder.com/900x200.png" alt="First slide" />
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>AVISOS GENERALES</h5>
-                                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <img class="d-block w-100" src="https://via.placeholder.com/900x200.png" alt="Second slide" />
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>Second slide label</h5>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <img class="d-block w-100" src="https://via.placeholder.com/900x200.png" alt="Third slide" />
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>Third slide label</h5>
-                                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-                                </div>
-                            </div>
+                    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
+                        <div class="carousel-indicators">
+                          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
                         </div>
-                        <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
+                        <div class="carousel-inner">
+                          <div class="carousel-item active">
+                            <img class="d-block w-100" src="https://via.placeholder.com/1100x400.png/bc955c/fff" alt="First slide" />
+                            <div class="carousel-caption d-none d-md-block">
+                              <h5>First slide label</h5>
+                              <p>Some representative placeholder content for the first slide.</p>
+                            </div>
+                          </div>
+                          <div class="carousel-item">
+                            <img class="d-block w-100" src="https://via.placeholder.com/1100x400.png/00312d/fff" alt="Second slide" />
+                            <div class="carousel-caption d-none d-md-block">
+                              <h5>Second slide label</h5>
+                              <p>Some representative placeholder content for the second slide.</p>
+                            </div>
+                          </div>
+                          <div class="carousel-item">
+                            <img class="d-block w-100" src="https://via.placeholder.com/1100x400.png/9f2442/fff" alt="Third slide" />
+                            <div class="carousel-caption d-none d-md-block">
+                              <h5>Third slide label</h5>
+                              <p>Some representative placeholder content for the third slide.</p>
+                            </div>
+                          </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                 </div>
             </div>
 
             <div class="col-6">
-                
-                <div class="row">
-                    <div class="col-12 text-center">
+                <div class="row" style="background-color: rgb(236, 236, 236);padding: 46px 0px;border-radius: 10px;margin: 10px;margin-bottom: 70px;">
+                    <div class="col-12 text-center" style="padding-bottom: 30px;">
                         <h3 class="text-center">REGISTRO DE CEDULA</h3>
                         Presenta tus Recomendaciones, Opiniones o Propuestas y participa en la consulta ciudadana que la CDMX te ofrece. 
                         <br>
@@ -483,14 +488,14 @@
                     </div>
                     <div class="col-8 offset-md-2">
                         <div class="d-grid col-12">
-                            <a class="btn btn-primary" href="{{ route('ipdp.registra_cedula') }}">REGISTRAR CEDULA</a>
+                            <a class="btn btn-primary" href="/registro_cedula.html">REGISTRAR CEDULA</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-6">
-                <div class="row">
-                    <div class="col-12 text-center">
+                <div class="row" style="background-color: rgb(236, 236, 236); padding: 32px 0px; border-radius: 10px; margin: 10px;margin-bottom: 70px;">
+                    <div class="col-12 text-center" style="padding-bottom: 17px;">
                         <h3>SEGUIMIENTO DE FOLIOS</h3>
                         Si ya tienes un folio capturado.
                         <br>
@@ -498,8 +503,9 @@
                     </div>
                     <div class="col-8 offset-md-2">
                         <div class="d-grid col-12">
-                            <input class="form-control" type="text" placeholder="Ingresa el numero de folio">
-                            <button class="btn btn-primary" type="button">CONSULTAR</button>
+                            <input class="form-control" type="number" placeholder="Ingresa el numero de folio" style="margin-bottom: 10px; padding: 15px;">
+                            <!-- <button class="btn btn-primary" type="button">CONSULTAR</button> -->
+                            <a class="btn btn-primary" href="/seguimiento_folios.html">CONSULTAR</a>
                         </div>
                     </div>
                 </div>
@@ -587,14 +593,19 @@
     </div>
     <!-- </div> -->
 
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <script>
-        const myCarouselElement = document.querySelector('#carouselExampleCaptions')
-        const carousel = new bootstrap.Carousel(myCarouselElement, {
-            interval: 2000
-        })
+        const carousel = new bootstrap.Carousel('#carouselExampleCaptions')
+        // const myCarouselElement = document.querySelector('#carouselExampleCaptions')
+        // const carousel = new bootstrap.Carousel(myCarouselElement, {
+        //     interval: 2000
+        // })
+        
     </script>
 </body>
 

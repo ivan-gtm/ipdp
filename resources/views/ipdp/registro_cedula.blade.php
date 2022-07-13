@@ -6,19 +6,9 @@
     <meta name="description"
         content="Portal de la Ciudad de México donde podrás consultar el listado de trámites y servicios disponibles">
     <meta name="keywords" content="CDMX, Trámites, Servicios, Ciudad de México">
-
-
-
-
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
-
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
     <meta property="og:url" content="https://www.cdmx.gob.mx">
     <meta property="og:type" content="website">
     <meta property="og:title" content="CDMX - Portal de Trámites y Servicios">
@@ -35,18 +25,13 @@
         content="Portal de la Ciudad de México donde podrás consultar el listado de trámites y servicios disponibles">
     <meta name="twitter:image" content="https://cdmx.gob.mx/resources/img/img_redes.png">
     <meta name="robots" content="all">
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    
-        <link type="text/css" rel="stylesheet" href="{{asset('css/ipdp.css')}}" />
+
+    <link type="text/css" rel="stylesheet" href="{{asset('css/ipdp.css')}}" />
 
     <style>
-        .btn-primary {
-            background-color: #9f2442;
-            border-color: #9f2442;
-        }
-
         body {
             background-color: #f2f3f7
         }
@@ -69,7 +54,8 @@
                             <div class="flex-row">
                                 <div class="flex-4">
                                     <a href="/index.html" class="ui-link ui-widget">
-                                        <img src="https://plazapublica.cdmx.gob.mx/assets/logo-d832e68a4bf0d893f62b192a2ab8233761432beb589c74ae807353bdb515df2d.svg" style="float: left;" class="img-header pt-1">
+                                        <img src="https://plazapublica.cdmx.gob.mx/assets/logo-d832e68a4bf0d893f62b192a2ab8233761432beb589c74ae807353bdb515df2d.svg"
+                                            style="float: left;" class="img-header pt-1">
                                     </a>
                                 </div>
                                 <div class="flex-8 ">
@@ -77,14 +63,16 @@
                                         style="float:right !important;">
                                         <div
                                             class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
-                                            <a href="https://cdmx.gob.mx/"
-                                                class="ui-link ui-widget menu-header-principal"
+                                            <a href="index.html" class="ui-link ui-widget menu-header-principal"
                                                 target="_blank">Seguimiento a Folios</a>
                                         </div>
                                         <div
                                             class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
-                                            <a href="https://siapem.cdmx.gob.mx/" class="ui-link ui-widget menu-header"
-                                                target="_blank">Preguntas Frecuentes</a>
+                                            <a href="login.html" class="btn btn-sm btn-outline-primary mr-1"
+                                                data-icon="fa-sign-in-alt"><i class="fa fa-sign-in-alt"></i>
+                                                <i class="fa fa-sign-in"></i>
+                                                Ingresar
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -93,7 +81,7 @@
                         <div class="col-1 ZeroPadding-Bottom">&nbsp;</div>
                     </div>
 
-                    <div id="formHeader:idGridMenuRespon"
+                    <!-- <div id="formHeader:idGridMenuRespon"
                         class="ui-panelgrid ui-widget ui-grid-col-12 ZeroPadding-Right menu-responsive"
                         style="margin: 0; width: 100%; text-align: right;">
                         <div id="formHeader:idGridMenuRespon_content"
@@ -112,13 +100,13 @@
                                             class="ui-button-text ui-c"></span></button></div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
 
                 <div class="col-12 text-center" style="background-color: #00312d; color: white; padding: 15px;">
                     <div class="container" style="background-color: #00312d; color: white;">CÉDULA PARA LA PRESENTACIÓN
-                        DE RECOMENDACIONES, OPINIONES O PROPUESTAS A LOS PROYECTOS DEL PLAN GENERAL DE DE SARROLLO Y DEL
+                        DE RECOMENDACIONES, OPINIONES O PROPUESTAS A LOS PROYECTOS DEL PLAN GENERAL DE DESARROLLO Y DEL
                         PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL. AMBOS DE LA CIUDAD DE MÉXICO</div>
                 </div>
                 <!-- <div class="col-12 p-3 text-center">
@@ -187,144 +175,184 @@
         <div class="row">
             <div class="col-12">
                 <strong>
-                    Instrucciones: Todos los campos marcados con (*) son obligatorios.
+                    Instrucciones: Todos los campos marcados con (<label class="label-red">*</label>) son obligatorios.
                 </strong>
             </div>
             <div class="col-12">
                 <div class="bd-example">
                     <nav>
                         <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
-                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
-                                type="button" role="tab" aria-controls="nav-home" aria-selected="false"
-                                tabindex="-1">Datos Generales</button>
-                            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+                            <button class="nav-link active" id="nav-datos-generales-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-registro-cedula" type="button" role="tab" aria-controls="nav-registro-cedula"
+                                aria-selected="false" tabindex="-1">Datos Generales</button>
+                            
+                            <button class="nav-link" id="nav-instrumento-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact"
-                                aria-selected="true">Instrumento</button>
-                            <button class="nav-link" id="nav-opinion-tab" data-bs-toggle="tab"
+                                aria-selected="true" tabindex="1">Instrumento</button>
+
+                            <!-- <button class="nav-link" id="nav-opinion-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-opinion" type="button" role="tab" aria-controls="nav-opinion"
-                                aria-selected="true">Opinion</button>
-                            <button class="nav-link" id="nav-ticket-finalizo-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-ticket-finalizo" type="button" role="tab" aria-controls="nav-ticket-finalizo"
-                                aria-selected="true">Solicitud Enviada</button>
-                            <button class="nav-link" id="nav-eje-tematico-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-eje-tematico" type="button" role="tab"
-                                aria-controls="nav-eje-tematico" aria-selected="true">Ejes Tematicos</button>
+                                aria-selected="true" >Opinion</button> -->
                         </div>
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
-                            tabindex="0">
-                            <form class="row g-3">
+                        <div class="tab-pane fade active show" id="nav-registro-cedula" role="tabpanel"
+                            aria-labelledby="nav-datos-generales-tab" tabindex="0">
+                            <form class="row g-3 needs-validation" id="formDatosGenerales" novalidate>
                                 <div class="col-md-12">
                                     <strong>PERSONA PARTICIPANTE:</strong>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="inputNombres" class="form-label">Nombres</label>
-                                    <input type="text" class="form-control" id="inputNombres">
+                                    <label for="inputNombre" class="form-label">Nombre(s)</label>
+                                    <label class="label-red">*</label>
+                                    <div class="input-group has-validation">
+                                        <input type="text" class="form-control" id="inputNombre" name="inputNombre" required>
+                                        <div class="invalid-feedback">
+                                            Por favor especifique un nombre.
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="inputPrimerApellido" class="form-label">Primer Apellido</label>
-                                    <input type="text" class="form-control" id="inputPrimerApellido">
+                                    <label class="label-red">*</label>
+                                    <div class="input-group has-validation">
+                                        <input type="text" class="form-control" id="inputPrimerApellido" name="inputPrimerApellido" required>
+                                        <div class="invalid-feedback">
+                                            Por favor especifique su primer apellido.
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="inputSegundoApellido" class="form-label">Segundo Apellido</label>
-                                    <input type="text" class="form-control" id="inputSegundoApellido">
+                                    <label class="label-red">*</label>
+                                    <div class="input-group has-validation">
+                                        <input type="text" class="form-control" id="inputSegundoApellido" name="inputSegundoApellido" required>
+                                        <div class="invalid-feedback">
+                                            Por favor especifique su segundo apellido.
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- --- -->
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label for="inputEdad" class="form-label">Edad</label>
-                                        <input type="number" class="form-control" id="inputEdad">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="inputOcupacion" class="form-label">Ocupación</label>
-                                        <select class="form-control" name="inputOcupacion" autocomplete="on">
-                                            <option>Profesionista</option>
-                                            <option>Empleado en sector privado</option>
-                                            <option>Tecnico</option>
-                                            <option>Trabajador de la educación</option>
-                                            <option>Artista</option>
-                                            <option>Servidor Publico</option>
-                                            <option>Trabajador de actividades en campo</option>
-                                            <option>Trabajador de actividades administrativas</option>
-                                            <option>Comerciante</option>
-                                            <option>Trabajador Ambulante</option>
-                                            <option>Estudiante</option>
-                                            <option>Trabajador de servicios domesticos</option>
-                                            <option>Ama de casa</option>
-                                            <option>Trabajadores de proteccion y vigilancia/fuerzas armadas</option>
-                                            <option>Desempleo</option>
-                                            <option>Otros</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="inputEmail4" class="form-label">Generos</label>
-                                        <div class="bd-example-snippet bd-code-snippet">
-                                            <div class="bd-example">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="radioGenero" id="radioGenero" value="hombre">
-                                                    <label class="form-check-label" for="radioGenero">Hombre</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="radioGenero" id="radioGenero" value="mujer">
-                                                    <label class="form-check-label" for="radioGenero">Mujer</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="radioGenero" id="radioGenero" value="otro">
-                                                    <label class="form-check-label" for="radioGenero">Otro</label>
-                                                </div>
+                                        <div class="input-group has-validation">
+                                            <input type="number" class="form-control" id="inputEdad" name="inputEdad" max="99" min="1" required>
+                                            <div class="invalid-feedback">
+                                                Por favor especifique su edad.
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- --- -->
+                                    <div class="col-md-4">
+                                        <label for="inputOcupacion" class="form-label">Ocupación</label>
+                                        <label class="label-red">*</label>
+                                        <div class="input-group has-validation">
+                                            <select class="form-control" id="inputOcupacion" name="inputOcupacion" required>
+                                                <option></option>
+                                                <option>Profesionista</option>
+                                                <option>Empleado en sector privado</option>
+                                                <option>Tecnico</option>
+                                                <option>Trabajador de la educación</option>
+                                                <option>Artista</option>
+                                                <option>Servidor Publico</option>
+                                                <option>Trabajador de actividades en campo</option>
+                                                <option>Trabajador de actividades administrativas</option>
+                                                <option>Comerciante</option>
+                                                <option>Trabajador Ambulante</option>
+                                                <option>Estudiante</option>
+                                                <option>Trabajador de servicios domesticos</option>
+                                                <option>Ama de casa</option>
+                                                <option>Trabajadores de proteccion y vigilancia/fuerzas armadas</option>
+                                                <option>Desempleo</option>
+                                                <option>Otros</option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Por favor seleccione su ocupación.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="optionGenero" class="form-label">Género</label>
+                                        <br>
+                                        <input class="form-check-input" type="radio" name="optionGenero"
+                                            id="generoHombre" value="Hombre" required>
+                                        <label class="form-check-label" for="generoHombre">Hombre</label>
+                                        
+                                        <input class="form-check-input" type="radio" name="optionGenero"
+                                            id="generoMujer" value="Mujer" required>
+                                        <label class="form-check-label" for="generoMujer">Mujer</label>
+
+                                        <input class="form-check-input" type="radio" name="optionGenero"
+                                            id="generoOtro" value="Otro" required>
+                                        <label class="form-check-label" for="generoOtro">Otro</label>
+                                        
+                                        <div class="invalid-feedback">Seleccione su genero</div>
+                                    </div>
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label for="inputEmail" class="form-label">Correo</label>
-                                            <input type="email" class="form-control" id="inputEmail">
+                                            <label for="inputCorreo" class="form-label">Correo electrónico</label>
+                                            <label class="label-red">*</label>
+                                            <div class="input-group has-validation">
+                                                <input type="email" class="form-control" id="inputCorreo" name="inputCorreo" required>
+                                                <div class="invalid-feedback">
+                                                    Por favor indique su correo electrónico.
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="inputTelefonoCelular" class="form-label">Telefono celular</label>
-                                            <input type="number" class="form-control" id="inputTelefonoCelular">
+                                            <label for="inputCelular" class="form-label">Teléfono celular</label>
+                                            <input type="number" class="form-control" id="inputCelular" name="inputCelular" pattern="[0-9]{10}" required>
                                         </div>
                                     </div>
                                     <div class="row" style="padding-top: 30px;">
                                         <div class="col-md-12 text-center">
-                                            <h4>Domicilio Opcional</h4>
+                                            <h4>Domicilio</h4>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label for="inputCalle" class="form-label">Calle</label>
-                                            <input type="text" class="form-control" id="inputCalle">
+                                            <input type="text" class="form-control" id="inputCalle" name="inputCalle">
                                         </div>
                                         <div class="col-md-3">
-                                            <label for="inputNumeroExterior" class="form-label">Numero Exterior</label>
-                                            <input type="text" class="form-control" id="inputNumeroExterior">
+                                            <label for="inputNumExterior" class="form-label">Numero Exterior</label>
+                                            <input type="text" class="form-control" id="inputNumExterior" name="inputNumExterior">
                                         </div>
                                         <div class="col-md-3">
-                                            <label for="inputNumeroInterior" class="form-label">Numero Interior</label>
-                                            <input type="text" class="form-control" id="inputNumeroInterior">
+                                            <label for="inputNumInterior" class="form-label">Numero Interior</label>
+                                            <input type="text" class="form-control" id="inputNumInterior" name="inputNumInterior">
                                         </div>
                                         <div class="col-md-3">
-                                            <label for="inputManzanaLote" class="form-label">Manzana / Lote</label>
-                                            <input type="text" class="form-control" id="inputManzanaLote">
+                                            <label for="inputManzana" class="form-label">Manzana / Lote</label>
+                                            <input type="text" class="form-control" id="inputManzana" name="inputManzana">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label for="inputColoniaPueblo" class="form-label">Colonia, Pueblo o Barrio</label>
-                                            <input type="text" class="form-control" id="inputColoniaPueblo">
+                                            <label for="inputCP" class="form-label">Código Postal</label>
+                                            <label class="label-red">*</label>
+                                            <div class="input-group has-validation">
+                                                <input type="text" class="form-control" id="inputCP" name="inputCP" required>
+                                                <div class="invalid-feedback">
+                                                    Por favor especifique su codigo postal.
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="inputCodigoPostal" class="form-label">Codigo Postal</label>
-                                            <input type="text" class="form-control" id="inputCodigoPostal">
+                                            <label for="inputAlcaldia" class="form-label">Alcaldía</label>
+                                            <div class="input-group has-validation">
+                                                <input type="text" class="form-control" id="inputAlcaldia" name="inputAlcaldia" required>
+                                                <div class="invalid-feedback">
+                                                    Por favor especifique su alcaldía.
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="inputAlcaldia" class="form-label">Alcaldia</label>
-                                            <input type="text" class="form-control" id="inputAlcaldia">
+                                            <label for="inputColonia" class="form-label">Colonia, Pueblo o Barrio</label>
+                                            <input type="text" class="form-control" id="inputColonia" name="inputColonia">
                                         </div>
                                     </div>
 
@@ -333,686 +361,327 @@
                                         <div class="col-md-12">
                                             <table class="table">
                                                 <tr>
-                                                    <td class="text-center" style="background-color: #9f2442; color: white;">
-                                                        <strong>SI USTED ES REPRESENTANTE DE UNA ORGANIZACIÓN PUBLICA, PRIVADA O SOCIAL, SELECCIONE LA OPCION QUE CORRESPONDA</strong>
+                                                    <td class="text-center"
+                                                        style="background-color: #9f2442; color: white;">
+                                                        <strong>SI USTED ES REPRESENTANTE DE UNA ORGANIZACIÓN PUBLICA,
+                                                            PRIVADA O SOCIAL, SELECCIONE LA OPCION QUE
+                                                            CORRESPONDA</strong>
                                                     </td>
                                                 </tr>
                                             </table>
                                         </div>
                                         <div class="col-6 offset-md-3">
-                                            <table class="table" border="1">
-                                                <tr>
-                                                    <td>
-                                                        <label class="form-check-label" for="radioTipoOrganizacion">ORGANIZACIÓN SOCIAL</label>
-                                                    </td>
-                                                    <td>
-                                                        <input class="form-check-input" type="radio" name="radioTipoOrganizacion" id="radioTipoOrganizacion" value="organizacion_social">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="form-check-label" for="radioTipoOrganizacion">ACADEMIA</label>
-                                                    </td>
-                                                    <td>
-                                                        <input class="form-check-input" type="radio" name="radioTipoOrganizacion" id="radioTipoOrganizacion" value="academia">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="form-check-label" for="radioTipoOrganizacion">CÁMARA O COLEGIO</label>
-                                                    </td>
-                                                    <td>
-                                                        <input class="form-check-input" type="radio" name="radioTipoOrganizacion" id="radioTipoOrganizacion" value="camara_o_colegio">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="form-check-label" for="radioTipoOrganizacion">ALCALDIAS O ADMINISTRACIÓN PUBLICA</label>
-                                                    </td>
-                                                    <td>
-                                                        <input class="form-check-input" type="radio" name="radioTipoOrganizacion" id="radioTipoOrganizacion" value="alcaldias_o_administracion_publica">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="form-check-label" for="radioTipoOrganizacion">OTRA</label>
-                                                    </td>
-                                                    <td>
-                                                        <input class="form-check-input" type="radio" name="radioTipoOrganizacion" id="radioTipoOrganizacion" value="otra">
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            <div class="input-group has-validation">
+                                                <table class="table" style="border: 1px solid black;">
+                                                    <tr>
+                                                        <td>
+                                                            <label class="form-check-label" for="representanteOrganizacion">
+                                                                ORGANIZACIÓN SOCIAL
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-check-input" type="radio"
+                                                                name="optionRepresentante" id="representanteOrganizacion" value="ORGANIZACIÓN SOCIAL" required>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="form-check-label"
+                                                                for="representanteAcademia">ACADEMIA</label>
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-check-input" type="radio"
+                                                                name="optionRepresentante" id="representanteAcademia" value="ACADEMIA" required>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="form-check-label" for="representanteCamaraColegio">
+                                                                CÁMARA O COLEGIO
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-check-input" type="radio"
+                                                                name="optionRepresentante" id="representanteCamaraColegio" value="CÁMARA O COLEGIO" required>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="form-check-label" for="representanteAlcaldia">
+                                                                ALCALDÍA O ADMINISTRACIÓN PUBLICA
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-check-input" type="radio"
+                                                                name="optionRepresentante" id="representanteAlcaldia" value="ALCALDÍA O ADMINISTRACIÓN PUBLICA" required>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="form-check-label" for="representanteOtra">OTRA</label>
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-check-input" type="radio"
+                                                                name="optionRepresentante" id="representanteOtra" value="OTRA" required>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                
+                                                <div class="invalid-feedback">Por favor seleccione el tipo de representante.</div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                <button class="btn btn-primary" type="button">Siguiente</button>
+                                                <button class="btn btn-primary" type="button"
+                                                    id="btnDatosGeneralesSig">Siguiente</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        <div class="tab-pane" id="nav-contact" role="tabpanel"
-                            aria-labelledby="nav-contact-tab" tabindex="0">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <table class="table">
-                                        <tr>
-                                            <td class="text-center" style="background-color: #9f2442; color: white;">
-                                                <strong>INSTRUMENTO DE PLANEACIÓN A OBSERVAR</strong>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-10 offset-md-1">
-                                    <div class="row g-3">
-                                        <div class="col-md-12">
-                                            <table class="table table-striped-columns table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">
-                                                            &nbsp;
-                                                        </th>
-                                                        <th scope="col">VIGENCIA</th>
-                                                        <th scope="col">APLICACIÓN</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            <label for="inlineRadio1">
-                                                                PLAN GENERAL DE DESARROLLO DE LA CIUDAD DE MÉXICO
-                                                            </label>
-                                                        </th>
-                                                        <td>
-                                                            <label for="inlineRadio1">
-                                                                2020-2040
-                                                            </label>
-                                                        </td>
-                                                        <td>
-                                                            <input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            <label for="inlineRadio2">
-                                                                PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA CIUDAD DE
-                                                                MÉXICO
-                                                            </label>
-                                                        </th>
-                                                        <td>
-                                                            <label for="inlineRadio2">
-                                                                2020-2035
-                                                            </label>
-                                                        </td>
-                                                        <td>
-                                                            <input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            <label for="inlineRadio3">
-                                                                AMBOS INSTRUMENTOS
-                                                            </label>
-                                                        </th>
-                                                        <td>-</td>
-                                                        <td>
-                                                            <input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio3" value="option2">
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                        <div class="tab-pane" id="nav-contact" role="tabpanel" aria-labelledby="nav-instrumento-tab"
+                            tabindex="0">
+                            <form class="row g-3 needs-validation" id="formInstrumento" novalidate>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table">
+                                            <tr>
+                                                <td class="text-center" style="background-color: #9f2442; color: white;">
+                                                    <strong>INSTRUMENTO DE PLANEACIÓN A OBSERVAR</strong>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <table class="table">
-                                        <tr>
-                                            <td class="text-center" style="background-color: #9f2442; color: white;">
-                                                <strong>OPINIÓN, RECOMENDACIÓN PROPUESTA* Transcribir el texto de la opinión o propuesta:</strong>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-10 offset-md-1">
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-floating">
-                                                        <textarea class="form-control" placeholder="Leave a comment here"
-                                                            id="floatingTextarea"></textarea>
-                                                        <label for="floatingTextarea">Comments</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    SE ANEXAN DOCUMENTOS CON ESTA CEDULA*:
-                                                    SÍ <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                        id="inlineRadio1" value="option1">
-                                                    NO <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                        id="inlineRadio1" value="option1">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="row">
-                                                        <div class="col-8">
-                                                            INDIQUE NÚMERO DE DOCUMENTOS
-                                                        </div>
-                                                        <div class="col-4">
-                                                            <input class="form-control" type="number">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <table class="table">
-                                        <tr>
-                                            <td class="text-center" style="background-color: #9f2442; color: white;">
-                                                <strong>TIPO DE DOCUMENTOS</strong>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-10 offset-md-1">
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                <button class="btn btn-primary" type="button">Siguiente</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade show" id="nav-eje-tematico" role="tabpanel"
-                            aria-labelledby="nav-contact-tab" tabindex="0">
-                            <div class="row">
-                                <div class="col-10 offset-md-1">
-                                    <div class="row">
-
-                                        <div class="col-md-12">
-                                            <strong>Seleccione tipo de representante:</strong>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <table>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>1. Derecho a la Ciudad y planeación
-                                                                democrática</strong>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>a. Principios </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>b. Planeación democrática. </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>c. El Plan General de Desarrollo y el Programa General de
-                                                            Ordenamiento Territorial</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>2. Ciudad igualitaria (inclusión social)</strong>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>a. Personas de identidad indígena, afrodescendientes,
-                                                            migrantes y de minorías religiosas
-                                                        </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>b. Mujeres</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>c. Niñas, niños y adolescentes; personas jóvenes; y
-                                                            personas mayores</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>d. Personas con discapacidad</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>e. Personas LGBTTTIQA</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>f. Personas en situación de calle, privadas de su libertad
-                                                            y residentes en instituciones de
-                                                            asistencia social </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>3. Ciudad con equilibrio y ordenamiento territorial
-                                                                I (Hábitat)</strong>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>a. Patrimonio material, rural y urbano territorial b.
-                                                            Asentamientos irregulares</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>c. Espacio público y convivencia social </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>d. Vivienda y mercado inmobiliario </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>e. Equipamiento público</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>f. Servicios, infraestructura física y tecnológica</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>g. Sistema de movilidad, transporte y accesibilidad</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>h. Estructura territorial. Corredores, centralidades y
-                                                            fortalecimiento de pueblos, barrios y
-                                                            colonias</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>4. Ciudad con equilibrio y ordenamiento territorial
-                                                                II (Medio ambiente)</strong>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>a. Economía circular</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>b. Contaminación ambiental, tratamiento sustentable de
-                                                            residuos y desalojo de aguas
-                                                            servidas</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>c. Derecho al agua </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>d. Vulnerabilidad, resiliencia, prevención y mitigación de
-                                                            riesgos </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>e. Equilibrio ecológico y suelo de conservación </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>f. Bienestar animal</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>g. Cambio climático y transición energética</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <table>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>5. Ciudad de bienestar (Salud)</strong>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>a. Sistema de salud </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>b. Bienestar social y sistema de cuidados</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>c. Promoción de la salud. Nutrición, prevención y control
-                                                            de enfermedades</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>d. Recreación y deporte </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>6. Ciudad de derechos culturales </strong>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>a. Gestión cultural</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>b. Patrimonio histórico, cultural e inmaterial</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>c. Oferta y espacios culturales</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>7. Ciudad próspera, dinámica e innovadora
-                                                                (Economía) </strong>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>a. Innovación y desarrollo económico</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>b. Combate a la desigualdad y a la pobreza</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>c. Transformación de la actividad económica.
-                                                            Formalización y empleo </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>d. Desarrollo rural </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>e. Turismo </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>8. Ciudad en paz y con justicia </strong>
-                                                        </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>a. Garantía de los Derechos humanos</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>b. Seguridad ciudadana. Sistema policial, investigación y
-                                                            coordinación interinstitucional
-                                                        </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>c. Acceso a la justicia</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>d. Víctimas, violencia y maltrato</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>e. Prevención del delito </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>9. Ciudad educadora y basada en el conocimiento
-                                                            </strong>
-                                                        </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>a. Sistema educativo </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>b. Ciencia y tecnología </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>10. Democracia, gobierno honesto, cercano y buena
-                                                                administración</strong>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>a. Gobierno honesto, eficiente y austero </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>b. Transparencia y rendición de cuentas </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>c. Gobierno digital. Innovación en los servicios públicos
-                                                        </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>d. Coordinación metropolitana</td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>e. Gasto público eficiente e ingresos públicos sostenibles
-                                                        </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>f. Administración pública moderna y eficiente </td>
-                                                        <td><input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>g. Participación ciudadana</td>
-                                                        <td>
-                                                            <input class="form-check-input" type="radio"
-                                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                                value="option1">
+                                    <div class="col-10 offset-md-1">
+                                        <div class="row g-3">
+                                            <div class="col-md-12">
+                                                <!-- <div class="invalid-feedback" style="display: block;">
+                                                    Es requerido que describa la propuesta.
+                                                </div> -->
+                                                <table class="table table-striped-columns table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">
+                                                                &nbsp;
+                                                            </th>
+                                                            <th scope="col">VIGENCIA</th>
+                                                            <th scope="col">APLICACIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <label for="opcion2020-2040">
+                                                                    PLAN GENERAL DE DESARROLLO DE LA CIUDAD DE MÉXICO
+                                                                </label>
+                                                            </th>
+                                                            <td>
+                                                                <label for="opcion2020-2040">
+                                                                    2020-2040
+                                                                </label>
                                                             </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                            <button class="btn btn-primary" type="button">Siguiente</button>
+                                                            <td>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="opcionInstrumentoObservar" id="opcion2020-2040"
+                                                                    value="opcion2020-2040" required>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <label for="opcion2020-2035">
+                                                                    PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA
+                                                                    CIUDAD DE
+                                                                    MÉXICO
+                                                                </label>
+                                                            </th>
+                                                            <td>
+                                                                <label for="opcion2020-2035">
+                                                                    2020-2035
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="opcionInstrumentoObservar" id="opcion2020-2035"
+                                                                    value="opcion2020-2035" required>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <label for="opcionAmbos">
+                                                                    AMBOS INSTRUMENTOS
+                                                                </label>
+                                                            </th>
+                                                            <td>-</td>
+                                                            <td>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="opcionInstrumentoObservar" id="opcionAmbos"
+                                                                    value="opcionAmbos" required>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                    <div class="col-md-12">
+                                        <table class="table">
+                                            <tr>
+                                                <td class="text-center" style="background-color: #9f2442; color: white;">
+                                                    <strong>OPINIÓN, RECOMENDACIÓN PROPUESTA* Transcribir el texto de la
+                                                        opinión o propuesta:</strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-10 offset-md-1">
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="mb-3">
+                                                            <label for="textComentarios" class="form-label">Comentarios</label>
+                                                            <textarea class="form-control" id="textComentarios" name="textComentarios" placeholder="Por favor deje algún comentario" required></textarea>
+                                                            <div class="invalid-feedback">
+                                                                Es requerido que describa la propuesta.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <hr>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="opcionIncluyeDocumentos" class="form-label">SE ANEXAN DOCUMENTOS CON ESTA CEDULA:</label>
+                                                        
+                                                        SÍ <input class="form-check-input" type="radio"
+                                                            name="opcionIncluyeDocumentos" id="conDocumentos" value="conDocumentos" required>
+                                                        NO <input class="form-check-input" type="radio"
+                                                            name="opcionIncluyeDocumentos" id="sinDocumentos" value="sinDocumentos" required>
 
-                        </div>
-                        <div class="tab-pane fade show" id="nav-opinion" role="tabpanel"
-                            aria-labelledby="nav-contact-tab" tabindex="0">
-                            <div class="row">
-                                <div class="col-md-10 offset-md-1">
-                                    <table class="table">
-                                        <tr>
-                                            <td>
-                                                OTORGA SU CONSENTIMIENTO PARA EL TRATAMIENTO DE LOS DATOS PERSONALES*
-                                            </td>
-                                            <td>
-                                                SI <input class="form-check-input" type="radio"
-                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                value="option1">
-                                                NO <input class="form-check-input" type="radio"
-                                                name="inlineRadioOptions" id="inlineRadio1"
-                                                value="option1">
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-10 offset-md-1">
-                                    <table border="1">
-                                        <tr>
-                                            <td class="text-center">
-                                                <strong>AVISO DE PRIVACIDAD SIMPLIFICADO</strong>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                El Instituto de Planeación Democrática y Prospectiva de la Ciudad de México a través de Jefatura de Unidad
-                                                Departamental de Transparencia, es la responsable del tratamiento de los datos personales que nos
-                                                proporcione, los cuales serán protegidos en términos de la Ley General de Protección de Datos Personales en
-                                                Posesión de Sujetos Obligados, la Ley de Protección de Datos Personales en Posesión de Sujetos Obligados de
-                                                la Ciudad de México y demás normatividad que resulte aplicable.
-                                                Los datos personales que recabemos serán utilizados con la finalidad de registrar y gestionar las
-                                                recomendaciones, opiniones o propuestas según corresponda en la formulación del contenidos de los
-                                                instrumentos de planeación relacionados con la Consulta Indígena a Pueblos y Barrios Originarios y
-                                                Comunidades Indígenas Residentes de la Ciudad de México, así como la Consulta Pública. Los datos personales
-                                                no serán transferidos a terceros.
-                                                Usted podrá manifestar la negativa al tratamiento de sus datos personales directamente ante la Jefatura de
-                                                Unidad Departamental de Transparencia, ubicada en San Lorenzo No. 712, col. Del Valle Sur, Alcaldía Benito
-                                                Juárez, C.P. 03100, Ciudad de México con número telefónico 55-51-30-21-00.
-                                                El Aviso de Privacidad Integral podrá consultarse a través del siguiente enlace electrónico
-                                                atención.ipdp@cdmx.gob.mx, al correo electrónico: atención.ipdp@cdmx.gob.mx o acudir directamente a la
-                                                Jefatura de Unidad Departamental de Transparencia.
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-10 offset-md-1">
-                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <button class="btn btn-primary" type="button">Siguiente</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade show" id="nav-ticket-finalizo" role="tabpanel"
-                            aria-labelledby="nav-ticket-finalizo" tabindex="0">
-                            <div class="row">
-                                <div class="col-10 offset-md-1">
-                                    <div class="row">
-                                        <div class="col-md-8 offset-md-2 text-center">
-                                            <img class="img-fluid" src="imgs/solicitud_enviada.png" width="200px">
-                                            <h1>Su solicitud ha sido enviada.</h1>
-                                            <h3>FOLIO: C-0000001</h3>
-                            
-                                            Para descargar su comprobante, por favor dar click en el
-                                            siguiente botón y su descarga comenzará en breve…
-                            
-                                            <div class="row">
-                                                <div class="col-12 pt-3">
-                                                    <button type="button" class="btn btn-outline-primary">DESCARGAR ARCHIVO</button>
+                                                        <div class="invalid-feedback">Especifique si se anexan documentos</div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="row">
+                                                            <div class="col-8">
+                                                                INDIQUE NÚMERO DE DOCUMENTOS
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <div class="input-group has-validation">
+                                                                    <input class="form-control" type="number" id="numeroDocumentos" name="numeroDocumentos" required>
+                                                                    <div class="invalid-feedback">Especifique numero de documentos</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <table class="table">
+                                            <tr>
+                                                <td class="text-center" style="background-color: #9f2442; color: white;">
+                                                    <strong>TIPO DE DOCUMENTOS</strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="Tipo de documentos"
+                                                id="floatingTextarea"></textarea>
+                                            <label for="floatingTextarea">Tipo de documentos</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-10 offset-md-1">
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                    <button type="button" class="btn btn-primary" 
+                                                        id="btnAtrasDatosGenerales">Atras</button>
+                                                    <button type="button" class="btn btn-primary" id="btnInstrumento">xFinalizar Registro</button>
+                                                    
+                                                    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#modalConsentimientoDatos">Finalizar Registro</button> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalConsentimientoDatos" tabindex="-1" aria-labelledby="modalConsentimientoDatosLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <form class="row g-3 needs-validation" id="conocimientoDatosPersonales" novalidate>
+                                        <div class="modal-header">
+                                            <div class="row">
+                                                <div class="col-sm-10">OTORGA SU CONSENTIMIENTO PARA EL TRATAMIENTO DE LOS
+                                                    DATOS PERSONALES<label class="label-red">*</label></div>
+                                                <div class="col-sm-2">
+                                                    SI <input class="form-check-input" type="radio"
+                                                        name="conocimientoDatosPersonales" id="conocimientoDatosPersonales" value="si" required>
+                                                    NO <input class="form-check-input" type="radio"
+                                                        name="conocimientoDatosPersonales" id="conocimientoDatosPersonales" value="no" required>
+                                                    
+                                                    <div class="invalid-feedback">De favor, indique si otorga su consentimiento.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <p class="text-center"><strong>AVISO DE PRIVACIDAD SIMPLIFICADO</strong>
+                                                    </p>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <p class="text-justify">
+                                                        El Instituto de Planeación Democrática y Prospectiva de la Ciudad de
+                                                        México a través de Jefatura de Unidad
+                                                        Departamental de Transparencia, es la responsable del tratamiento de
+                                                        los datos personales que nos
+                                                        proporcione, los cuales serán protegidos en términos de la Ley
+                                                        General de Protección de Datos Personales en
+                                                        Posesión de Sujetos Obligados, la Ley de Protección de Datos
+                                                        Personales en Posesión de Sujetos Obligados de
+                                                        la Ciudad de México y demás normatividad que resulte aplicable.
+                                                        Los datos personales que recabemos serán utilizados con la finalidad
+                                                        de registrar y gestionar las
+                                                        recomendaciones, opiniones o propuestas según corresponda en la
+                                                        formulación del contenidos de los
+                                                        instrumentos de planeación relacionados con la Consulta Indígena a
+                                                        Pueblos y Barrios Originarios y
+                                                        Comunidades Indígenas Residentes de la Ciudad de México, así como la
+                                                        Consulta Pública. Los datos personales
+                                                        no serán transferidos a terceros.
+                                                        Usted podrá manifestar la negativa al tratamiento de sus datos
+                                                        personales directamente ante la Jefatura de
+                                                        Unidad Departamental de Transparencia, ubicada en San Lorenzo No.
+                                                        712, col. Del Valle Sur, Alcaldía Benito
+                                                        Juárez, C.P. 03100, Ciudad de México con número telefónico
+                                                        55-51-30-21-00.
+                                                        El Aviso de Privacidad Integral podrá consultarse a través del
+                                                        siguiente enlace electrónico
+                                                        atención.ipdp@cdmx.gob.mx, al correo electrónico:
+                                                        atención.ipdp@cdmx.gob.mx o acudir directamente a la
+                                                        Jefatura de Unidad Departamental de Transparencia.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-primary" id="finalizarRegistro">wFinalizar Registro</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -1120,6 +789,103 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
         crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script type="text/javascript">
+        const instrumentoTabEl = document.querySelector('button#nav-instrumento-tab');
+        const datosGeneralesTabEl = document.querySelector('button#nav-datos-generales-tab');
+        const modalConsentimientoDatos = new bootstrap.Modal(document.getElementById('modalConsentimientoDatos'));
+
+
+        const instrumentoTab = new bootstrap.Tab(instrumentoTabEl);
+        const datosGeneralesTab = new bootstrap.Tab(datosGeneralesTabEl);
+        
+        // instrumentoTab.show();
+
+        $("#btnDatosGeneralesSig").click(function(){
+            if(!$("#formDatosGenerales")[0].checkValidity()){
+                $("#formDatosGenerales")[0].classList.add('was-validated')
+            } else {
+                instrumentoTab.show();
+            }
+        });
+        
+        $("#btnInstrumento").click(function(){
+            console.warn("Hello");
+            if(!$("#formInstrumento")[0].checkValidity()){
+                $("#formInstrumento")[0].classList.add('was-validated');
+            } else if( !$("#formDatosGenerales")[0].checkValidity() ){
+                $("#formDatosGenerales")[0].classList.add('was-validated');
+                datosGeneralesTab.show();
+            } else {
+                modalConsentimientoDatos.show();
+            }
+        });
+        
+        $("#btnAtrasDatosGenerales").click(function(){
+            datosGeneralesTab.show();
+        });
+        
+        $("#finalizarRegistro").click(function(){
+            if(!$("#conocimientoDatosPersonales")[0].checkValidity()){
+                $("#conocimientoDatosPersonales")[0].classList.add('was-validated');
+            } else {
+                registrarCedula();
+            }
+        });
+
+        function registrarCedula(){
+            
+            var inputNombre = $('[name="inputNombre"]').val();
+            var inputPrimerApellido = $('[name="inputPrimerApellido"]').val();
+            var inputSegundoApellido = $('[name="inputSegundoApellido"]').val();
+            var inputEdad = $('[name="inputEdad"]').val();
+            var inputOcupacion = $('[name="inputOcupacion"]').val();
+            var optionGenero = $('[name="optionGenero"]').val();
+            var inputCorreo = $('[name="inputCorreo"]').val();
+            var inputCelular = $('[name="inputCelular"]').val();
+            var inputCalle = $('[name="inputCalle"]').val();
+            var inputNumExterior = $('[name="inputNumExterior"]').val();
+            var inputNumInterior = $('[name="inputNumInterior"]').val();
+            var inputManzana = $('[name="inputManzana"]').val();
+            var inputCP = $('[name="inputCP"]').val();
+            var inputAlcaldia = $('[name="inputAlcaldia"]').val();
+            var inputColonia = $('[name="inputColonia"]').val();
+            var optionRepresentante = $('[name="optionRepresentante"]').val();
+            var opcionInstrumentoObservar = $('[name="opcionInstrumentoObservar"]').val();
+            var textComentarios = $('[name="textComentarios"]').val();
+            var opcionIncluyeDocumentos = $('[name="opcionIncluyeDocumentos"]').val();
+            var numeroDocumentos = $('[name="numeroDocumentos"]').val();
+            var conocimientoDatosPersonales = $('[name="conocimientoDatosPersonales"]').val();
+
+            var requestBody = {
+                "inputNombre": inputNombre,
+                "inputPrimerApellido": inputPrimerApellido,
+                "inputSegundoApellido": inputSegundoApellido,
+                "inputEdad": inputEdad,
+                "inputOcupacion": inputOcupacion,
+                "optionGenero": optionGenero,
+                "inputCorreo": inputCorreo,
+                "inputCelular": inputCelular,
+                "inputCalle": inputCalle,
+                "inputNumExterior": inputNumExterior,
+                "inputNumInterior": inputNumInterior,
+                "inputManzana": inputManzana,
+                "inputCP": inputCP,
+                "inputAlcaldia": inputAlcaldia,
+                "inputColonia": inputColonia,
+                "optionRepresentante": optionRepresentante,
+                "opcionInstrumentoObservar": opcionInstrumentoObservar,
+                "textComentarios": textComentarios,
+                "opcionIncluyeDocumentos": opcionIncluyeDocumentos,
+                "numeroDocumentos": numeroDocumentos,
+                "conocimientoDatosPersonales": conocimientoDatosPersonales,
+            };
+            
+            console.warn(requestBody);
+
+        }
+    </script>
 </body>
 
 </html>

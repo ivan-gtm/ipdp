@@ -25,6 +25,7 @@
         content="Portal de la Ciudad de México donde podrás consultar el listado de trámites y servicios disponibles">
     <meta name="twitter:image" content="https://cdmx.gob.mx/resources/img/img_redes.png">
     <meta name="robots" content="all">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
@@ -179,6 +180,17 @@
                 </strong>
             </div>
             <div class="col-12">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </div>
+            <div class="col-12">
                 <div class="bd-example">
                     <nav>
                         <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
@@ -198,7 +210,7 @@
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade active show" id="nav-registro-cedula" role="tabpanel"
                             aria-labelledby="nav-datos-generales-tab" tabindex="0">
-                            <form class="row g-3 needs-validation" id="formDatosGenerales" novalidate>
+                            <form class="row g-3 needs-validation" id="formDatosGenerales" novalidate action="{{ route('cedula.store') }}">
                                 <div class="col-md-12">
                                     <strong>PERSONA PARTICIPANTE:</strong>
                                 </div>
@@ -556,9 +568,9 @@
                                                         <label for="opcionIncluyeDocumentos" class="form-label">SE ANEXAN DOCUMENTOS CON ESTA CEDULA:</label>
                                                         
                                                         SÍ <input class="form-check-input" type="radio"
-                                                            name="opcionIncluyeDocumentos" id="conDocumentos" value="conDocumentos" required>
+                                                            name="opcionIncluyeDocumentos" id="conDocumentos" value="1" required>
                                                         NO <input class="form-check-input" type="radio"
-                                                            name="opcionIncluyeDocumentos" id="sinDocumentos" value="sinDocumentos" required>
+                                                            name="opcionIncluyeDocumentos" id="sinDocumentos" value="0" required>
 
                                                         <div class="invalid-feedback">Especifique si se anexan documentos</div>
                                                     </div>
@@ -859,30 +871,56 @@
             var conocimientoDatosPersonales = $('[name="conocimientoDatosPersonales"]').val();
 
             var requestBody = {
-                "inputNombre": inputNombre,
-                "inputPrimerApellido": inputPrimerApellido,
-                "inputSegundoApellido": inputSegundoApellido,
-                "inputEdad": inputEdad,
-                "inputOcupacion": inputOcupacion,
-                "optionGenero": optionGenero,
-                "inputCorreo": inputCorreo,
-                "inputCelular": inputCelular,
-                "inputCalle": inputCalle,
-                "inputNumExterior": inputNumExterior,
-                "inputNumInterior": inputNumInterior,
-                "inputManzana": inputManzana,
-                "inputCP": inputCP,
-                "inputAlcaldia": inputAlcaldia,
-                "inputColonia": inputColonia,
-                "optionRepresentante": optionRepresentante,
-                "opcionInstrumentoObservar": opcionInstrumentoObservar,
-                "textComentarios": textComentarios,
-                "opcionIncluyeDocumentos": opcionIncluyeDocumentos,
-                "numeroDocumentos": numeroDocumentos,
-                "conocimientoDatosPersonales": conocimientoDatosPersonales,
+                "nombre": inputNombre,
+                "primer_apellido": inputPrimerApellido,
+                "segundo_apellido": inputSegundoApellido,
+                "edad": inputEdad,
+                "ocupacion": inputOcupacion,
+                "genero": optionGenero,
+                "correo": inputCorreo,
+                "celular": inputCelular,
+                "calle": inputCalle,
+                "num_exterior": inputNumExterior,
+                "num_interior": inputNumInterior,
+                "manzana": inputManzana,
+                "cp": inputCP,
+                "alcaldia": inputAlcaldia,
+                "colonia": inputColonia,
+                "representante": optionRepresentante,
+                "instrumento_observar": opcionInstrumentoObservar,
+                "comentarios": textComentarios,
+                "incluye_documentos": opcionIncluyeDocumentos,
+                "numero_documentos": numeroDocumentos,
+                "conocimiento_datos_personales": conocimientoDatosPersonales,
             };
             
             console.warn(requestBody);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('cedula.store') }}",
+                method: "POST",
+                data: requestBody,
+                dataType: 'json'
+            })
+            .done(function( data, textStatus, jqXHR ) {
+                if ( console && console.log ) {
+                    console.log( "La solicitud se ha completado correctamente." );
+                }
+                
+                window.location.href = "{{ route('ipdp.confirmacion') }}";
+                // $("#status").text("READY!");
+            })
+            .fail(function( jqXHR, textStatus, errorThrown ) {
+                if ( console && console.log ) {
+                    console.log( "La solicitud a fallado: " +  textStatus);
+                }
+                $("#status").text("FAIL REQUEST");
+            });
 
         }
     </script>

@@ -17,7 +17,6 @@ class CedulaController extends Controller
     function registraCedula(){
         // Genera Numero de Folio
         $numero_folio = mt_rand(100000, 999999);
-        
         return view('ipdp.registro_cedula', [
             'numero_folio' => $numero_folio
         ]);
@@ -61,7 +60,7 @@ class CedulaController extends Controller
          ){
 
                 $folder = date("Y").'/'.date("m").'/'.$folio;
-                $path = Storage::put($folder, $request->file);
+                $path = Storage::disk('public')->put($folder, $request->file);
 
                 $cedula_archivo = CedulaArchivo::create([
                     'folio' => $folio,
@@ -78,8 +77,7 @@ class CedulaController extends Controller
 
     public function buscarCedula(Request $request){
         
-        // echo "<pre>";
-        // print_r($request->all());
+        
         $cedula = null;
         if( isset($request) AND isset($request->numero_folio) ) {
             // Valida que folio se componga de 6 digitos
@@ -90,13 +88,14 @@ class CedulaController extends Controller
         } elseif( isset($request) AND isset($request->correo) ) {
             $cedula = DB::table('cedulas')->where('correo','=',$request->correo)->first();
         }
-        
-        // print_r( $cedula );
 
+        $archivos = DB::table('cedula_archivo')->where('folio','=',$request->numero_folio)->get();
+        
         if($cedula != null){
             return view('ipdp.seguimiento_folios', [
                 'numero_folio' => $cedula->folio,
-                'cedula' => $cedula
+                'cedula' => $cedula,
+                'archivos' => $archivos
             ]);
         } else {
             abort(404);

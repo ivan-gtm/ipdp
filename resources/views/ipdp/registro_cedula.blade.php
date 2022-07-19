@@ -27,19 +27,14 @@
     <meta name="robots" content="all">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="folio" content="{{ $numero_folio }}" />
-
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"> -->
     
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
     <link type="text/css" rel="stylesheet" href="{{asset('css/ipdp.css')}}" />
-    <!-- 1. Add CSS to `<head>` -->
-    <!-- <link href="https://releases.transloadit.com/uppy/v2.12.3/uppy.min.css" rel="stylesheet"> -->
-    <link type="text/css" rel="stylesheet" href="{{asset('css/uppy.min.css')}}" rel="stylesheet" />
 
-    <!-- 2. Add JS before the closing `</body>` -->
+
+    <link type="text/css" rel="stylesheet" href="{{asset('css/uppy.min.css')}}" rel="stylesheet" />
     <script src="{{asset('css/uppy.min.js')}}"></script>
 
     <style>
@@ -91,27 +86,6 @@
                         </div>
                         <div class="col-1 ZeroPadding-Bottom">&nbsp;</div>
                     </div>
-
-                    <!-- <div id="formHeader:idGridMenuRespon"
-                        class="ui-panelgrid ui-widget ui-grid-col-12 ZeroPadding-Right menu-responsive"
-                        style="margin: 0; width: 100%; text-align: right;">
-                        <div id="formHeader:idGridMenuRespon_content"
-                            class="ui-panelgrid-content ui-widget-content ui-grid ui-grid-responsive">
-                            <div class="ui-grid-row">
-                                <div class="ui-panelgrid-cell ui-grid-col-4"><a href="https://www.cdmx.gob.mx"
-                                        class="ui-link ui-widget" target="_blank"><img
-                                            src="https://cdmx.gob.mx/resources/img/adip-header2.svg"
-                                            style="float: left;" class="img-header pt-1 menu-responsive"></a></div>
-                                <div class="ui-panelgrid-cell ui-grid-col-8"><button id="formHeader:j_idt38"
-                                        name="formHeader:j_idt38"
-                                        class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only menu-responsive claseButttonHeader"
-                                        onclick="PF('sidebar1').show()"
-                                        style="font-size: 25px; background-image: url(/resources/img/menu-mobile.svg); height: 24px; width: 27px; border: none; border-radius: 0;"
-                                        type="button" role="button" aria-disabled="false"><span
-                                            class="ui-button-text ui-c"></span></button></div>
-                            </div>
-                        </div>
-                    </div> -->
 
                 </div>
 
@@ -312,7 +286,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="inputCelular" class="form-label">Teléfono celular</label>
+                                            <label for="inputCelular" class="form-label">Teléfono celular (10 digitos)</label>
                                             <input type="number" class="form-control" id="inputCelular" name="inputCelular" pattern="[0-9]{10}" required>
                                         </div>
                                     </div>
@@ -580,8 +554,7 @@
                                                             </div>
                                                             <div class="col-4">
                                                                 <div class="input-group has-validation">
-                                                                    <input class="form-control" type="number" id="numeroDocumentos" name="numeroDocumentos" required>
-                                                                    <div class="invalid-feedback">Especifique numero de documentos</div>
+                                                                    <input class="form-control" type="number" id="numeroDocumentos" name="numeroDocumentos" value="0" disabled>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -693,7 +666,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Cerrar</button>
-                                            <button type="button" class="btn btn-primary" id="finalizarRegistro">wFinalizar Registro</button>
+                                            <button type="button" class="btn btn-primary" id="finalizarRegistro">Finalizar Registro</button>
                                         </div>
                                     </form>
                                 </div>
@@ -810,11 +783,11 @@
         const datosGeneralesTabEl = document.querySelector('button#nav-datos-generales-tab');
         const modalConsentimientoDatos = new bootstrap.Modal(document.getElementById('modalConsentimientoDatos'));
 
-
         const instrumentoTab = new bootstrap.Tab(instrumentoTabEl);
         const datosGeneralesTab = new bootstrap.Tab(datosGeneralesTabEl);
 
         var folio = $('meta[name="folio"]').attr("content");
+        var numero_documentos = 0;
         // instrumentoTab.show();
 
         $("#btnDatosGeneralesSig").click(function(){
@@ -826,12 +799,20 @@
         });
         
         $("#btnInstrumento").click(function(){
-            console.warn("Hello");
             if(!$("#formInstrumento")[0].checkValidity()){
                 $("#formInstrumento")[0].classList.add('was-validated');
+            
             } else if( !$("#formDatosGenerales")[0].checkValidity() ){
                 $("#formDatosGenerales")[0].classList.add('was-validated');
                 datosGeneralesTab.show();
+            
+            } else if( $('[name="opcionIncluyeDocumentos"]:checked').val() == 1 && numero_documentos == 0 ){
+                var element = '<div class="alert alert-danger" role="alert">';
+                element += 'Es requerido adjuntar por lo menos un archivo.';
+                element += '</div>';
+                
+                $("#notification-center").html("").append( element ).focus();
+
             } else {
                 modalConsentimientoDatos.show();
             }
@@ -1051,7 +1032,19 @@
             a.appendChild(document.createTextNode(fileName))
             li.appendChild(a)
 
-            document.querySelector(elForUploadedFiles).appendChild(li)
+            document.querySelector(elForUploadedFiles).appendChild(li);
+
+            numero_documentos = $('div.uploaded-files ol>li').length;
+            $('#numeroDocumentos').val( numero_documentos );
+            
+            console.log("numero_documentos");
+            console.log(numero_documentos);
+
+            // maxNumberOfFiles
+            if( numero_documentos == 3){
+                uppy.close();
+            }
+
         }
 
         
@@ -1067,7 +1060,9 @@
             },
             locale: ejemplo
         });
-        uppy.use(Uppy.DragDrop, { target: '.UppyDragDrop' })
+
+        uppy.use(Uppy.DragDrop, { target: '.UppyDragDrop' });
+
         uppy.use(Uppy.XHRUpload, {
                 limit: 10,
                 endpoint: '/subir-archivo/'+folio,
@@ -1078,20 +1073,16 @@
                 }
         });
 
-        uppy.use(Uppy.ProgressBar, { target: '.for-ProgressBar', hideAfterFinish: false })
+        uppy.use(Uppy.ProgressBar, { target: '.for-ProgressBar', hideAfterFinish: false });
 
         uppy.on('complete', (event) => {
             if(event.successful[0] !== undefined) {
                 console.info('Successful uploads:', event.successful)
                 this.payload = event.successful[0].response.body.path;
-
-                this.disabled = false;
             }
-
-            console.log(event);
         });
 
-        uppy.on('upload-success', onUploadSuccess('.uploaded-files ol'))
+        uppy.on('upload-success', onUploadSuccess('.uploaded-files ol'));
 
         uppy.on('upload-error', (file, error, response) => {
             

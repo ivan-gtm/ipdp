@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedbiginteger('folio');
+            $table->integer('status')->default('1');
             $table->string('primer_apellido');
             $table->string('nombre');
             $table->string('segundo_apellido');

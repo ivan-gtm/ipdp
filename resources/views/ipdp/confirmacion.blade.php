@@ -176,8 +176,9 @@
                                 <a class="btn btn-outline-primary" href="{{ route('cedula.pdf',[
                                         'numero_folio' => $numero_folio
                                     ]) }}">DESCARGAR ARCHIVO</a>
-                                <br>
-                                <br>
+                                <br><br>
+                                ó
+                                <br><br>
                                 <a class="btn" href="{{ route('ipdp.home') }}">Volver al Inicio</a>
                             </div>
                         </div>
@@ -265,18 +266,5 @@
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        
-    <script type="text/javascript">
-        $("#btnGralSig").on("click", function(){
-            if(!$("#frmGrales")[0].checkValidity()){
-                $("#frmGrales")[0].classList.add('was-validated')
-            }else{
-                $(".nav").find(".active").removeClass("active");
-                $("#nav-contact-tab").addClass("active");
-                $("#nav-home").hide();
-                $("#nav-contact").show();           
-            }
-        });
-    </script>
 </body>
 </html>

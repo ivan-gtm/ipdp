@@ -9,6 +9,7 @@ class Cedula extends Model
 {
     protected $fillable = [
         'folio',
+        'status',
         'nombre',
         'primer_apellido',
         'segundo_apellido',

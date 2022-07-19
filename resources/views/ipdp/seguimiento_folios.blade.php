@@ -176,6 +176,7 @@
             <div class="col-12 text-center">
                 Para dudas o aclaraciones contactanos con tu numero de folio a <a href="mailto:contacto_ipdp@cdmx.gob.mx">contacto_ipdp@cdmx.gob.mx</a>
             </div>
+            
             <div class="col-12">
                 <div class="row">
                     <div class="col-lg-12">
@@ -281,6 +282,19 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    
+                                    <br>
+                                    @if( sizeof($archivos) > 0 )
+                                        <h2 class="text-center">ARCHIVOS</h2>
+                                        <div class="col-12 text-center">
+                                            <ul>
+                                                @foreach ($archivos as $archivo)
+                                                    <li><a target="_blank" href="{{ asset('storage/'.$archivo->file_path) }}">FILE</a></li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+
                                     <div class="noresult" style="display: none">
                                         <div class="text-center">
                                             <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"

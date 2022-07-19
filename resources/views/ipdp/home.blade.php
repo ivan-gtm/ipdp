@@ -447,22 +447,22 @@
                           <div class="carousel-item active">
                             <img class="d-block w-100" src="https://via.placeholder.com/1100x400.png/bc955c/fff" alt="First slide" />
                             <div class="carousel-caption d-none d-md-block">
-                              <h5>First slide label</h5>
-                              <p>Some representative placeholder content for the first slide.</p>
+                              <h5>Noticia de Ejemplo 1</h5>
+                              <p>Contenido de ejempo para Slide 1.</p>
                             </div>
                           </div>
                           <div class="carousel-item">
                             <img class="d-block w-100" src="https://via.placeholder.com/1100x400.png/00312d/fff" alt="Second slide" />
                             <div class="carousel-caption d-none d-md-block">
-                              <h5>Second slide label</h5>
-                              <p>Some representative placeholder content for the second slide.</p>
+                                <h5>Noticia de Ejemplo 2</h5>
+                                <p>Contenido de ejempo para Slide 2.</p>
                             </div>
                           </div>
                           <div class="carousel-item">
                             <img class="d-block w-100" src="https://via.placeholder.com/1100x400.png/9f2442/fff" alt="Third slide" />
                             <div class="carousel-caption d-none d-md-block">
-                              <h5>Third slide label</h5>
-                              <p>Some representative placeholder content for the third slide.</p>
+                                <h5>Noticia de Ejemplo 3</h5>
+                                <p>Contenido de ejempo para Slide 3.</p>
                             </div>
                           </div>
                         </div>
@@ -479,7 +479,7 @@
             </div>
 
             <div class="col-6">
-                <div class="row" style="background-color: rgb(236, 236, 236);padding: 46px 0px;border-radius: 10px;margin: 10px;margin-bottom: 70px;">
+                <div class="row" style="background-color: rgb(236, 236, 236);padding: 109px 0px;border-radius: 10px;margin: 10px;margin-bottom: 70px;">
                     <div class="col-12 text-center" style="padding-bottom: 30px;">
                         <h3 class="text-center">REGISTRO DE CEDULA</h3>
                         Presenta tus Recomendaciones, Opiniones o Propuestas y participa en la consulta ciudadana que la CDMX te ofrece. 
@@ -494,21 +494,31 @@
                 </div>
             </div>
             <div class="col-6">
-                <div class="row" style="background-color: rgb(236, 236, 236); padding: 32px 0px; border-radius: 10px; margin: 10px;margin-bottom: 70px;">
-                    <div class="col-12 text-center" style="padding-bottom: 17px;">
-                        <h3>SEGUIMIENTO DE FOLIOS</h3>
-                        Si ya tienes un folio capturado.
-                        <br>
-                        Consulta en esta sección, el progreso de tu cedula.
-                    </div>
-                    <div class="col-8 offset-md-2">
-                        <div class="d-grid col-12">
-                            <input class="form-control" type="number" placeholder="Ingresa el numero de folio" style="margin-bottom: 10px; padding: 15px;">
-                            <!-- <button class="btn btn-primary" type="button">CONSULTAR</button> -->
-                            <a class="btn btn-primary" href="/seguimiento_folios.html">CONSULTAR</a>
+                <form method="POST" action="{{route('cedula.buscarCedula')}}">
+                    <div class="row" style="background-color: rgb(236, 236, 236); padding: 32px 0px; border-radius: 10px; margin: 10px;margin-bottom: 70px;">
+                        <div class="col-8 offset-md-2 text-center" style="padding-bottom: 17px;">
+                            <h3>SEGUIMIENTO DE FOLIOS</h3>
+                            Si ya tienes un folio capturado. Consulta en esta sección, el progreso de tu cedula.
+                                @csrf
+                                <input name="numero_folio" class="form-control" type="number" placeholder="Ingresa el numero de folio" style="margin-bottom: 10px; padding: 15px;">
+                        </div>
+                        <div class="col-8 offset-md-2 text-center">
+                            ó
+                        </div>
+
+                        <div class="col-8 offset-md-2">
+                            <label class="form-label" for="password-input">En caso de no recordar el folio, capture el correo electrónico registrado</label>
+                            <div class="position-relative auth-pass-inputgroup mb-3">
+                                <input type="email" class="form-control pe-5" id="correo" name="correo" placeholder="Ingresa tu correo electrónico" style="margin-bottom: 10px; padding: 15px;">
+                            </div>
+                        </div>
+                        <div class="col-8 offset-md-2">
+                            <div class="d-grid col-12">
+                                <button type="submit" class="btn btn-primary" type="button">CONSULTAR</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

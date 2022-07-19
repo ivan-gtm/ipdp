@@ -26,11 +26,21 @@
     <meta name="twitter:image" content="https://cdmx.gob.mx/resources/img/img_redes.png">
     <meta name="robots" content="all">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="folio" content="{{ $numero_folio }}" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"> -->
+    
+    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
     <link type="text/css" rel="stylesheet" href="{{asset('css/ipdp.css')}}" />
+    <!-- 1. Add CSS to `<head>` -->
+    <!-- <link href="https://releases.transloadit.com/uppy/v2.12.3/uppy.min.css" rel="stylesheet"> -->
+    <link type="text/css" rel="stylesheet" href="{{asset('css/uppy.min.css')}}" rel="stylesheet" />
+
+    <!-- 2. Add JS before the closing `</body>` -->
+    <script src="{{asset('css/uppy.min.js')}}"></script>
 
     <style>
         body {
@@ -173,6 +183,23 @@
     </div>
 
     <div class="container" style="padding: 30px 30px;">
+        <div class="row">
+            <div class="col-12">
+                <a href="{{ route('cedula.pdf') }}" target="_blank">PDF</a>
+            </div>
+        </div>
+
+        <div class="row">
+            
+            <div id="notification-center"></div>
+
+            <div class="UppyDragDrop"></div>
+            <div class="for-ProgressBar"></div>
+            <div class="uploaded-files">
+                <h5>Archivos cargados con exito a tu cedula:</h5>
+                <ol></ol>
+            </div>
+        </div>
         <div class="row">
             <div class="col-12">
                 <strong>
@@ -364,7 +391,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label for="inputColonia" class="form-label">Colonia, Pueblo o Barrio</label>
-                                            <input type="text" class="form-control" id="inputColonia" name="inputColonia">
+                                            <!-- <input type="text" class="form-control" id="inputColonia" name="inputColonia"> -->
+                                            <select class="form-control" name="inputColonia" id="inputColonia"></select>
                                         </div>
                                     </div>
 
@@ -498,7 +526,7 @@
                                                             <td>
                                                                 <input class="form-check-input" type="radio"
                                                                     name="opcionInstrumentoObservar" id="opcion2020-2040"
-                                                                    value="opcion2020-2040" required>
+                                                                    value="2020-2040" required>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -517,7 +545,7 @@
                                                             <td>
                                                                 <input class="form-check-input" type="radio"
                                                                     name="opcionInstrumentoObservar" id="opcion2020-2035"
-                                                                    value="opcion2020-2035" required>
+                                                                    value="2020-2035" required>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -530,7 +558,7 @@
                                                             <td>
                                                                 <input class="form-check-input" type="radio"
                                                                     name="opcionInstrumentoObservar" id="opcionAmbos"
-                                                                    value="opcionAmbos" required>
+                                                                    value="ambos" required>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -798,10 +826,10 @@
     </div>
     <!-- </div> -->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    <script src="{{asset('css/bootstrap.bundle.min.js')}}"
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
         crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{asset('css/jquery-3.6.0.min.js')}}"></script>
 
     <script type="text/javascript">
         const instrumentoTabEl = document.querySelector('button#nav-instrumento-tab');
@@ -811,7 +839,8 @@
 
         const instrumentoTab = new bootstrap.Tab(instrumentoTabEl);
         const datosGeneralesTab = new bootstrap.Tab(datosGeneralesTabEl);
-        
+
+        var folio = $('meta[name="folio"]').attr("content");
         // instrumentoTab.show();
 
         $("#btnDatosGeneralesSig").click(function(){
@@ -846,6 +875,58 @@
             }
         });
 
+        $( "#inputCP" ).change(function() {
+            var base_url = "{{ URL::to('/'); }}"+"/obtener-colonias/";
+            var codigo_postal = $( "#inputCP" ).val();
+            var codigo_postal_url = base_url + codigo_postal;
+            
+            console.warn("codigo_postal_url");
+            console.warn(codigo_postal_url);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: codigo_postal_url,
+                method: "GET"
+            })
+            .done(function( data, textStatus, jqXHR ) {
+                $('#inputColonia')
+                    .find('option')
+                    .remove()
+                    .end()
+                ;
+
+                if ( console && console.log ) {
+                    console.log( "La solicitud se ha completado correctamente." );
+                }
+                
+                if(typeof data.alcaldia != 'undefined' && data.alcaldia.length > 0){
+                    $('#inputAlcaldia').val(data.alcaldia);
+                }
+
+                if(typeof data.colonias != 'undefined' && data.colonias.length > 0){
+                    data.colonias.forEach(colonia => {
+                        $('#inputColonia').append($('<option>', {
+                            value: colonia.nombre,
+                            text: colonia.nombre
+                        }));
+                    });
+                }
+
+                console.log( data.alcaldia );
+                
+            })
+            .fail(function( jqXHR, textStatus, errorThrown ) {
+                if ( console && console.log ) {
+                    console.log( "La solicitud a fallado: " +  textStatus);
+                }
+                $("#status").text("FAIL REQUEST");
+            });
+        });
+
         function registrarCedula(){
             
             var inputNombre = $('[name="inputNombre"]').val();
@@ -871,6 +952,7 @@
             var conocimientoDatosPersonales = $('[name="conocimientoDatosPersonales"]').val();
 
             var requestBody = {
+                "folio": folio,
                 "nombre": inputNombre,
                 "primer_apellido": inputPrimerApellido,
                 "segundo_apellido": inputSegundoApellido,
@@ -912,7 +994,7 @@
                     console.log( "La solicitud se ha completado correctamente." );
                 }
                 
-                window.location.href = "{{ route('ipdp.confirmacion') }}";
+                window.location.href = "{{ route('ipdp.confirmacion',[numero_folio => $folio]) }}";
                 // $("#status").text("READY!");
             })
             .fail(function( jqXHR, textStatus, errorThrown ) {
@@ -923,6 +1005,173 @@
             });
 
         }
+    </script>
+    <script>
+        
+        console.log( "folio" );
+        console.log( folio );
+
+        var ejemplo = {
+            strings:{
+                addBulkFilesFailed:{
+                    0:"No se pudo agregar el archivo %{smart_count} debido a un error interno",
+                    1:"Error al agregar %{smart_count} archivos debido a errores internos"
+                },
+                youCanOnlyUploadX:{
+                    0:"Solo puede cargar %{smart_count} archivo",
+                    1:"Solo puede cargar %{smart_count} archivos"
+                },
+                youHaveToAtLeastSelectX:{
+                    0:"Tienes que seleccionar al menos %{smart_count} archivo",
+                    1:"Tienes que seleccionar al menos %{smart_count} archivos"
+                },
+                exceedsSize:"%{file} excede el tamaño máximo permitido de %{size}",
+                missingRequiredMetaField:"Faltan metacampos obligatorios",
+                missingRequiredMetaFieldOnFile:"Faltan metacampos obligatorios en %{fileName}",
+                inferiorSize:"Este archivo es más pequeño que el tamaño permitido de %{size}",
+                youCanOnlyUploadFileTypes:"Solo puedes subir: %{types}",
+                noMoreFilesAllowed:"No se pueden agregar más archivos",
+                noDuplicates:"No se puede agregar el archivo duplicado '%{fileName}', ya existe",
+                companionError:"Falló la conexión con Companion",
+                authAborted:"Autenticación cancelada",
+                companionUnauthorizeHint:"Para desautorizar su cuenta de %{provider}, vaya a %{url}",
+                failedToUpload:"Error al cargar %{file}",
+                noInternetConnection:"Sin conexión a Internet",
+                connectedToInternet:"Conectado a Internet",
+                noFilesFound:"No tienes archivos ni carpetas aquí",
+                selectX:{
+                    0:"Seleccione %{smart_count}",
+                    1:"Seleccione %{smart_count}"
+                },
+                allFilesFromFolderNamed:"Todos los archivos de la carpeta %{name}",
+                openFolderNamed:"Abrir carpeta %{name}",
+                cancel:"Cancelar",
+                logOut:"Cerrar sesión",
+                filter:"Filtrar",
+                resetFilter:"Reiniciar filtro",
+                loading:"Cargando...",
+                authenticateWithTitle:"Autentíquese con %{pluginName} para seleccionar archivos",
+                authenticateWith:"Conectarse a %{pluginName}",
+                signInWithGoogle:"Inicia sesión con Google",
+                searchImages:"Buscar imágenes",
+                enterTextToSearch:"Ingrese texto para buscar imágenes",
+                search:"Búsqueda",
+                emptyFolderAdded:"No se agregaron archivos de una carpeta vacía",
+                folderAlreadyAdded:"La carpeta \"%{folder}\" ya fue agregada",
+                folderAdded:{
+                    0:"Archivo %{smart_count} agregado de %{folder}",
+                    1:"Se agregaron %{smart_count} archivos de %{folder}"
+                }
+            }
+        };
+        const onUploadSuccess = (elForUploadedFiles) => (file, response) => {
+            console.log( response );
+
+            const url = response.uploadURL
+            const fileName = file.name
+
+            const li = document.createElement('li')
+            const a = document.createElement('a')
+            a.href = url
+            a.target = '_blank'
+            a.appendChild(document.createTextNode(fileName))
+            li.appendChild(a)
+
+            document.querySelector(elForUploadedFiles).appendChild(li)
+        }
+
+        // var uppy = new Uppy.Core()
+        // uppy.use(Uppy.Tus, { endpoint: '//tusd.tusdemo.net/files/' })
+        var uppy = new Uppy.Core({
+            debug: true,
+            autoProceed: true,
+            restrictions: {
+                maxFileSize: 2000000,
+                maxTotalFileSize: 4000000,
+                minNumberOfFiles: 1,
+                maxNumberOfFiles: 3,
+                allowedFileTypes: ['image/*', 'video/*', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf']
+            },
+            locale: ejemplo
+        });
+        uppy.use(Uppy.DragDrop, { target: '.UppyDragDrop' })
+        uppy.use(Uppy.XHRUpload, {
+                limit: 10,
+                endpoint: '/subir-archivo/'+folio,
+                formData: true,
+                fieldName: 'file',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // from <meta name="csrf-token" content="{{ csrf_token() }}">
+                }
+        });
+
+        uppy.use(Uppy.ProgressBar, { target: '.for-ProgressBar', hideAfterFinish: false })
+
+        uppy.on('complete', (event) => {
+            if(event.successful[0] !== undefined) {
+                console.info('Successful uploads:', event.successful)
+                this.payload = event.successful[0].response.body.path;
+
+                this.disabled = false;
+            }
+
+            console.log(event);
+        });
+
+        uppy.on('upload-success', onUploadSuccess('.uploaded-files ol'))
+
+        // uppy.on('progress', (progress) => {
+        //     // progress: integer (total progress percentage)
+        //     console.log("progress")
+        //     console.log(progress)
+        // });
+        
+        uppy.on('upload-error', (file, error, response) => {
+            
+            console.log( file );
+            console.log( error );
+            console.log( response );
+
+            console.log('error with file:', file.id)
+            console.log('error message:', error)
+        });
+
+        uppy.on('error', (error) => {
+          console.error("error+error");
+          console.error(error);
+          console.error(error.stack);
+        });
+
+        uppy.on('info-visible', () => {
+            console.log('info-visible');
+            const { info } = uppy.getState();
+            // info: {
+            //  isHidden: false,
+            //  type: 'error',
+            //  message: 'Failed to upload',
+            //  details: 'Error description'
+            // }
+
+            $("#notification-center").html("");
+            
+            info.forEach((infoElement) => {
+                // console.error('Errors:' + infoElement.message);
+                console.log(`${infoElement.message} ${infoElement.details}`);
+                
+                if( infoElement.type == 'error' ){
+                    notification_class = 'alert-danger';
+                } else {
+                    notification_class = 'alert-success';
+                }
+
+                var element = '<div class="alert ' + notification_class + '" role="alert">';
+                element += `${infoElement.message}`;
+                element += '</div>';
+
+                $("#notification-center").append( element );
+            });
+            
+        })
     </script>
 </body>
 

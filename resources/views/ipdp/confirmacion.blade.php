@@ -164,9 +164,9 @@
             <div class="col-10 offset-md-1">
                 <div class="row">
                     <div class="col-md-8 offset-md-2 text-center">
-                        <img class="img-fluid" src="./imgs/solicitud_enviada.png" width="150px">
+                        <img class="img-fluid" src="{{ asset( 'imgs/solicitud_enviada.png' ) }}" width="150px">
                         <h1>Su solicitud ha sido enviada.</h1>
-                        <h3>FOLIO: C-0000001</h3>
+                        <h3>FOLIO: {{ $numero_folio }}</h3>
 
                         Para descargar su comprobante, por favor dar click en el
                         siguiente botón y su descarga comenzará en breve…

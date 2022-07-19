@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('cedulas', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedbiginteger('folio');
             $table->string('primer_apellido');
             $table->string('nombre');
             $table->string('segundo_apellido');

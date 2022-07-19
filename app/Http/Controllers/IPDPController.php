@@ -48,23 +48,11 @@ class IPDPController extends Controller
         return view('ipdp.recupera_contrasena', []);
     }
     
-    function registraCedula(){
-        return view('ipdp.registro_cedula', []);
-    }
-    
     function buscarFolio(){
         return view('ipdp.buscar_folio', []);
     }
     
-    function seguimientoFolios(){
-        return view('ipdp.seguimiento_folios', []);
-    }
-    
     function admin(){
         return view('ipdp.admin', []);
-    }
-    
-    function confirmacion(){
-        return view('ipdp.confirmacion', []);
     }
 }

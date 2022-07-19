@@ -13,11 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class CedulaController extends Controller
 {
-    // public function index()
-    // {
-    //     return view('ipdp.registro_cedula', []);
-    // }
-
+    
     function registraCedula(){
         // Genera Numero de Folio
         $numero_folio = mt_rand(100000, 999999);

@@ -120,16 +120,7 @@
                         DE RECOMENDACIONES, OPINIONES O PROPUESTAS A LOS PROYECTOS DEL PLAN GENERAL DE DESARROLLO Y DEL
                         PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL. AMBOS DE LA CIUDAD DE MÉXICO</div>
                 </div>
-                <!-- <div class="col-12 p-3 text-center">
-                    <h4>Consultar estado de solicitud</h4>
-
-                    <input type="text" class="form-control" placeholder="Ingrese Numero de Folio"
-                        aria-label="Ingrese Numero de Folio">
-
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="button">Consultar Folio</button>
-                    </div>
-                </div> -->
+                
 
                 <div id="formHeader:sidebar1" class="ui-sidebar ui-widget ui-widget-content ui-shadow  ui-sidebar-left"
                     style=".ui-sidebar-close: none; width: 80%; max-width: 400px;" role="dialog" aria-hidden="true">
@@ -185,23 +176,6 @@
     <div class="container" style="padding: 30px 30px;">
         <div class="row">
             <div class="col-12">
-                <a href="{{ route('cedula.pdf') }}" target="_blank">PDF</a>
-            </div>
-        </div>
-
-        <div class="row">
-            
-            <div id="notification-center"></div>
-
-            <div class="UppyDragDrop"></div>
-            <div class="for-ProgressBar"></div>
-            <div class="uploaded-files">
-                <h5>Archivos cargados con exito a tu cedula:</h5>
-                <ol></ol>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
                 <strong>
                     Instrucciones: Todos los campos marcados con (<label class="label-red">*</label>) son obligatorios.
                 </strong>
@@ -229,9 +203,6 @@
                                 data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact"
                                 aria-selected="true" tabindex="1">Instrumento</button>
 
-                            <!-- <button class="nav-link" id="nav-opinion-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-opinion" type="button" role="tab" aria-controls="nav-opinion"
-                                aria-selected="true" >Opinion</button> -->
                         </div>
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
@@ -605,7 +576,7 @@
                                                     <div class="col-md-6">
                                                         <div class="row">
                                                             <div class="col-8">
-                                                                INDIQUE NÚMERO DE DOCUMENTOS
+                                                                NÚMERO DE DOCUMENTOS
                                                             </div>
                                                             <div class="col-4">
                                                                 <div class="input-group has-validation">
@@ -623,16 +594,22 @@
                                         <table class="table">
                                             <tr>
                                                 <td class="text-center" style="background-color: #9f2442; color: white;">
-                                                    <strong>TIPO DE DOCUMENTOS</strong>
+                                                    <strong>COMPLEMENTE SU PROPUESTA, ADJUNTE DOCUMENTOS (PDF, WORD), IMAGENES (JPG,PNG) Ó VIDEOS (MP4)</strong>
                                                 </td>
                                             </tr>
                                         </table>
                                     </div>
                                     <div class="col-12">
-                                        <div class="form-floating">
-                                            <textarea class="form-control" placeholder="Tipo de documentos"
-                                                id="floatingTextarea"></textarea>
-                                            <label for="floatingTextarea">Tipo de documentos</label>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div id="notification-center"></div>
+                                                <div class="uploaded-files">
+                                                    <h5>Archivos cargados con exito a tu cedula:</h5>
+                                                    <ol></ol>
+                                                </div>
+                                                <div class="UppyDragDrop"></div>
+                                                <div class="for-ProgressBar"></div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -642,10 +619,7 @@
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                     <button type="button" class="btn btn-primary" 
                                                         id="btnAtrasDatosGenerales">Atras</button>
-                                                    <button type="button" class="btn btn-primary" id="btnInstrumento">xFinalizar Registro</button>
-                                                    
-                                                    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#modalConsentimientoDatos">Finalizar Registro</button> -->
+                                                    <button type="button" class="btn btn-primary" id="btnInstrumento">Finalizar Registro</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -994,7 +968,7 @@
                     console.log( "La solicitud se ha completado correctamente." );
                 }
                 
-                window.location.href = "{{ route('ipdp.confirmacion',[numero_folio => $folio]) }}";
+                window.location.href = "{{ route('ipdp.confirmacion',['numero_folio' => $numero_folio]) }}";
                 // $("#status").text("READY!");
             })
             .fail(function( jqXHR, textStatus, errorThrown ) {
@@ -1080,8 +1054,7 @@
             document.querySelector(elForUploadedFiles).appendChild(li)
         }
 
-        // var uppy = new Uppy.Core()
-        // uppy.use(Uppy.Tus, { endpoint: '//tusd.tusdemo.net/files/' })
+        
         var uppy = new Uppy.Core({
             debug: true,
             autoProceed: true,
@@ -1120,12 +1093,6 @@
 
         uppy.on('upload-success', onUploadSuccess('.uploaded-files ol'))
 
-        // uppy.on('progress', (progress) => {
-        //     // progress: integer (total progress percentage)
-        //     console.log("progress")
-        //     console.log(progress)
-        // });
-        
         uppy.on('upload-error', (file, error, response) => {
             
             console.log( file );
@@ -1171,7 +1138,7 @@
                 $("#notification-center").append( element );
             });
             
-        })
+        });
     </script>
 </body>
 

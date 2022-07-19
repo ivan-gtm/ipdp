@@ -13,23 +13,20 @@ Route::get('/', [IPDPController::class, 'index'])->name('ipdp.home');
 
 // Registro de cedula
 Route::get('/obtener-colonias/{codigo_postal}', [CedulaController::class, 'obtenerColonias'])->name('cedula.obtenerColonias');
-Route::get('/registra-cedula', [CedulaController::class, 'registraCedula'])->name('cedula.show');
+Route::get('/registra-cedula', [CedulaController::class, 'registraCedula'])->name('cedula.registrar');
 Route::post('/cedula', [CedulaController::class, 'store'])->name('cedula.store');
-
-Route::post('/buscar-cedula', [CedulaController::class, 'buscarCedula'])->name('cedula.buscarCedula');
-
 Route::get('/confirmacion/{numero_folio}', [CedulaController::class, 'confirmacion'])->name('ipdp.confirmacion');
-
-Route::get('/cedula/pdf/{numero_folio}', [CedulaController::class, 'generarFormatoPDF'])->name('cedula.pdf');
-
 Route::post('/subir-archivo/{folio}', [CedulaController::class, 'subirArchivo']);
 
-Route::get('/seguimiento/{folio}', [CedulaController::class, 'seguimientoFolios'])->name('ipdp.seguimiento_folios');
+Route::post('/buscar-cedula', [CedulaController::class, 'buscarCedula'])->name('cedula.buscarCedula');
+Route::get('/cedula/pdf/{numero_folio}', [CedulaController::class, 'generarFormatoPDF'])->name('cedula.pdf');
+
+// Route::get('/seguimiento/{folio}', [CedulaController::class, 'seguimientoFolios'])->name('ipdp.seguimiento_folios');
+Route::get('/buscar-folio', [IPDPController::class, 'buscarFolio'])->name('ipdp.buscar_folio');
 
 Route::get('/logins', [IPDPController::class, 'login'])->name('ipdp.logins');
 Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena'])->name('ipdp.recupera_contrasena');
 Route::get('/consulta-indigena', [IPDPController::class, 'consultaIndigena'])->name('ipdp.consulta_indigena');
-Route::get('/buscar-folio', [IPDPController::class, 'buscarFolio'])->name('ipdp.buscar_folio');
 Route::get('/admin', [IPDPController::class, 'admin'])->name('ipdp.admin');
 
 Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('ipdp.login');

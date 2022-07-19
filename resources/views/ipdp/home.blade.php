@@ -488,7 +488,7 @@
                     </div>
                     <div class="col-8 offset-md-2">
                         <div class="d-grid col-12">
-                            <a class="btn btn-primary" href="/registro_cedula.html">REGISTRAR CEDULA</a>
+                            <a class="btn btn-primary" href="{{ route('cedula.registrar') }}">REGISTRAR CEDULA</a>
                         </div>
                     </div>
                 </div>

@@ -173,7 +173,12 @@
 
                         <div class="row">
                             <div class="col-12 pt-3">
-                                <button type="button" class="btn btn-outline-primary">DESCARGAR ARCHIVO</button>
+                                <a class="btn btn-outline-primary" href="{{ route('cedula.pdf',[
+                                        'numero_folio' => $numero_folio
+                                    ]) }}">DESCARGAR ARCHIVO</a>
+                                <br>
+                                <br>
+                                <a class="btn" href="{{ route('ipdp.home') }}">Volver al Inicio</a>
                             </div>
                         </div>
                     </div>

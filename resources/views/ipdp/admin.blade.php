@@ -187,32 +187,44 @@
                                                                         <i class="ri-apps-2-line"></i> <span
                                                                             data-key="t-apps">Cedulas</span>
                                                                     </a>
-                                                                    <!-- <div class="collapse menu-dropdown show"
-                                                                        id="sidebarApps">
-                                                                        <ul class="nav nav-sm flex-column">
-                                                                            <li class="nav-item">
-                                                                                <a href="/consulta_indigena.html"
-                                                                                    class="nav-link"
-                                                                                    data-key="t-calendar"> Registrar Consulta Indigena </a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div> -->
                                                                 </li>
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active"
-                                                                        href="{{ route('ipdp.consulta_indigena') }}">
+                                                                        href="#">
                                                                         <i class="ri-apps-2-line"></i>
-                                                                        <span data-key="t-apps">Registrar Consulta
+                                                                        <span data-key="t-apps">Consulta
                                                                             Indigena</span>
                                                                     </a>
+                                                                    <div class="collapse menu-dropdown show"
+                                                                        id="sidebarApps">
+                                                                        <ul class="nav nav-sm flex-column">
+                                                                            <li class="nav-item">
+                                                                                <a href="{{ route('consultaIndigena.store') }}"
+                                                                                    class="nav-link"
+                                                                                    data-key="t-calendar">Registrar Nueva</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </li>
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active"
                                                                         href="/consulta_indigena.html">
                                                                         <i class="ri-apps-2-line"></i> <span
-                                                                            data-key="t-apps">Administrar
+                                                                            data-key="t-apps">
                                                                             Usuarios</span>
                                                                     </a>
+                                                                    <ul class="nav nav-sm flex-column">
+                                                                        <li class="nav-item">
+                                                                            <a href="{{ route('consultaIndigena.store') }}"
+                                                                                class="nav-link"
+                                                                                data-key="t-calendar">Administrar</a>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <a href="{{ route('consultaIndigena.store') }}"
+                                                                                class="nav-link"
+                                                                                data-key="t-calendar">Registrar Usuario</a>
+                                                                        </li>
+                                                                    </ul>
                                                                 </li>
 
 

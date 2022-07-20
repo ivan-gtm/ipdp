@@ -40,10 +40,6 @@ class IPDPController extends Controller
         return view('ipdp.login', []);
     }
     
-    function consultaIndigena(){
-        return view('ipdp.consulta_indigena', []);
-    }
-    
     function recuperaContrasena(){
         return view('ipdp.recupera_contrasena', []);
     }

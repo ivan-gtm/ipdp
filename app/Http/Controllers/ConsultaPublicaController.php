@@ -11,13 +11,13 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 
 
-class CedulaController extends Controller
+class ConsultaPublicaController extends Controller
 {
     
-    function registraCedula(){
+    function registrar(){
         // Genera Numero de Folio
         $numero_folio = mt_rand(100000, 999999);
-        return view('ipdp.registro_cedula', [
+        return view('ipdp.consulta_publica', [
             'numero_folio' => $numero_folio
         ]);
 
@@ -35,7 +35,7 @@ class CedulaController extends Controller
             abort(404);
         }
 
-        return view('ipdp.confirmacion', [
+        return view('cedula.confirmacion', [
             'numero_folio' => $numero_folio
         ]);
     }
@@ -134,7 +134,7 @@ class CedulaController extends Controller
         return response()->json([]);
 
     }
-
+    
     /**
      * Display the specified resource.
      *

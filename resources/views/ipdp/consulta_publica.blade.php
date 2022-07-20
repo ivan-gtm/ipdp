@@ -797,11 +797,10 @@
         $("#btnInstrumento").click(function(){
             if(!$("#formInstrumento")[0].checkValidity()){
                 $("#formInstrumento")[0].classList.add('was-validated');
-            
+                instrumentoTab.show();
             } else if( !$("#formDatosGenerales")[0].checkValidity() ){
                 $("#formDatosGenerales")[0].classList.add('was-validated');
                 datosGeneralesTab.show();
-            
             } else if( $('[name="opcionIncluyeDocumentos"]:checked').val() == 1 && numero_documentos == 0 ){
                 var element = '<div class="alert alert-danger" role="alert">';
                 element += 'Es requerido adjuntar por lo menos un archivo.';
@@ -945,7 +944,7 @@
                     console.log( "La solicitud se ha completado correctamente." );
                 }
                 
-                window.location.href = "{{ route('ipdp.confirmacion',['numero_folio' => $numero_folio]) }}";
+                window.location.href = "{{ route('cedula.confirmacion',['numero_folio' => $numero_folio]) }}";
                 // $("#status").text("READY!");
             })
             .fail(function( jqXHR, textStatus, errorThrown ) {

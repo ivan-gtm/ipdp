@@ -538,25 +538,21 @@
                                                         <hr>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="opcionIncluyeDocumentos" class="form-label">SE ANEXAN DOCUMENTOS CON ESTA CEDULA:</label>
-                                                        
+                                                        <strong><label for="opcionIncluyeDocumentos" class="form-label">SE ANEXAN DOCUMENTOS CON ESTA CEDULA:</label></strong>
+                                                        <br>
                                                         SÍ <input class="form-check-input" type="radio"
                                                             name="opcionIncluyeDocumentos" id="conDocumentos" value="1" required>
+                                                        &nbsp;&nbsp;
                                                         NO <input class="form-check-input" type="radio"
                                                             name="opcionIncluyeDocumentos" id="sinDocumentos" value="0" required>
 
                                                         <div class="invalid-feedback">Especifique si se anexan documentos</div>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <div class="row">
-                                                            <div class="col-8">
-                                                                NÚMERO DE DOCUMENTOS
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <div class="input-group has-validation">
-                                                                    <input class="form-control" type="number" id="numeroDocumentos" name="numeroDocumentos" value="0" disabled>
-                                                                </div>
-                                                            </div>
+                                                        <strong>NÚMERO DE DOCUMENTOS</strong>
+                                                        <br>
+                                                        <div class="input-group has-validation">
+                                                            <input class="form-control" type="number" id="numeroDocumentos" name="numeroDocumentos" value="0" disabled>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -572,7 +568,7 @@
                                             </tr>
                                         </table>
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-10 offset-md-1">
                                         <div class="row">
                                             <div class="col-12">
                                                 <div id="notification-center"></div>

@@ -228,7 +228,6 @@
                                                 <td class="text-center">
                                                     <button class="edit-item-btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                         <i class="fa-solid fa-magnifying-glass"></i>
-                                                        <!-- Descargar como PDF -->
                                                     </button>
                                                     <a href="{{ route('cedula.pdf',[
                                                             'numero_folio' => $cedula->folio

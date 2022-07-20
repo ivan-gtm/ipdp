@@ -8,6 +8,7 @@ use App\Http\Controllers\DummyController;
 use App\Http\Controllers\IPDPController;
 use App\Http\Controllers\CedulaController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\AdministracionController;
 
 Route::get('/', [IPDPController::class, 'index'])->name('ipdp.home');
 
@@ -27,7 +28,8 @@ Route::get('/buscar-folio', [IPDPController::class, 'buscarFolio'])->name('ipdp.
 Route::get('/logins', [IPDPController::class, 'login'])->name('ipdp.logins');
 Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena'])->name('ipdp.recupera_contrasena');
 Route::get('/consulta-indigena', [IPDPController::class, 'consultaIndigena'])->name('ipdp.consulta_indigena');
-Route::get('/admin', [IPDPController::class, 'admin'])->name('ipdp.admin');
+
+Route::get('/administracion', [AdministracionController::class, 'home'])->name('administracion.home');
 
 Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('ipdp.login');
 Route::get('/dummy', [DummyController::class, 'dummyMethod']);

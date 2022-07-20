@@ -51,8 +51,4 @@ class IPDPController extends Controller
     function buscarFolio(){
         return view('ipdp.buscar_folio', []);
     }
-    
-    function admin(){
-        return view('ipdp.admin', []);
-    }
 }

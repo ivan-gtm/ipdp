@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('segundoApellido');
             $table->integer('edad');
             $table->string('ocupacion');
-            $table->string('optionGenero');
+            $table->string('genero');
             $table->string('celular');
             $table->string('calle');
             $table->string('numExterior');

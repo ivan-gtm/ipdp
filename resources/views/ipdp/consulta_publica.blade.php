@@ -1060,7 +1060,7 @@
 
         uppy.use(Uppy.XHRUpload, {
                 limit: 10,
-                endpoint: '/subir-archivo/'+folio,
+                endpoint: 'consulta-publica/subir-archivo/'+folio,
                 formData: true,
                 fieldName: 'file',
                 headers: {

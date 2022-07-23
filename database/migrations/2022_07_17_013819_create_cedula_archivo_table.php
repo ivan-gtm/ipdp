@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('cedula_archivo', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('tipo_consulta');
             $table->unsignedbiginteger('folio');
             $table->string('file_path');
             $table->timestamps();

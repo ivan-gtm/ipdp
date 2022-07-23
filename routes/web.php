@@ -6,28 +6,36 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DummyController;
 
 use App\Http\Controllers\IPDPController;
-use App\Http\Controllers\CedulaController;
+use App\Http\Controllers\ConsultaPublicaController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AdministracionController;
+use App\Http\Controllers\ConsultaIndigenaController;
 
 Route::get('/', [IPDPController::class, 'index'])->name('ipdp.home');
 
-// Registro de cedula
-Route::get('/obtener-colonias/{codigo_postal}', [CedulaController::class, 'obtenerColonias'])->name('cedula.obtenerColonias');
-Route::get('/registra-cedula', [CedulaController::class, 'registraCedula'])->name('cedula.registrar');
-Route::post('/cedula', [CedulaController::class, 'store'])->name('cedula.store');
-Route::get('/confirmacion/{numero_folio}', [CedulaController::class, 'confirmacion'])->name('ipdp.confirmacion');
-Route::post('/subir-archivo/{folio}', [CedulaController::class, 'subirArchivo']);
+Route::get('/obtener-colonias/{codigo_postal}', [ConsultaPublicaController::class, 'obtenerColonias'])->name('cedula.obtenerColonias');
 
-Route::post('/buscar-cedula', [CedulaController::class, 'buscarCedula'])->name('cedula.buscarCedula');
-Route::get('/cedula/pdf/{numero_folio}', [CedulaController::class, 'generarFormatoPDF'])->name('cedula.pdf');
+// Consulta Publica
+Route::get('/consulta-publica/registrar', [ConsultaPublicaController::class, 'registrar'])->name('cedula.registrar');
+Route::post('/consulta-publica', [ConsultaPublicaController::class, 'store'])->name('cedula.store');
+Route::get('/consulta-publica/confirmacion/{numero_folio}', [ConsultaPublicaController::class, 'confirmacion'])->name('cedula.confirmacion');
+Route::get('/cedula/pdf/{numero_folio}', [ConsultaPublicaController::class, 'generarFormatoPDF'])->name('cedula.pdf');
 
-// Route::get('/seguimiento/{folio}', [CedulaController::class, 'seguimientoFolios'])->name('ipdp.seguimiento_folios');
+// Consulta Indigena
+Route::get('/consulta-indigena', [ConsultaIndigenaController::class, 'registrar'])->name('consultaIndigena.registrar');
+Route::post('/consulta-indigena', [ConsultaIndigenaController::class, 'store'])->name('consultaIndigena.store');
+Route::get('/consulta-indigena/confirmacion/{numero_folio}', [ConsultaIndigenaController::class, 'confirmacion'])->name('consultaIndigena.confirmacion');
+Route::get('/consulta-indigena/pdf/{numero_folio}', [ConsultaIndigenaController::class, 'generarFormatoPDF'])->name('consulta_indigena.pdf');
+
+Route::post('/{tipo_consulta}/subir-archivo/{folio}', [ConsultaPublicaController::class, 'subirArchivo']);
+
+Route::post('/buscar-cedula', [ConsultaPublicaController::class, 'buscarCedula'])->name('cedula.buscarCedula');
+
+// Route::get('/seguimiento/{folio}', [ConsultaPublicaController::class, 'seguimientoFolios'])->name('ipdp.seguimiento_folios');
 Route::get('/buscar-folio', [IPDPController::class, 'buscarFolio'])->name('ipdp.buscar_folio');
 
 Route::get('/logins', [IPDPController::class, 'login'])->name('ipdp.logins');
 Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena'])->name('ipdp.recupera_contrasena');
-Route::get('/consulta-indigena', [IPDPController::class, 'consultaIndigena'])->name('ipdp.consulta_indigena');
 
 Route::get('/administracion', [AdministracionController::class, 'home'])->name('administracion.home');
 

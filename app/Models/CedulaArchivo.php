@@ -9,7 +9,7 @@ class CedulaArchivo extends Model
 {
     protected $table = 'cedula_archivo';
     
-    protected $fillable = ['folio','file_path'];
+    protected $fillable = ['folio','file_path','tipo_consulta'];
 
     use HasFactory;
 }

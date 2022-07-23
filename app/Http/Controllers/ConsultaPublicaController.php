@@ -35,12 +35,12 @@ class ConsultaPublicaController extends Controller
             abort(404);
         }
 
-        return view('cedula.confirmacion', [
+        return view('ipdp.confirmacion', [
             'numero_folio' => $numero_folio
         ]);
     }
 
-    public function subirArchivo($folio, Request $request)
+    public function subirArchivo( $tipo_consulta, $folio, Request $request)
     {
         
         $file_name = $request->file->getClientOriginalName();
@@ -63,6 +63,7 @@ class ConsultaPublicaController extends Controller
                 $path = Storage::disk('public')->put($folder, $request->file);
 
                 $cedula_archivo = CedulaArchivo::create([
+                    'tipo_consulta' => $tipo_consulta,
                     'folio' => $folio,
                     'file_path' => $path,
                 ]);

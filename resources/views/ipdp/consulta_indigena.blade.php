@@ -31,13 +31,9 @@
 
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-
     <link type="text/css" rel="stylesheet" href="{{asset('css/ipdp.css')}}" />
-
-
     <link type="text/css" rel="stylesheet" href="{{asset('css/uppy.min.css')}}" rel="stylesheet" />
-    <script src="{{asset('css/uppy.min.js')}}"></script>
-
+    
     <style>
         body {
             background-color: #f2f3f7
@@ -269,7 +265,7 @@
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text" id="basic-addon1">Correo
                                                     Electrónico<label class="label-red">*</label></span>
-                                                <input type="email" class="form-control" id="inputCorreo"
+                                                <input type="text" class="form-control" id="inputCorreo"
                                                     name="inputCorreo" required>
                                                 <div class="invalid-feedback">Indique su correo electronico</div>
                                             </div>
@@ -828,6 +824,20 @@
                                                 </div>
                                             </div>
                                             <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <hr>
+                                                        <div id="notification-center"></div>
+                                                        <div class="uploaded-files">
+                                                            <h5>Archivos cargados con exito a tu cedula:</h5>
+                                                            <ol></ol>
+                                                        </div>
+                                                        <div class="UppyDragDrop"></div>
+                                                        <div class="for-ProgressBar"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                     <!-- <a href="confirmacion_formato.html" class="btn btn-primary">Finalizar</a> -->
                                                     <button class="btn btn-primary" type="button"
@@ -948,6 +958,8 @@
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script src="{{asset('css/uppy.min.js')}}"></script>
 
     <script type="text/javascript">
         const tipoConsultaTabEl = document.querySelector('button#nav-tipo-consulta-tab');
@@ -1106,7 +1118,7 @@
             var inputSegundoApellido = $('[name="inputSegundoApellido"]').val();
             var inputEdad = $('[name="inputEdad"]').val();
             var inputOcupacion = $('[name="inputOcupacion"]').val();
-            var optionGenero = $('[name="optionGenero"]').val();
+            var genero = $('[name="genero"]').val();
             var inputCelular = $('[name="inputCelular"]').val();
             var inputCalle = $('[name="inputCalle"]').val();
             var inputNumExterior = $('[name="inputNumExterior"]').val();
@@ -1140,7 +1152,7 @@
                 "segundoApellido": inputSegundoApellido,
                 "edad": inputEdad,
                 "ocupacion": inputOcupacion,
-                "optionGenero": optionGenero,
+                "genero": optionGenero,
                 "celular": inputCelular,
                 "calle": inputCalle,
                 "numExterior": inputNumExterior,
@@ -1165,7 +1177,7 @@
                 }
             });
             $.ajax({
-                url: "{{ route('cedula.store') }}",
+                url: "{{ route('consultaIndigena.store') }}",
                 method: "POST",
                 data: requestBody,
                 dataType: 'json'
@@ -1175,7 +1187,7 @@
                         console.log("La solicitud se ha completado correctamente.");
                     }
 
-                    window.location.href = "{{ route('cedula.confirmacion',['numero_folio' => $numero_folio ]) }}";
+                    window.location.href = "{{ route('consultaIndigena.confirmacion',['numero_folio' => $numero_folio ]) }}";
                     // $("#status").text("READY!");
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
@@ -1187,6 +1199,174 @@
 
         }
     </script>
+
+    <script>
+        var folio = $('meta[name="folio"]').attr("content");
+        var ejemplo = {
+            strings:{
+                addBulkFilesFailed:{
+                    0:"No se pudo agregar el archivo %{smart_count} debido a un error interno",
+                    1:"Error al agregar %{smart_count} archivos debido a errores internos"
+                },
+                youCanOnlyUploadX:{
+                    0:"Solo puede cargar %{smart_count} archivo",
+                    1:"Solo puede cargar %{smart_count} archivos"
+                },
+                youHaveToAtLeastSelectX:{
+                    0:"Tienes que seleccionar al menos %{smart_count} archivo",
+                    1:"Tienes que seleccionar al menos %{smart_count} archivos"
+                },
+                exceedsSize:"%{file} excede el tamaño máximo permitido de %{size}",
+                missingRequiredMetaField:"Faltan metacampos obligatorios",
+                missingRequiredMetaFieldOnFile:"Faltan metacampos obligatorios en %{fileName}",
+                inferiorSize:"Este archivo es más pequeño que el tamaño permitido de %{size}",
+                youCanOnlyUploadFileTypes:"Solo puedes subir: %{types}",
+                noMoreFilesAllowed:"No se pueden agregar más archivos",
+                noDuplicates:"No se puede agregar el archivo duplicado '%{fileName}', ya existe",
+                companionError:"Falló la conexión con Companion",
+                authAborted:"Autenticación cancelada",
+                companionUnauthorizeHint:"Para desautorizar su cuenta de %{provider}, vaya a %{url}",
+                failedToUpload:"Error al cargar %{file}",
+                noInternetConnection:"Sin conexión a Internet",
+                connectedToInternet:"Conectado a Internet",
+                noFilesFound:"No tienes archivos ni carpetas aquí",
+                selectX:{
+                    0:"Seleccione %{smart_count}",
+                    1:"Seleccione %{smart_count}"
+                },
+                allFilesFromFolderNamed:"Todos los archivos de la carpeta %{name}",
+                openFolderNamed:"Abrir carpeta %{name}",
+                cancel:"Cancelar",
+                logOut:"Cerrar sesión",
+                filter:"Filtrar",
+                resetFilter:"Reiniciar filtro",
+                loading:"Cargando...",
+                authenticateWithTitle:"Autentíquese con %{pluginName} para seleccionar archivos",
+                authenticateWith:"Conectarse a %{pluginName}",
+                signInWithGoogle:"Inicia sesión con Google",
+                searchImages:"Buscar imágenes",
+                enterTextToSearch:"Ingrese texto para buscar imágenes",
+                search:"Búsqueda",
+                emptyFolderAdded:"No se agregaron archivos de una carpeta vacía",
+                folderAlreadyAdded:"La carpeta \"%{folder}\" ya fue agregada",
+                folderAdded:{
+                    0:"Archivo %{smart_count} agregado de %{folder}",
+                    1:"Se agregaron %{smart_count} archivos de %{folder}"
+                }
+            }
+        };
+        const onUploadSuccess = (elForUploadedFiles) => (file, response) => {
+            console.log( response );
+
+            const url = response.uploadURL
+            const fileName = file.name
+
+            const li = document.createElement('li')
+            const a = document.createElement('a')
+            a.href = url
+            a.target = '_blank'
+            a.appendChild(document.createTextNode(fileName))
+            li.appendChild(a)
+
+            document.querySelector(elForUploadedFiles).appendChild(li);
+
+            numero_documentos = $('div.uploaded-files ol>li').length;
+            $('#numeroDocumentos').val( numero_documentos );
+            
+            console.log("numero_documentos");
+            console.log(numero_documentos);
+
+            // maxNumberOfFiles
+            if( numero_documentos == 3){
+                uppy.close();
+            }
+
+        }
+
+        
+        var uppy = new Uppy.Core({
+            debug: true,
+            autoProceed: true,
+            restrictions: {
+                maxFileSize: 2000000,
+                maxTotalFileSize: 4000000,
+                minNumberOfFiles: 1,
+                maxNumberOfFiles: 3,
+                allowedFileTypes: ['image/*', 'video/*', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf']
+            },
+            locale: ejemplo
+        });
+
+        uppy.use(Uppy.DragDrop, { target: '.UppyDragDrop' });
+
+        uppy.use(Uppy.XHRUpload, {
+                limit: 10,
+                endpoint: '/consulta-indigena/subir-archivo/'+folio,
+                formData: true,
+                fieldName: 'file',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // from <meta name="csrf-token" content="{{ csrf_token() }}">
+                }
+        });
+
+        uppy.use(Uppy.ProgressBar, { target: '.for-ProgressBar', hideAfterFinish: false });
+
+        uppy.on('complete', (event) => {
+            if(event.successful[0] !== undefined) {
+                console.info('Successful uploads:', event.successful)
+                this.payload = event.successful[0].response.body.path;
+            }
+        });
+
+        uppy.on('upload-success', onUploadSuccess('.uploaded-files ol'));
+
+        uppy.on('upload-error', (file, error, response) => {
+            
+            console.log( file );
+            console.log( error );
+            console.log( response );
+
+            console.log('error with file:', file.id)
+            console.log('error message:', error)
+        });
+
+        uppy.on('error', (error) => {
+        console.error("error+error");
+        console.error(error);
+        console.error(error.stack);
+        });
+
+        uppy.on('info-visible', () => {
+            console.log('info-visible');
+            const { info } = uppy.getState();
+            // info: {
+            //  isHidden: false,
+            //  type: 'error',
+            //  message: 'Failed to upload',
+            //  details: 'Error description'
+            // }
+
+            $("#notification-center").html("");
+            
+            info.forEach((infoElement) => {
+                // console.error('Errors:' + infoElement.message);
+                console.log(`${infoElement.message} ${infoElement.details}`);
+                
+                if( infoElement.type == 'error' ){
+                    notification_class = 'alert-danger';
+                } else {
+                    notification_class = 'alert-success';
+                }
+
+                var element = '<div class="alert ' + notification_class + '" role="alert">';
+                element += `${infoElement.message}`;
+                element += '</div>';
+
+                $("#notification-center").append( element );
+            });
+            
+        });
+</script>
 </body>
 
 </html>

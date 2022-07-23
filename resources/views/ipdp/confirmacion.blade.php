@@ -22,7 +22,8 @@
     <meta property="og:url" content="https://www.cdmx.gob.mx">
     <meta property="og:type" content="website">
     <meta property="og:title" content="CDMX - Portal de Trámites y Servicios">
-    <meta property="og:description" content="Portal de la Ciudad de México donde podrás consultar el listado de trámites y servicios disponibles">
+    <meta property="og:description"
+        content="Portal de la Ciudad de México donde podrás consultar el listado de trámites y servicios disponibles">
     <meta property="og:image" content="https://cdmx.gob.mx/resources/img/img_redes.png">
     <meta property="og:image:height" content="734">
     <meta property="og:image:width" content="907">
@@ -34,14 +35,13 @@
         content="Portal de la Ciudad de México donde podrás consultar el listado de trámites y servicios disponibles">
     <meta name="twitter:image" content="https://cdmx.gob.mx/resources/img/img_redes.png">
     <meta name="robots" content="all">
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    
+
     <link type="text/css" rel="stylesheet" href="{{asset('css/ipdp.css')}}" />
 
     <style>
-
         body {
             background-color: #f2f3f7
         }
@@ -63,17 +63,22 @@
                             <div class="flex-row">
                                 <div class="flex-4">
                                     <a href="/index.html" class="ui-link ui-widget">
-                                        <img src="https://plazapublica.cdmx.gob.mx/assets/logo-d832e68a4bf0d893f62b192a2ab8233761432beb589c74ae807353bdb515df2d.svg" style="float: left;" class="img-header pt-1">
+                                        <img src="https://plazapublica.cdmx.gob.mx/assets/logo-d832e68a4bf0d893f62b192a2ab8233761432beb589c74ae807353bdb515df2d.svg"
+                                            style="float: left;" class="img-header pt-1">
                                     </a>
                                 </div>
                                 <div class="flex-8 ">
                                     <div class="flex flex-wrap card-container yellow-container "
                                         style="float:right !important;">
-                                        <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
-                                            <a href="index.html" class="ui-link ui-widget menu-header-principal" target="_blank">Seguimiento a Folios</a>
+                                        <div
+                                            class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
+                                            <a href="index.html" class="ui-link ui-widget menu-header-principal"
+                                                target="_blank">Seguimiento a Folios</a>
                                         </div>
-                                        <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
-                                            <a href="login.html" class="btn btn-sm btn-outline-primary mr-1" data-icon="fa-sign-in-alt"><i class="fa fa-sign-in-alt"></i> 
+                                        <div
+                                            class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
+                                            <a href="login.html" class="btn btn-sm btn-outline-primary mr-1"
+                                                data-icon="fa-sign-in-alt"><i class="fa fa-sign-in-alt"></i>
                                                 <i class="fa fa-sign-in"></i>
                                                 Ingresar
                                             </a>
@@ -173,7 +178,7 @@
 
                         <div class="row">
                             <div class="col-12 pt-3">
-                                <a class="btn btn-outline-primary" href="{{ route('cedula.pdf',[
+                                <a class="btn btn-outline-primary" href="{{ route('consulta_indigena.pdf',[
                                         'numero_folio' => $numero_folio
                                     ]) }}">DESCARGAR ARCHIVO</a>
                                 <br><br>
@@ -267,4 +272,5 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
+
 </html>

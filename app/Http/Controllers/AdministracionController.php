@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cedula;
+use Illuminate\Support\Facades\DB;
 
 class AdministracionController extends Controller
 {
@@ -19,24 +20,26 @@ class AdministracionController extends Controller
         // echo $cedulas->getPageName();
         // echo $cedulas->nextPageUrl();
 
-        return view('ipdp.admin', [
+        return view('ipdp.admin_analisis', [
             'page_number' => $page_number,
             'cedulas' => $cedulas
         ]);
 
     }
+    
+    function detalleConsultaPublica( $folio ){
+        
+        $cedula = DB::table('cedulas')->where('folio','=',$folio)->first();
+        $archivos_cedula = DB::table('cedula_archivo')
+                    ->where('tipo_consulta','=','consulta-publica')
+                    ->where('folio','=',$folio)
+                    ->get();
+        
+        return view('ipdp.admin_detalle_consulta', [
+            'cedula' => $cedula,
+            'archivos_cedula' => $archivos_cedula
+        ]);
 
-    function getEstadoSolicitud( $db_status ){
-        switch ($db_status) {
-            case '1':
-                return 'Pendiente Valoración Técnica';
-                break;
-            case '2':
-                # code...
-                break;
-            default:
-                # code...
-                break;
-        }
     }
+
 }

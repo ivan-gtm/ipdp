@@ -201,7 +201,8 @@
                                                                             <li class="nav-item">
                                                                                 <a href="{{ route('consultaIndigena.store') }}"
                                                                                     class="nav-link"
-                                                                                    data-key="t-calendar">Registrar Nueva</a>
+                                                                                    data-key="t-calendar">Registrar
+                                                                                    Nueva</a>
                                                                             </li>
                                                                         </ul>
                                                                     </div>
@@ -222,7 +223,8 @@
                                                                         <li class="nav-item">
                                                                             <a href="{{ route('consultaIndigena.store') }}"
                                                                                 class="nav-link"
-                                                                                data-key="t-calendar">Registrar Usuario</a>
+                                                                                data-key="t-calendar">Registrar
+                                                                                Usuario</a>
                                                                         </li>
                                                                     </ul>
                                                                 </li>
@@ -391,221 +393,184 @@
                     <!--end row-->
 
                     <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card" id="ticketsList">
-                                <div class="card-header border-0">
-                                    <div class="d-flex align-items-center">
-                                        <h5 class="card-title mb-0 flex-grow-1">Folios por analizar</h5>
-                                        <div class="flex-shrink-0">
+                        
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <center>
+                                    <h3>PERSONA PARTICIPANTE</h3>
+                                </center>
+                                <br>
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>Nombre</strong>
+                                                <br>
+                                                {{ $cedula->nombre }}
+                                            </td>
+                                            <td>
+                                                <strong>Primer Apellido</strong>
+                                                <br>
+                                                {{ $cedula->primer_apellido }}
+                                            </td>
+                                            <td>
+                                                <strong>Segundo Apellido</strong>
+                                                <br>
+                                                {{ $cedula->segundo_apellido }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Ocupación</strong>
+                                                <br>
+                                                {{ $cedula->ocupacion }}
+                                            </td>
+                                            <td>
+                                                <strong>Edad</strong>
+                                                <br>
+                                                {{ $cedula->edad }}
+                                            </td>
+                                            <td>
+                                                <strong>Género</strong>
+                                                <br>
+                                                {{ $cedula->genero }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <strong>Correo electrónico</strong>
+                                                <br>
+                                                {{ $cedula->correo }}
+                                            </td>
+                                            <td>
+                                                <strong>Teléfono celular</strong>
+                                                <br>
+                                                {{ $cedula->celular }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                                            <input type="text" class="btn btn-danger add-btn"
-                                                placeholder="Buscar por nombre, razon, numero">
-                                            <button class="btn btn-soft-danger" onclick="deleteMultiple()">
-                                                <i class="fa-solid fa-search"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive table-card mb-4">
-                                        <table class="table align-middle table-nowrap mb-0" id="ticketTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th>Folio<br>Solicitud</th>
-                                                    <th>Fecha</th>
-                                                    <th>Tipo</th>
-                                                    <th>Registrado por</th>
-                                                    <th>Estado de la solicitud</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="list form-check-all" id="ticket-list-data">
-                                                @foreach ($cedulas as $cedula)
-                                                <tr>
-                                                    <td>
-                                                        {{ $cedula->id }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $cedula->folio }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $cedula->created_at }}
-                                                    </td>
-                                                    <td>
-                                                        <span class="badge bg-success text-uppercase">CEDULA</span>
-                                                    </td>
-                                                    <td>
-                                                        {{ $cedula->nombre.' '.$cedula->primer_apellido }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $cedula->status }}
-                                                    </td>
-                                                    <td class="create_date">
-                                                        <ul class="panel-acciones">
-                                                            <li>
-                                                                <a class="edit-item-btn" href="#">
-                                                                    <i class="fa-solid fa-folder-plus"></i>
-                                                                    <!-- Detalles -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="{{ route('cedula.pdf',[
-                                                                            'numero_folio' => $cedula->folio
-                                                                        ]) }}" class="edit-item-btn" download>
-                                                                    <i class="fa-solid fa-file-pdf"></i>
-                                                                    <!-- Descargar como PDF -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="edit-item-btn" href="#">
-                                                                    <i class="fa-solid fa-circle-check"></i>
-                                                                    <!-- Aprobar -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="remove-item-btn" href="#deleteOrder">
-                                                                    <i class="fa-solid fa-circle-xmark"></i>
-                                                                    <!-- Rechazar -->
-                                                                </a>
-                                                            </li>
+                                <br>
+                                <center>
+                                    <h3>DOMICILIO</h3>
+                                </center>
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>Calle</strong>
+                                                <br>
+                                                {{ $cedula->calle }}
+                                            </td>
+                                            <td>
+                                                <strong>Numero Exterior</strong>
+                                                <br>
+                                                {{ $cedula->num_exterior }}
+                                            </td>
+                                            <td>
+                                                <strong>Numero Interior</strong>
+                                                <br>
+                                                {{ $cedula->num_interior }}
+                                            </td>
+                                            <td>
+                                                <strong>Manzana / Lote</strong>
+                                                <br>
+                                                {{ $cedula->manzana }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Código Postal</strong>
+                                                <br>
+                                                {{ $cedula->cp }}
+                                            </td>
+                                            <td>
+                                                <strong>Alcaldía</strong>
+                                                <br>
+                                                {{ $cedula->alcaldia }}
+                                            </td>
+                                            <td colspan="2">
+                                                <strong>Colonia, Pueblo o Barrio</strong>
+                                                <br>
+                                                {{ $cedula->colonia }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br>
+                                <br>
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="text-align: center;">
+                                                <strong>TIPO DE REPRESENTANTE:</strong>
 
-                                                            <li>
-                                                                <!-- Button trigger modal -->
-                                                                <button type="button" class="btn btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModal">
-                                                                    Launch demo modal
-                                                                </button>
+                                                {{ $cedula->representante }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br>
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="text-align: center;">
+                                                <strong>VIGENCIA</strong>
+                                                <br>
+                                                {{ $cedula->instrumento_observar }}
+                                            </td>
+                                            <td>
+                                                <strong>INSTRUMENTO DE PLANEACIÓN A OBSERVAR</strong>
+                                                <br>
+                                                PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA CIUDAD DE MÉXICO
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                                                                <!-- Modal -->
-                                                                <div class="modal fade" id="exampleModal" tabindex="-1"
-                                                                    aria-labelledby="exampleModalLabel"
-                                                                    aria-hidden="true">
-                                                                    <div class="modal-dialog">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h5 class="modal-title"
-                                                                                    id="exampleModalLabel">Modal title
-                                                                                </h5>
-                                                                                <button type="button" class="btn-close"
-                                                                                    data-bs-dismiss="modal"
-                                                                                    aria-label="Close"></button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                ...
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button"
-                                                                                    class="btn btn-secondary"
-                                                                                    data-bs-dismiss="modal">Close</button>
-                                                                                <button type="button"
-                                                                                    class="btn btn-primary">Save
-                                                                                    changes</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                                <tr>
-                                                    <th scope="row">
-                                                        1
-                                                    </th>
-                                                    <td class="id"><a href="#" onclick="ViewTickets(this)" data-id="13"
-                                                            class="fw-medium link-primary ticket-id">#123123</a></td>
-                                                    <td class="tasks_name">21/07/2022</td>
-                                                    <td class="client_name">
-                                                        <span class="badge bg-success text-uppercase">CEDULA</span>
-                                                    </td>
-                                                    <td class="assignedto">Juan Rivas</td>
-                                                    <td class="status">
-                                                        <span
-                                                            class="badge badge-soft-warning text-uppercase">Recepción</span>
-                                                    </td>
-                                                    <td class="create_date">
-                                                        <ul class="panel-acciones">
-                                                            <li>
-                                                                <a class="edit-item-btn" href="#">
-                                                                    <i class="fa-solid fa-folder-plus"></i>
-                                                                    <!-- Detalles -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="edit-item-btn" href="#">
-                                                                    <i class="fa-solid fa-file-pdf"></i>
-                                                                    <!-- Descargar como PDF -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="edit-item-btn" href="#">
-                                                                    <i class="fa-solid fa-circle-check"></i>
-                                                                    <!-- Aprobar -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="remove-item-btn" href="#deleteOrder">
-                                                                    <i class="fa-solid fa-circle-xmark"></i>
-                                                                    <!-- Rechazar -->
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="noresult" style="display: none">
-                                            <div class="text-center">
-                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                                    colors="primary:#121331,secondary:#08a88a"
-                                                    style="width:75px;height:75px"></lord-icon>
-                                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                <p class="text-muted mb-0">We've searched more than 150+ Tickets We did
-                                                    not find any Tickets for you search.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @if( $cedulas->hasPages() )
-                                    <div class="d-flex justify-content-end mt-2">
-                                        <div class="pagination-wrap hstack gap-2" style="display: flex;">
-                                            @if( $cedulas->onFirstPage() == false)
-                                            <a class="page-item pagination-prev disabled"
-                                                href="{{ $cedulas->previousPageUrl() }}">
-                                                Anterior
-                                            </a>
-                                            @endif
-                                            <ul class="pagination listjs-pagination mb-0">
-                                                @for ($i = 1; $i <= $page_number; $i++) @if( $cedulas->currentPage() ==
-                                                    $i)
-                                                    <li class="active">
-                                                        @else
-                                                    <li>
-                                                        @endif
-                                                        <a class="page" href="{{ $cedulas->url($i) }}" data-i="1"
-                                                            data-page="8">
-                                                            {{ $i }}
-                                                        </a>
-                                                    </li>
-                                                    @endfor
-                                            </ul>
-                                            @if( $cedulas->hasMorePages() )
-                                            <a class="page-item pagination-next" href="{{ $cedulas->nextPageUrl() }}">
-                                                Siguiente
-                                            </a>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    @endif
-                                </div>
-                                <!--end card-body-->
                             </div>
-                            <!--end card-->
                         </div>
-                        <!--end col-->
+
+                        <div class="page_break" style="page-break-before: always;"></div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <br>
+                                <center>
+                                    <h3>OPINIÓN, RECOMENDACIÓN PROPUESTA</h3>
+                                </center>
+                                <p>{{ $cedula->comentarios }}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h3>ARCHIVOS</h3>
+                            </div>
+                            <div class="col-12">
+                                @foreach ($archivos_cedula as $archivo)
+                                    @if( substr($archivo->file_path,-3) == 'jpg' 
+                                        || substr($archivo->file_path,-3) == 'jpeg' 
+                                        || substr($archivo->file_path,-3) == 'png' 
+                                        )
+                                        <img class="img-fluid" src="{{ asset('storage/'.$archivo->file_path ) }}">
+                                    @elseif( substr($archivo->file_path,-3) == 'pdf' )
+                                        <a href="{{ asset('storage/'.$archivo->file_path ) }}" class="edit-item-btn" download>
+                                            <i class="fa-solid fa-file-pdf"></i>
+                                            <!-- Descargar como PDF -->
+                                        </a>
+                                    @elseif( substr($archivo->file_path,-3) == 'doc' || substr($archivo->file_path,-3) == 'ocx' )
+                                        <a href="{{ substr($archivo->file_path,-3) }}" class="edit-item-btn" download>
+                                            <i class="fa-solid fa-file-pdf"></i>
+                                            <!-- Descargar como PDF -->
+                                        </a>
+                                    @endif
+                                    
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                     <!--end row-->
                 </div>
@@ -630,10 +595,53 @@
 
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="rechazoModal" tabindex="-1" aria-labelledby="rechazoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rechazoModalLabel">Rechazar Folio "342344"
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Escriba una breve descripción, con el motivo del rechazo:
+                    <textarea class="form-control" name="motivo_rechazo" id="" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Enviar Rechazo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="aceptarConsultaModal" tabindex="-1" aria-labelledby="rechazoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- <div class="modal-header">
+                    <h5 class="modal-title"
+                        id="rechazoModalLabel">Aceptar Folio "342344"
+                    </h5>
+                    <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div> -->
+                <div class="modal-body">
+                    ¿Esta seguro, el poder aceptar el folio "342344"?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Aceptar Consulta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT -->
     <script src="{{asset('css/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('css/jquery-3.6.0.min.js')}}"></script>
-
 </body>
 
 </html>

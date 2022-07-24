@@ -37,7 +37,9 @@ Route::get('/buscar-folio', [IPDPController::class, 'buscarFolio'])->name('ipdp.
 Route::get('/logins', [IPDPController::class, 'login'])->name('ipdp.logins');
 Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena'])->name('ipdp.recupera_contrasena');
 
+// ADMIN
 Route::get('/administracion', [AdministracionController::class, 'home'])->name('administracion.home');
+Route::get('/administracion/consulta-publica/detalle/{folio}', [AdministracionController::class, 'detalleConsultaPublica'])->name('administracion.detalleConsultaPublica');
 
 Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('ipdp.login');
 Route::get('/dummy', [DummyController::class, 'dummyMethod']);

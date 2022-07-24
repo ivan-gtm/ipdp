@@ -136,12 +136,6 @@ class ConsultaPublicaController extends Controller
 
     }
     
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function generarFormatoPDF($numero_folio)
     {
         // Valida que folio se componga de 6 digitos

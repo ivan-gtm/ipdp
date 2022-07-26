@@ -5,7 +5,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>IPDP | Gestión de CEDULAS</title>
+    <title>IPDP | @yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
@@ -66,7 +66,7 @@
                     <div class="d-flex">
                         <!-- LOGO -->
                         <div class="navbar-brand-box horizontal-logo">
-                            <a href="index.html" class="logo logo-dark">
+                            <a href="{{ route('administracion') }}" class="logo logo-dark">
                                 <span class="logo-sm">
                                     <img src="https://themesbrand.com/velzon/html/default/assets/images/logo-sm.png" alt="" height="22">
                                 </span>
@@ -75,7 +75,7 @@
                                 </span>
                             </a>
 
-                            <a href="index.html" class="logo logo-light">
+                            <a href="{{ route('administracion') }}" class="logo logo-light">
                                 <span class="logo-sm">
                                     <img src="https://themesbrand.com/velzon/html/default/assets/images/logo-sm.png" alt="" height="22">
                                 </span>
@@ -137,7 +137,7 @@
             <!-- LOGO -->
             <div class="navbar-brand-box">
                 <!-- Dark Logo-->
-                <!-- <a href="index.html" class="logo logo-dark">
+                <!-- <a href="{{ route('administracion') }}" class="logo logo-dark">
                     <span class="logo-sm">
                         <img src="https://themesbrand.com/velzon/html/default/assets/images/logo-sm.png" alt=""
                             height="22">
@@ -148,7 +148,7 @@
                     </span>
                 </a> -->
                 <!-- Light Logo-->
-                <a href="index.html" class="logo logo-light" style="background-color: white; padding: 10px;">
+                <a href="{{ route('administracion') }}" class="logo logo-light" style="background-color: white; padding: 10px;">
                     <span class="logo-sm">
                         <img src="https://cdmx.gob.mx/resources/img/adip-header2.svg" alt="" height="200">
                     </span>
@@ -188,6 +188,25 @@
                                                                     <a class="nav-link menu-link collapsed active" href="#sidebarApps">
                                                                         <i class="ri-apps-2-line"></i> <span data-key="t-apps">Cedulas</span>
                                                                     </a>
+                                                                    <div class="collapse menu-dropdown show" id="sidebarApps">
+                                                                        <ul class="nav nav-sm flex-column">
+                                                                            <li class="nav-item">
+                                                                                <a href="{{ route('administracion.evaluacionAnalisis') }}" class="nav-link" data-key="t-calendar">
+                                                                                    Analisis
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="nav-item">
+                                                                                <a href="{{ route('administracion.evaluacionTecnica') }}" class="nav-link" data-key="t-calendar">
+                                                                                    Evaluación Tecnica
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="nav-item">
+                                                                                <a href="{{ route('administracion.evaluacionJuridica') }}" class="nav-link" data-key="t-calendar">
+                                                                                    Evaluación Juridica
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </li>
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active" href="#">
@@ -205,13 +224,13 @@
                                                                     </div>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a class="nav-link menu-link collapsed active" href="/consulta_indigena.html">
+                                                                    <a class="nav-link menu-link collapsed active" href="{{ route('usuariosSistema') }}">
                                                                         <i class="ri-apps-2-line"></i> <span data-key="t-apps">
                                                                             Usuarios</span>
                                                                     </a>
                                                                     <ul class="nav nav-sm flex-column">
                                                                         <li class="nav-item">
-                                                                            <a href="{{ route('consultaIndigena.store') }}" class="nav-link" data-key="t-calendar">Administrar</a>
+                                                                            <a href="{{ route('usuariosSistema') }}" class="nav-link" data-key="t-calendar">Administrar</a>
                                                                         </li>
                                                                         <li class="nav-item">
                                                                             <a href="{{ route('consultaIndigena.store') }}" class="nav-link" data-key="t-calendar">Registrar
@@ -267,7 +286,9 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Gestión de Solicitudes</h4>
+                                <h4 class="mb-sm-0">
+                                    @yield('modulo_titulo')
+                                </h4>
 
                                 <!-- <div class="page-title-right">
                                     <ol class="breadcrumb m-0">
@@ -385,99 +406,24 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card" id="ticketsList">
-                                <div class="card-header border-0">
-                                    <div class="d-flex align-items-center">
-                                        <h5 class="card-title mb-0 flex-grow-1">Usuarios registrados en plataforma</h5>
-                                        <div class="flex-shrink-0">
-
-                                            <input type="text" class="btn btn-danger add-btn" placeholder="Buscar por nombre, razon, numero">
-                                            <button class="btn btn-soft-danger" onclick="deleteMultiple()">
-                                                <i class="fa-solid fa-search"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    @yield('content')
-                                </div>
-                                <!--end card-body-->
-                            </div>
-                            <!--end card-->
-                        </div>
-                        <!--end col-->
-                    </div>
-                    <!--end row-->
+                    @yield('content')
+                    
                 </div>
                 <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
-            <!-- <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            2022 © Velzon.
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="text-sm-end d-none d-sm-block">
-                                Design &amp; Develop by Themesbrand
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer> -->
+            
         </div>
 
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="rechazoModal" tabindex="-1" aria-labelledby="rechazoModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="rechazoModalLabel">Rechazar Folio "342344"
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Escriba una breve descripción, con el motivo del rechazo:
-                    <textarea class="form-control" name="motivo_rechazo" id="" rows="10"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Enviar Rechazo</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="aceptarConsultaModal" tabindex="-1" aria-labelledby="rechazoModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- <div class="modal-header">
-                    <h5 class="modal-title"
-                        id="rechazoModalLabel">Aceptar Folio "342344"
-                    </h5>
-                    <button type="button" class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div> -->
-                <div class="modal-body">
-                    ¿Esta seguro, el poder aceptar el folio "342344"?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Aceptar Consulta</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    @yield('modales')
 
     <!-- JAVASCRIPT -->
     <script src="{{asset('css/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('css/jquery-3.6.0.min.js')}}"></script>
+    @yield('js')
 </body>
 
 </html>

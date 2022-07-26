@@ -1,4 +1,4 @@
-<!-- https://themesbrand.com/velzon/html/default/pages-pricing.html -->
+
 <!DOCTYPE html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
     data-layout-mode="light" data-layout-width="fluid" data-layout-position="fixed" data-layout-style="default">

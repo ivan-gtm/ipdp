@@ -347,7 +347,7 @@
                         <div class="col-10 ZeroPadding-Bottom ZeroPadding-Left">
                             <div class="flex-row">
                                 <div class="flex-4">
-                                    <a href="/index.html" class="ui-link ui-widget"><img src="https://plazapublica.cdmx.gob.mx/assets/logo-d832e68a4bf0d893f62b192a2ab8233761432beb589c74ae807353bdb515df2d.svg" style="float: left;" class="img-header pt-1"></a>
+                                    <a href="{{ route('administracion') }}" class="ui-link ui-widget"><img src="https://plazapublica.cdmx.gob.mx/assets/logo-d832e68a4bf0d893f62b192a2ab8233761432beb589c74ae807353bdb515df2d.svg" style="float: left;" class="img-header pt-1"></a>
                                 </div>
                                 <div class="flex-8 ">
                                     <div class="flex flex-wrap card-container yellow-container " style="float:right !important;">

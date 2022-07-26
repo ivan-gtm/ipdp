@@ -547,6 +547,8 @@
 
                         <div class="row">
                             <div class="col-12 text-center">
+                            <br>    
+                            <hr>
                                 <h3>ARCHIVOS</h3>
                             </div>
                             <div class="col-12">

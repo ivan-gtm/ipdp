@@ -10,6 +10,7 @@ use App\Http\Controllers\ConsultaPublicaController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AdministracionController;
 use App\Http\Controllers\ConsultaIndigenaController;
+use App\Http\Controllers\CustomAuthController;
 
 Route::get('/', [IPDPController::class, 'index'])->name('ipdp.home');
 
@@ -39,17 +40,34 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
 
 // ADMIN
     // EVALUACION ANALISIS 
-    Route::get('/administracion/analisis', [AdministracionController::class, 'evaluacionAnalisis'])->name('administracion.evaluacionAnalisis');
-    Route::get('/administracion/analisis/detalle-consulta/{folio}', [AdministracionController::class, 'detalleConsulta'])->name('administracion.detalleConsulta');
+    Route::get('/administracion', [AdministracionController::class, 'evaluacionAnalisis'])->name('administracion')->middleware('auth');
+    Route::get('/administracion/analisis', [AdministracionController::class, 'evaluacionAnalisis'])->name('administracion.evaluacionAnalisis')->middleware('auth');
+    Route::get('/administracion/analisis/detalle-consulta/{folio}', [AdministracionController::class, 'detalleConsulta'])->name('administracion.detalleConsulta')->middleware('auth');
 
     // EVALUACION TECNICA
-    Route::get('/administracion/evaluacion-tecnica', [AdministracionController::class, 'evaluacionTecnica'])->name('administracion.evaluacionTecnica');
-    Route::post('/administracion/evaluacion-tecnica/guardar', [AdministracionController::class, 'guardarEvaluacionAnalisisTecnico'])->name('administracion.guardarEvaluacionAnalisisTecnico');
-    Route::get('/administracion/evaluacion-tecnica/consultar/{consulta_id}', [AdministracionController::class, 'obtenerEvaluacionJuridica'])->name('administracion.obtenerEvaluacionJuridica');
+    Route::get('/administracion/evaluacion-tecnica', [AdministracionController::class, 'evaluacionTecnica'])->name('administracion.evaluacionTecnica')->middleware('auth');
+    Route::post('/administracion/evaluacion-tecnica/guardar', [AdministracionController::class, 'guardarEvaluacionAnalisisTecnico'])->name('administracion.guardarEvaluacionAnalisisTecnico')->middleware('auth');
+    Route::get('/administracion/evaluacion-tecnica/consultar/{consulta_id}', [AdministracionController::class, 'obtenerEvaluacionJuridica'])->name('administracion.obtenerEvaluacionJuridica')->middleware('auth');
     
     // EVALUACION TECNICA
-    Route::get('/administracion/evaluacion-juridica', [AdministracionController::class, 'evaluacionJuridica'])->name('administracion.evaluacionJuridica');
+    Route::get('/administracion/evaluacion-juridica', [AdministracionController::class, 'evaluacionJuridica'])->name('administracion.evaluacionJuridica')->middleware('auth');
     // Route::post('/administracion/evaluacion-juridica/guardar', [AdministracionController::class, 'guardarEvaluacionAnalisisTecnico'])->name('administracion.guardarEvaluacionAnalisisTecnico');
 
-Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('ipdp.login');
-Route::get('/dummy', [DummyController::class, 'dummyMethod']);
+// USUARIOS SISTEMA
+    Route::get('/administracion/usuarios', [AdministracionController::class, 'usuariosSistema'])->name('usuariosSistema')->middleware('auth');
+
+// Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('ipdp.login');
+// Route::get('/dummy', [DummyController::class, 'dummyMethod']);
+
+/*
+|--------------------------------------------------------------------------
+| LOGIN
+|--------------------------------------------------------------------------
+*/
+Route::get('login', [CustomAuthController::class, 'index'])->name('login');
+Route::get('signout', [CustomAuthController::class, 'signOut'])->name('signout');
+
+Route::get('dashboard', [CustomAuthController::class, 'dashboard']); 
+Route::post('custom-login', [CustomAuthController::class, 'customLogin'])->name('login.custom'); 
+Route::get('registration', [CustomAuthController::class, 'registration'])->name('register-user');
+Route::post('custom-registration', [CustomAuthController::class, 'customRegistration'])->name('register.custom'); 

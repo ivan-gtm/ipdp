@@ -7,13 +7,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 use App\Models\Cedula;
+use App\Models\User;
 use App\Models\EvaluacionTecnica;
 use App\Models\EvualuacionTecnicaDetalle;
-// use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class AdministracionController extends Controller
 {
     function evaluacionTecnica(){
+        
         $perPage = 2;
         $cedulas = Cedula::where('status','=',2)
             ->paginate($perPage);
@@ -101,6 +103,12 @@ class AdministracionController extends Controller
     }
 
     function evaluacionAnalisis(){
+        if (Auth::check()) {
+            $user_name = Auth::user()->name;
+            $user_mail = Auth::user()->email;
+        }
+
+
         $perPage = 2;
         $cedulas = Cedula::paginate($perPage);
         $total = $cedulas->total();
@@ -113,6 +121,8 @@ class AdministracionController extends Controller
         // exit;
 
         return view('ipdp.admin_analisis', [
+            'user_name',$user_name,
+            'user_mail',$user_mail,
             'page_number' => $page_number,
             'cedulas' => $cedulas,
             'parametros' => $parametros
@@ -178,6 +188,24 @@ class AdministracionController extends Controller
         // return response()->json($resultado);
         return $resultado;
 
+    }
+
+    function usuariosSistema(){
+        
+        $perPage = 2;
+        $usuarios = User::paginate($perPage);
+        $total = $usuarios->total();
+        $page_number = round($total / $perPage);
+
+        // $columnas = ceil(sizeof($parametros) / 2);
+        // echo "<pre>";
+        // print_r( $parametros );
+        // exit;
+
+        return view('ipdp.admin_usuarios', [
+            'page_number' => $page_number,
+            'usuarios' => $usuarios,
+        ]);
     }
 
 }

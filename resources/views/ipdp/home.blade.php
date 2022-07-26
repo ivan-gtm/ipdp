@@ -355,7 +355,8 @@
                                             <a href="/buscar_folio.html" class="ui-link ui-widget menu-header-principal">Seguimiento a Folios</a>
                                         </div>
                                         <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
-                                            <a href="/login.html" class="btn btn-sm btn-outline-primary mr-1" data-icon="fa-sign-in-alt"><i class="fa fa-sign-in-alt"></i> 
+                                            <a href="{{ route('login') }}" class="btn btn-sm btn-outline-primary mr-1" data-icon="fa-sign-in-alt">
+                                                <i class="fa fa-sign-in-alt"></i> 
                                                 <i class="fa fa-sign-in"></i>
                                                 Ingresar
                                             </a>

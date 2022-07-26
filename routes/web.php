@@ -38,8 +38,18 @@ Route::get('/logins', [IPDPController::class, 'login'])->name('ipdp.logins');
 Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena'])->name('ipdp.recupera_contrasena');
 
 // ADMIN
-Route::get('/administracion', [AdministracionController::class, 'home'])->name('administracion.home');
-Route::get('/administracion/consulta-publica/detalle/{folio}', [AdministracionController::class, 'detalleConsultaPublica'])->name('administracion.detalleConsultaPublica');
+    // EVALUACION ANALISIS 
+    Route::get('/administracion/analisis', [AdministracionController::class, 'evaluacionAnalisis'])->name('administracion.evaluacionAnalisis');
+    Route::get('/administracion/analisis/detalle-consulta/{folio}', [AdministracionController::class, 'detalleConsulta'])->name('administracion.detalleConsulta');
+
+    // EVALUACION TECNICA
+    Route::get('/administracion/evaluacion-tecnica', [AdministracionController::class, 'evaluacionTecnica'])->name('administracion.evaluacionTecnica');
+    Route::post('/administracion/evaluacion-tecnica/guardar', [AdministracionController::class, 'guardarEvaluacionAnalisisTecnico'])->name('administracion.guardarEvaluacionAnalisisTecnico');
+    Route::get('/administracion/evaluacion-tecnica/consultar/{consulta_id}', [AdministracionController::class, 'obtenerEvaluacionJuridica'])->name('administracion.obtenerEvaluacionJuridica');
+    
+    // EVALUACION TECNICA
+    Route::get('/administracion/evaluacion-juridica', [AdministracionController::class, 'evaluacionJuridica'])->name('administracion.evaluacionJuridica');
+    // Route::post('/administracion/evaluacion-juridica/guardar', [AdministracionController::class, 'guardarEvaluacionAnalisisTecnico'])->name('administracion.guardarEvaluacionAnalisisTecnico');
 
 Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('ipdp.login');
 Route::get('/dummy', [DummyController::class, 'dummyMethod']);

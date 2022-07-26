@@ -8,6 +8,7 @@
     <meta charset="utf-8">
     <title>IPDP | Gestión de CEDULAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
@@ -441,7 +442,9 @@
                                                         {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                                                     </td>
                                                     <td>
-                                                        {{ $cedula->status }}
+                                                        <span class="badge badge-soft-warning text-uppercase">
+                                                            {{ $cedula->status }}
+                                                        </span>
                                                     </td>
                                                     <td class="create_date">
                                                         <ul class="panel-acciones">
@@ -463,8 +466,9 @@
                                                             </li>
                                                             <li>
                                                                 <button type="button" class="edit-item-btn"
+                                                                    onclick="actualizarFolioId({{ $cedula->id }})"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#aceptarConsultaModal">
+                                                                    data-bs-target="#modalEvaluacionTecnica">
                                                                     <i class="fa-solid fa-circle-check"></i>
                                                                     <!-- Aprobar -->
                                                                 </button>
@@ -481,50 +485,7 @@
                                                     </td>
                                                 </tr>
                                                 @endforeach
-                                                <tr>
-                                                    <th scope="row">
-                                                        1
-                                                    </th>
-                                                    <td class="id"><a href="#" onclick="ViewTickets(this)" data-id="13"
-                                                            class="fw-medium link-primary ticket-id">#123123</a></td>
-                                                    <td class="tasks_name">21/07/2022</td>
-                                                    <td class="client_name">
-                                                        <span class="badge bg-success text-uppercase">CEDULA</span>
-                                                    </td>
-                                                    <td class="assignedto">Juan Rivas</td>
-                                                    <td class="status">
-                                                        <span
-                                                            class="badge badge-soft-warning text-uppercase">Recepción</span>
-                                                    </td>
-                                                    <td class="create_date">
-                                                        <ul class="panel-acciones">
-                                                            <li>
-                                                                <a class="edit-item-btn" href="#">
-                                                                    <i class="fa-solid fa-folder-plus"></i>
-                                                                    <!-- Detalles -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="edit-item-btn" href="#">
-                                                                    <i class="fa-solid fa-file-pdf"></i>
-                                                                    <!-- Descargar como PDF -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="edit-item-btn" href="#">
-                                                                    <i class="fa-solid fa-circle-check"></i>
-                                                                    <!-- Aprobar -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="remove-item-btn" href="#deleteOrder">
-                                                                    <i class="fa-solid fa-circle-xmark"></i>
-                                                                    <!-- Rechazar -->
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
+                                                
                                             </tbody>
                                         </table>
                                         <div class="noresult" style="display: none">
@@ -602,7 +563,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="rechazoModal" tabindex="-1" aria-labelledby="rechazoModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="rechazoModalLabel">Rechazar Folio "342344"
@@ -621,24 +582,63 @@
         </div>
     </div>
 
-    <div class="modal fade" id="aceptarConsultaModal" tabindex="-1" aria-labelledby="rechazoModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="modalEvaluacionTecnica" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <!-- <div class="modal-header">
-                    <h5 class="modal-title"
-                        id="rechazoModalLabel">Aceptar Folio "342344"
-                    </h5>
-                    <button type="button" class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div> -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <div class="modal-body">
-                    ¿Esta seguro, el poder aceptar el folio "342344"?
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table">
+                                @foreach ($parametros as $categoria)
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="background-color: #9f2442; color: white;">
+                                        {{ $categoria['categoria']['descripcion'] }}
+                                    </td>
+                                </tr>
+                                @foreach( $categoria['parametros'] as $prm )
+                                <tr>
+                                    <td class="text-center">
+                                        <input class="form-check-input" type="radio"
+                                            name="cat{{ $categoria['categoria']['id'] }}"
+                                            data-categoria-id="{{ $categoria['categoria']['id'] }}"
+                                            data-parametro-id="{{ $prm['id'] }}"
+                                            id="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}"
+                                            value="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
+                                    </td>
+                                    <td>
+                                        <label class="form-check-label"
+                                            for="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
+                                            {{ $prm['descripcion'] }}
+                                        </label>
+                                    </td>
+
+                                </tr>
+                                @endforeach
+                                @endforeach
+                            </table>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>OBSERVACIONES DE VALORACIÓN TÉCNICA:</strong>
+                            <input class="d-none" type="text" name="folio_id" id="folio_id">
+                            <textarea class="form-control" name="observacionesValoracion" id="observacionesValoracion"
+                                rows="10"></textarea>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Aceptar Consulta</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarEvaluacionAnalisis()">Aceptar
+                        Consulta</button>
                 </div>
             </div>
         </div>
@@ -647,6 +647,71 @@
     <!-- JAVASCRIPT -->
     <script src="{{asset('css/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('css/jquery-3.6.0.min.js')}}"></script>
+
+    <script>
+        const modalEvaluacionTecnica = new bootstrap.Modal(document.getElementById('modalEvaluacionTecnica'));
+
+        function actualizarFolioId( folio_id ) {
+            $('#folio_id').val( folio_id );
+        }
+
+        function guardarEvaluacionAnalisis() {
+            prm = obtenerParametros();
+
+            requestBody = {
+                "folio_id": $('#folio_id').val(),
+                "observaciones": $('#observacionesValoracion').val(),
+                "parametros": prm
+            };
+
+            // console.log( respuesta );
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('administracion.guardarEvaluacionAnalisisTecnico') }}",
+                method: "POST",
+                data: JSON.stringify(requestBody),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json'
+            })
+            .done(function (data, textStatus, jqXHR) {
+                limpiarFormularioEvaluacion();
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                if (console && console.log) {
+                    console.log("La solicitud a fallado: " + textStatus);
+                }
+                $("#status").text("FAIL REQUEST").show();
+            });
+
+            console.log("finalice evaluacion");
+            modalEvaluacionTecnica.hide();
+            location.reload();
+        }
+
+        function limpiarFormularioEvaluacion() {
+            $('#numero_folio').val("");
+            $('#observacionesValoracion').val("");
+            $('input:radio:checked').each(function (index) {
+                $(this).prop( "checked", false );
+            });
+        }
+
+        function obtenerParametros() {
+            parametros = [];
+
+            $('input:radio:checked').each(function (index) {
+                console.log(index + ": " + $(this).val());
+                parametros.push($(this).val());
+            });
+
+            return parametros;
+        }
+    </script>
 </body>
 
 </html>

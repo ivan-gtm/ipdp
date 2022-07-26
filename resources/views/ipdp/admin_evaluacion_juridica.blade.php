@@ -8,6 +8,7 @@
     <meta charset="utf-8">
     <title>IPDP | Gestión de CEDULAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
@@ -441,7 +442,9 @@
                                                         {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                                                     </td>
                                                     <td>
-                                                        {{ $cedula->status }}
+                                                        <span class="badge badge-soft-warning text-uppercase">
+                                                            {{ $cedula->status }}
+                                                        </span>
                                                     </td>
                                                     <td class="create_date">
                                                         <ul class="panel-acciones">
@@ -463,8 +466,7 @@
                                                             </li>
                                                             <li>
                                                                 <button type="button" class="edit-item-btn"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#aceptarConsultaModal">
+                                                                    onclick="obtenerEvaluacion({{ $cedula->id }})">
                                                                     <i class="fa-solid fa-circle-check"></i>
                                                                     <!-- Aprobar -->
                                                                 </button>
@@ -481,50 +483,7 @@
                                                     </td>
                                                 </tr>
                                                 @endforeach
-                                                <tr>
-                                                    <th scope="row">
-                                                        1
-                                                    </th>
-                                                    <td class="id"><a href="#" onclick="ViewTickets(this)" data-id="13"
-                                                            class="fw-medium link-primary ticket-id">#123123</a></td>
-                                                    <td class="tasks_name">21/07/2022</td>
-                                                    <td class="client_name">
-                                                        <span class="badge bg-success text-uppercase">CEDULA</span>
-                                                    </td>
-                                                    <td class="assignedto">Juan Rivas</td>
-                                                    <td class="status">
-                                                        <span
-                                                            class="badge badge-soft-warning text-uppercase">Recepción</span>
-                                                    </td>
-                                                    <td class="create_date">
-                                                        <ul class="panel-acciones">
-                                                            <li>
-                                                                <a class="edit-item-btn" href="#">
-                                                                    <i class="fa-solid fa-folder-plus"></i>
-                                                                    <!-- Detalles -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="edit-item-btn" href="#">
-                                                                    <i class="fa-solid fa-file-pdf"></i>
-                                                                    <!-- Descargar como PDF -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="edit-item-btn" href="#">
-                                                                    <i class="fa-solid fa-circle-check"></i>
-                                                                    <!-- Aprobar -->
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="remove-item-btn" href="#deleteOrder">
-                                                                    <i class="fa-solid fa-circle-xmark"></i>
-                                                                    <!-- Rechazar -->
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
+                                                
                                             </tbody>
                                         </table>
                                         <div class="noresult" style="display: none">
@@ -602,7 +561,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="rechazoModal" tabindex="-1" aria-labelledby="rechazoModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="rechazoModalLabel">Rechazar Folio "342344"
@@ -621,24 +580,32 @@
         </div>
     </div>
 
-    <div class="modal fade" id="aceptarConsultaModal" tabindex="-1" aria-labelledby="rechazoModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="modalEvaluacionJuridica" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <!-- <div class="modal-header">
-                    <h5 class="modal-title"
-                        id="rechazoModalLabel">Aceptar Folio "342344"
-                    </h5>
-                    <button type="button" class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div> -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
                 <div class="modal-body">
-                    ¿Esta seguro, el poder aceptar el folio "342344"?
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table" id="evaluacion-juridica">
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>OBSERVACIONES DE VALORACIÓN TÉCNICA:</strong>
+                            <input class="d-none" type="text" name="folio_id" id="folio_id">
+                            <p id="observaciones_tecnica"></p>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Aceptar Consulta</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCELAR</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarEvaluacionAnalisis()">PROCEDENTE</button>
                 </div>
             </div>
         </div>
@@ -647,6 +614,73 @@
     <!-- JAVASCRIPT -->
     <script src="{{asset('css/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('css/jquery-3.6.0.min.js')}}"></script>
+
+    <script>
+        const modalEvaluacionJuridica = new bootstrap.Modal(document.getElementById('modalEvaluacionJuridica'));
+        
+        function setTitulo( titulo ){
+            $("table#evaluacion-juridica>tbody").append( getTituloHTML(titulo) );
+        }
+
+        function getTituloHTML( titulo ){
+            return '<tr><td colspan="2" style="background-color: #9f2442; color: white;">{titulo}</td></tr>'.replace("{titulo}", titulo);
+        }
+        
+        function setParametro( parametro ){
+            $("table#evaluacion-juridica>tbody").append( getParametroHTML(parametro) );
+        }
+
+        function getParametroHTML( parametro ){
+            return '<tr><td>{parametro}</td></tr>'.replace("{parametro}", parametro);
+        }
+        
+        function setEspacio(){
+            $("table#evaluacion-juridica>tbody").append( '<tr><td colspan="2">&nbsp;</td></tr>' );
+        }
+        
+        function obtenerEvaluacion( consulta_id ) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "http://localhost/administracion/evaluacion-tecnica/consultar/" + consulta_id,
+                method: "GET",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json'
+            })
+            .done(function (result, textStatus, jqXHR) {
+                
+                $("#observaciones_tecnica").text("JEMEPLdalskjdalksjdasklj");
+                $("#observaciones_juridica").text("");
+                $("table#evaluacion-juridica>tbody").html("");
+                evaluacion = result;
+
+                var numero_de_categorias = Object.keys(evaluacion).length;
+                for (let index = 1; index <= numero_de_categorias; index++) {
+                    const elemento = evaluacion[index];
+                    setTitulo( elemento.categoria.descripcion );
+                    
+                    var numero_de_parametros = Object.keys(elemento.parametros).length;
+                    console.log( "numero_de_parametros" );
+                    console.log( numero_de_parametros );
+
+                    for (let i = 0; i < numero_de_parametros; i++) {
+                        // console.log( elemento.parametros[i].descripcion );
+                        setParametro( elemento.parametros[i].descripcion );
+                    }
+                }
+                
+                modalEvaluacionJuridica.show();
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                if (console && console.log) {
+                    console.log("La solicitud a fallado: " + textStatus);
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

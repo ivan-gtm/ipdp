@@ -1064,39 +1064,39 @@
                 url: codigo_postal_url,
                 method: "GET"
             })
-                .done(function (data, textStatus, jqXHR) {
-                    $('#inputColonia')
-                        .find('option')
-                        .remove()
-                        .end()
-                        ;
+            .done(function (data, textStatus, jqXHR) {
+                $('#inputColonia')
+                    .find('option')
+                    .remove()
+                    .end()
+                    ;
 
-                    if (console && console.log) {
-                        console.log("La solicitud se ha completado correctamente.");
-                    }
+                if (console && console.log) {
+                    console.log("La solicitud se ha completado correctamente.");
+                }
 
-                    if (typeof data.alcaldia != 'undefined' && data.alcaldia.length > 0) {
-                        $('#inputAlcaldia').val(data.alcaldia);
-                    }
+                if (typeof data.alcaldia != 'undefined' && data.alcaldia.length > 0) {
+                    $('#inputAlcaldia').val(data.alcaldia);
+                }
 
-                    if (typeof data.colonias != 'undefined' && data.colonias.length > 0) {
-                        data.colonias.forEach(colonia => {
-                            $('#inputColonia').append($('<option>', {
-                                value: colonia.nombre,
-                                text: colonia.nombre
-                            }));
-                        });
-                    }
+                if (typeof data.colonias != 'undefined' && data.colonias.length > 0) {
+                    data.colonias.forEach(colonia => {
+                        $('#inputColonia').append($('<option>', {
+                            value: colonia.nombre,
+                            text: colonia.nombre
+                        }));
+                    });
+                }
 
-                    console.log(data.alcaldia);
+                console.log(data.alcaldia);
 
-                })
-                .fail(function (jqXHR, textStatus, errorThrown) {
-                    if (console && console.log) {
-                        console.log("La solicitud a fallado: " + textStatus);
-                    }
-                    $("#status").text("FAIL REQUEST");
-                });
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                if (console && console.log) {
+                    console.log("La solicitud a fallado: " + textStatus);
+                }
+                $("#status").text("FAIL REQUEST");
+            });
         });
 
         function registrarConsulta() {

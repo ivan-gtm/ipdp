@@ -1,6 +1,9 @@
 @extends('layouts.admin')
 @section('title', 'Gestión de CEDULAS | Analisis')
 @section('modulo_titulo', 'Gestión de CEDULAS | Analisis')
+@section('head')
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+@endsection
 @section('content')
 <div class="row">
                         <div class="col-lg-12">
@@ -179,6 +182,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <input type="hidden" name="folio_id" id="folio_id" value="">
                         <div class="col-md-12">
                             <table class="table" id="evaluacion-juridica">
                                 <tbody>
@@ -187,14 +191,13 @@
                         </div>
                         <div class="col-md-12">
                             <strong>OBSERVACIONES DE VALORACIÓN TÉCNICA:</strong>
-                            <input class="d-none" type="text" name="folio_id" id="folio_id">
                             <p id="observaciones_tecnica"></p>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCELAR</button>
-                    <button type="button" class="btn btn-primary" onclick="guardarEvaluacionAnalisis()">PROCEDENTE</button>
+                    <button type="button" class="btn btn-primary" onclick="aprobarSolicitudJuridica()">PROCEDENTE</button>
                 </div>
             </div>
         </div>
@@ -238,7 +241,9 @@
             dataType: 'json'
         })
         .done(function (result, textStatus, jqXHR) {
-            
+            console.log("consulta_id");
+            console.log(consulta_id);
+            $("#folio_id").val(consulta_id);
             $("#observaciones_tecnica").text("");
             $("#observaciones_juridica").text("");
             $("table#evaluacion-juridica>tbody").html("");
@@ -262,6 +267,34 @@
             }
             
             modalEvaluacionJuridica.show();
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            if (console && console.log) {
+                console.log("La solicitud a fallado: " + textStatus);
+            }
+        });
+    }
+    
+    function aprobarSolicitudJuridica() {
+        var consulta_id = $("#folio_id").val();
+        var requestBody = {
+            "consulta_id": consulta_id
+        };
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('administracion.guardarEvaluacionJuridica') }}/",
+            method: "POST",
+            data: JSON.stringify(requestBody),
+            contentType: 'application/json; charset=utf-8'
+        })
+        .done(function (result, textStatus, jqXHR) {
+            modalEvaluacionJuridica.hide();
+            location.reload();
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             if (console && console.log) {

@@ -184,9 +184,13 @@ class AdministracionController extends Controller
         return response()->json("exito");
     }
     
-    function guardarEvaluacionJuridica(){
+    function guardarEvaluacionJuridica( Request $request ){
+        $consulta = Cedula::find($request->consulta_id);
+        $consulta->status = 4;
+        $consulta->save();
+        return response()->json(["exito"]);
     }
-
+    
     function obtenerParametrosValoracionTecnica(){
         $query = '
         SELECT

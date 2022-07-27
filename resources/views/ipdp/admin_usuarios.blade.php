@@ -3,16 +3,6 @@
 @section('modulo_titulo', 'Administracion de usuarios')
 @section('content')
     <div class="row">
-        <div class="col-12">
-            @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-            @endif
-        </div>
-    </div>
-
-    <div class="row">
         <div class="col-lg-12">
             <div class="card" id="ticketsList">
                 <div class="card-header border-0">
@@ -66,10 +56,11 @@
                                                 </button>
                                             </li>
                                             <li>
-                                                <button type="button" class="remove-item-btn" data-bs-toggle="modal" data-bs-target="#rechazoModal">
+                                                <a href="{{ route('administracion.borrarUsuario',[
+                                                        'usuario_id' => $usuario->id
+                                                    ]) }}">
                                                     <i class="fa-solid fa-circle-xmark"></i>
-                                                    <!-- Rechazar -->
-                                                </button>
+                                                </a> 
                                             </li>
                                         </ul>
                                     </td>

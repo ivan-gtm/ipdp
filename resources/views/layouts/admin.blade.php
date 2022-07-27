@@ -233,7 +233,7 @@
                                                                             <a href="{{ route('usuariosSistema') }}" class="nav-link" data-key="t-calendar">Administrar</a>
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                            <a href="{{ route('consultaIndigena.store') }}" class="nav-link" data-key="t-calendar">Registrar
+                                                                            <a href="{{ route('administracion.registrarUsuario') }}" class="nav-link" data-key="t-calendar">Registrar
                                                                                 Usuario</a>
                                                                         </li>
                                                                     </ul>

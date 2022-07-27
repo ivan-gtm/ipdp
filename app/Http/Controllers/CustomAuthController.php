@@ -49,7 +49,7 @@ class CustomAuthController extends Controller
         $data = $request->all();
         $check = $this->create($data);
 
-        return redirect("dashboard")->withSuccess('have signed-in');
+        return redirect()->route('administracion.registrarUsuario')->with('status', 'Usuario Registrado con exito!');;
     }
 
     public function create(array $data)
@@ -83,5 +83,12 @@ class CustomAuthController extends Controller
         Auth::logout();
 
         return Redirect('login');
+    }
+
+    public function borrarUsuario($usuario_id){
+        $user = User::find($usuario_id);
+        $user->delete();
+        
+        return redirect()->route('usuariosSistema')->with('status', 'Usuario eliminado con exito!');;
     }
 }

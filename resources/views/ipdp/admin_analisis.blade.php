@@ -6,16 +6,6 @@
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-12">
-        @if (session('status'))
-        <div class="alert alert-success">
-            {{ session('status') }}
-        </div>
-        @endif
-    </div>
-</div>
-
-<div class="row">
     <div class="col-lg-12">
         <div class="card" id="ticketsList">
             <div class="card-header border-0">

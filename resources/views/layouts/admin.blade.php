@@ -100,10 +100,11 @@
                         <div class="dropdown ms-sm-3 header-item topbar-user">
                             <div class="btn" id="page-header-user-dropdown">
                                 <span class="d-flex align-items-center">
-                                    <img class="rounded-circle header-profile-user" src="https://themesbrand.com/velzon/html/default/assets/images/users/avatar-1.jpg" alt="Header Avatar">
+                                    <img class="rounded-circle header-profile-user" src="{{ asset('/imgs/user.png') }}" alt="Header Avatar">
                                     <span class="text-start ms-xl-2">
-                                        <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Adrian
-                                            Contreras</span>
+                                        <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">
+                                            NOMBRE USUARIO
+                                        </span>
                                         <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Equipo
                                             Analisis</span>
                                     </span>
@@ -186,7 +187,8 @@
                                                                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active" href="#sidebarApps">
-                                                                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Cedulas</span>
+                                                                        <i class="fa-solid fa-bars"></i>
+                                                                        <span data-key="t-apps">Cedulas</span>
                                                                     </a>
                                                                     <div class="collapse menu-dropdown show" id="sidebarApps">
                                                                         <ul class="nav nav-sm flex-column">
@@ -210,7 +212,7 @@
                                                                 </li>
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active" href="#">
-                                                                        <i class="ri-apps-2-line"></i>
+                                                                        <i class="fa-solid fa-bars"></i>
                                                                         <span data-key="t-apps">Consulta
                                                                             Indigena</span>
                                                                     </a>
@@ -225,7 +227,8 @@
                                                                 </li>
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active" href="{{ route('usuariosSistema') }}">
-                                                                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">
+                                                                        <i class="fa-solid fa-bars"></i>
+                                                                        <span data-key="t-apps">
                                                                             Usuarios</span>
                                                                     </a>
                                                                     <ul class="nav nav-sm flex-column">

@@ -36,10 +36,6 @@ class IPDPController extends Controller
         return view('ipdp.home', []);
     }
     
-    function login(){
-        return view('ipdp.login', []);
-    }
-    
     function recuperaContrasena(){
         return view('ipdp.recupera_contrasena', []);
     }

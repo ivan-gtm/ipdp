@@ -1,42 +1,41 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DummyController;
-
 use App\Http\Controllers\IPDPController;
 use App\Http\Controllers\ConsultaPublicaController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\AdministracionController;
 use App\Http\Controllers\ConsultaIndigenaController;
 use App\Http\Controllers\CustomAuthController;
 
 Route::get('/', [IPDPController::class, 'index'])->name('ipdp.home');
-
 Route::get('/obtener-colonias/{codigo_postal}', [ConsultaPublicaController::class, 'obtenerColonias'])->name('cedula.obtenerColonias');
+Route::post('/{tipo_consulta}/subir-archivo/{folio}', [ConsultaPublicaController::class, 'subirArchivo']);
+Route::post('/buscar-cedula', [ConsultaPublicaController::class, 'buscarCedula'])->name('cedula.buscarCedula');
+Route::get('/buscar-folio', [IPDPController::class, 'buscarFolio'])->name('ipdp.buscar_folio');
+Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena'])->name('ipdp.recupera_contrasena');
+// Route::get('/seguimiento/{folio}', [ConsultaPublicaController::class, 'seguimientoFolios'])->name('ipdp.seguimiento_folios');
 
-// Consulta Publica
+/*
+|--------------------------------------------------------------------------
+| Consulta Publica
+|--------------------------------------------------------------------------
+*/
 Route::get('/consulta-publica/registrar', [ConsultaPublicaController::class, 'registrar'])->name('cedula.registrar');
 Route::post('/consulta-publica', [ConsultaPublicaController::class, 'store'])->name('cedula.store');
 Route::get('/consulta-publica/confirmacion/{numero_folio}', [ConsultaPublicaController::class, 'confirmacion'])->name('cedula.confirmacion');
 Route::get('/cedula/pdf/{numero_folio}', [ConsultaPublicaController::class, 'generarFormatoPDF'])->name('cedula.pdf');
 
-// Consulta Indigena
+/*
+|--------------------------------------------------------------------------
+| Consulta Indigena
+|--------------------------------------------------------------------------
+*/
 Route::get('/consulta-indigena', [ConsultaIndigenaController::class, 'registrar'])->name('consultaIndigena.registrar');
 Route::post('/consulta-indigena', [ConsultaIndigenaController::class, 'store'])->name('consultaIndigena.store');
 Route::get('/consulta-indigena/confirmacion/{numero_folio}', [ConsultaIndigenaController::class, 'confirmacion'])->name('consultaIndigena.confirmacion');
 Route::get('/consulta-indigena/pdf/{numero_folio}', [ConsultaIndigenaController::class, 'generarFormatoPDF'])->name('consulta_indigena.pdf');
 
-Route::post('/{tipo_consulta}/subir-archivo/{folio}', [ConsultaPublicaController::class, 'subirArchivo']);
 
-Route::post('/buscar-cedula', [ConsultaPublicaController::class, 'buscarCedula'])->name('cedula.buscarCedula');
-
-// Route::get('/seguimiento/{folio}', [ConsultaPublicaController::class, 'seguimientoFolios'])->name('ipdp.seguimiento_folios');
-Route::get('/buscar-folio', [IPDPController::class, 'buscarFolio'])->name('ipdp.buscar_folio');
-
-Route::get('/logins', [IPDPController::class, 'login'])->name('ipdp.logins');
-Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena'])->name('ipdp.recupera_contrasena');
 
 // ADMIN
     // EVALUACION ANALISIS 
@@ -60,17 +59,14 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
     Route::post('custom-registration', [CustomAuthController::class, 'customRegistration'])->name('register.custom'); 
     Route::get('/administracion/usuarios/borrar/{usuario_id}', [CustomAuthController::class, 'borrarUsuario'])->name('administracion.borrarUsuario');
 
-// Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('ipdp.login');
-// Route::get('/dummy', [DummyController::class, 'dummyMethod']);
-
 /*
 |--------------------------------------------------------------------------
 | LOGIN
 |--------------------------------------------------------------------------
 */
-Route::get('login', [CustomAuthController::class, 'index'])->name('login');
-Route::get('signout', [CustomAuthController::class, 'signOut'])->name('signout');
-Route::post('custom-login', [CustomAuthController::class, 'customLogin'])->name('login.custom'); 
+    Route::get('/login', [CustomAuthController::class, 'index'])->name('login');
+    Route::get('/signout', [CustomAuthController::class, 'signOut'])->name('signout');
+    Route::post('/custom-login', [CustomAuthController::class, 'customLogin'])->name('login.custom'); 
 
 
 

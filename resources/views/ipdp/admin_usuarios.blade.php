@@ -8,7 +8,7 @@
                 <div class="card-header border-0">
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1">Usuarios registrados en plataforma</h5>
-                        <div class="flex-shrink-0">
+                        <div class="flex-shrink-0 d-none">
 
                             <input type="text" class="btn btn-danger add-btn" placeholder="Buscar por nombre, razon, numero">
                             <button class="btn btn-soft-danger" onclick="deleteMultiple()">
@@ -25,6 +25,7 @@
                                     <th>Id Usuario</th>
                                     <th>Creado</th>
                                     <th>Actualizado</th>
+                                    <th>Rol de Usuario</th>
                                     <th>Nombre</th>
                                     <th>E-mail</th>
                                     <th>Acciones</th>
@@ -36,6 +37,7 @@
                                     <td>{{ $usuario->id }}</td>
                                     <td>{{ $usuario->created_at }}</td>
                                     <td>{{ $usuario->updated_at }}</td>
+                                    <td>{{ strtoupper($usuario->rol) }}</td>
                                     <td>{{ $usuario->name }}</td>
                                     <td>{{ $usuario->email }}</td>
                                     <td>
@@ -45,15 +47,9 @@
                                                 <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
                                                                             'folio' => $usuario->id
                                                                         ]) }}">
-                                                    <i class="fa-solid fa-folder-plus"></i>
+                                                    <i class="fa-solid fa-pen-to-square"></i>
                                                     <!-- Detalles -->
                                                 </a>
-                                            </li>
-                                            <li>
-                                                <button type="button" class="edit-item-btn" data-bs-toggle="modal" data-bs-target="#aceptarConsultaModal">
-                                                    <i class="fa-solid fa-circle-check"></i>
-                                                    <!-- Aprobar -->
-                                                </button>
                                             </li>
                                             <li>
                                                 <a href="{{ route('administracion.borrarUsuario',[

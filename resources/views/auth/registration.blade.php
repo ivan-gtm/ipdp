@@ -1,6 +1,6 @@
 @extends('layouts.admin')
-@section('title', 'Gestión de CEDULAS | Analisis')
-@section('modulo_titulo', 'REGISTRAR USUARIO EN PLATAFORMA')
+@section('title', 'Registrar usuario en plataforma')
+@section('modulo_titulo', 'Registrar usuario en plataforma')
 @section('content')
 <main class="signup-form">
     <div class="cotainer">
@@ -25,6 +25,19 @@
                             </div>
                             <div class="form-group mb-3">
                                 <input type="password" placeholder="Contraseña" id="password" class="form-control" name="password" required>
+                                @if ($errors->has('password'))
+                                <span class="text-danger">{{ $errors->first('password') }}</span>
+                                @endif
+                            </div>
+                            <div class="form-group mb-3">
+                                <!-- <input type="password" placeholder="Contraseña" id="password" class="form-control" name="password" required> -->
+                                <select class="form-control" name="rol" id="rol">
+                                    <option></option>
+                                    <option value="analisis">Equipo Analisis</option>
+                                    <option value="tecnica">Equipo Evaluacion Tecnica</option>
+                                    <option value="juridica">Equipo Evaluacion Juridica</option>
+                                    <option value="administracion">Administracion</option>
+                                </select>
                                 @if ($errors->has('password'))
                                 <span class="text-danger">{{ $errors->first('password') }}</span>
                                 @endif

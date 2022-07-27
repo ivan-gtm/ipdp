@@ -1,6 +1,6 @@
 @extends('layouts.admin')
-@section('title', 'Administracion de usuarios')
-@section('modulo_titulo', 'Administracion de usuarios')
+@section('title', 'Evaluacion Tecnica')
+@section('modulo_titulo', 'Evaluacion Tecnica')
 @section('head')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 @endsection

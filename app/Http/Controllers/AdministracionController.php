@@ -14,7 +14,15 @@ use Illuminate\Support\Facades\Auth;
 
 class AdministracionController extends Controller
 {
+    function home(){
+        return view('ipdp.admin_home');
+    }
+
     function evaluacionTecnica(){
+        
+        if( Auth::check() && ( Auth::user()->rol != 'tecnica' && Auth::user()->rol != 'administracion') ) {
+            return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
+        }
         
         $perPage = 2;
         $cedulas = Cedula::where('status','=',2)
@@ -36,6 +44,11 @@ class AdministracionController extends Controller
     }
     
     function evaluacionJuridica(){
+        
+        if( Auth::check() && ( Auth::user()->rol != 'juridica' && Auth::user()->rol != 'administracion') ) {
+            return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
+        }
+
         $perPage = 2;
         $cedulas = Cedula::where('status','=',3)
             ->paginate($perPage);
@@ -111,9 +124,9 @@ class AdministracionController extends Controller
     }
 
     function evaluacionAnalisis(){
-        if (Auth::check()) {
-            $user_name = Auth::user()->name;
-            $user_mail = Auth::user()->email;
+        
+        if( Auth::check() && ( Auth::user()->rol != 'analisis' && Auth::user()->rol != 'administracion') ) {
+            return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
         }
 
         $perPage = 2;
@@ -128,8 +141,6 @@ class AdministracionController extends Controller
         // exit;
 
         return view('ipdp.admin_analisis', [
-            'user_name',$user_name,
-            'user_mail',$user_mail,
             'page_number' => $page_number,
             'cedulas' => $cedulas,
             'parametros' => $parametros
@@ -237,6 +248,9 @@ class AdministracionController extends Controller
     }
 
     function usuariosSistema(){
+        if( Auth::check() && Auth::user()->rol != 'administracion') {
+            return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
+        }
         
         $perPage = 2;
         $usuarios = User::paginate($perPage);

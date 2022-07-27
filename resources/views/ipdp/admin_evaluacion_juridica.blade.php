@@ -11,7 +11,7 @@
                                 <div class="card-header border-0">
                                     <div class="d-flex align-items-center">
                                         <h5 class="card-title mb-0 flex-grow-1">Folios por analizar</h5>
-                                        <div class="flex-shrink-0">
+                                        <div class="flex-shrink-0 d-none">
 
                                             <input type="text" class="btn btn-danger add-btn"
                                                 placeholder="Buscar por nombre, razon, numero">

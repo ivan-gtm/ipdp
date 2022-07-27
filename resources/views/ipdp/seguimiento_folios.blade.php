@@ -23,7 +23,7 @@
                         <div class="card-header border-0" style="display:none">
                             <div class="d-flex align-items-center">
                                 <h5 class="card-title mb-0 flex-grow-1">&nbsp;</h5>
-                                <div class="flex-shrink-0">
+                                <div class="flex-shrink-0 d-none">
                                     <input type="text" class="btn btn-danger add-btn" placeholder="Buscar por nombre, razon, numero">
                                     <button class="btn btn-soft-danger" onclick="deleteMultiple()">
                                         <i class="fa-solid fa-search"></i>

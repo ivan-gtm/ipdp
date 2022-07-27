@@ -66,7 +66,7 @@
                     <div class="d-flex">
                         <!-- LOGO -->
                         <div class="navbar-brand-box horizontal-logo">
-                            <a href="{{ route('administracion') }}" class="logo logo-dark">
+                            <a href="{{ route('administracion.home') }}" class="logo logo-dark">
                                 <span class="logo-sm">
                                     <img src="https://themesbrand.com/velzon/html/default/assets/images/logo-sm.png" alt="" height="22">
                                 </span>
@@ -75,7 +75,7 @@
                                 </span>
                             </a>
 
-                            <a href="{{ route('administracion') }}" class="logo logo-light">
+                            <a href="{{ route('administracion.home') }}" class="logo logo-light">
                                 <span class="logo-sm">
                                     <img src="https://themesbrand.com/velzon/html/default/assets/images/logo-sm.png" alt="" height="22">
                                 </span>
@@ -103,10 +103,16 @@
                                     <img class="rounded-circle header-profile-user" src="{{ asset('/imgs/user.png') }}" alt="Header Avatar">
                                     <span class="text-start ms-xl-2">
                                         <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">
-                                            NOMBRE USUARIO
+                                            @if(Auth::check())
+                                                {{ Auth::user()->name }}
+                                            @endif
                                         </span>
-                                        <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Equipo
-                                            Analisis</span>
+                                        <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">
+                                            Equipo
+                                            @if(Auth::check())
+                                                {{ ucfirst( Auth::user()->rol ) }}
+                                            @endif
+                                        </span>
                                     </span>
                                 </span>
                             </div>
@@ -117,9 +123,6 @@
                                 @guest
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">Login</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register-user') }}">Register</a>
                                 </li>
                                 @else
                                 <li class="nav-item">
@@ -137,19 +140,9 @@
         <div class="app-menu navbar-menu">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <!-- Dark Logo-->
-                <!-- <a href="{{ route('administracion') }}" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img src="https://themesbrand.com/velzon/html/default/assets/images/logo-sm.png" alt=""
-                            height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="https://themesbrand.com/velzon/html/default/assets/images/logo-dark.png" alt=""
-                            height="17">
-                    </span>
-                </a> -->
+                
                 <!-- Light Logo-->
-                <a href="{{ route('administracion') }}" class="logo logo-light" style="background-color: white; padding: 10px;">
+                <a href="{{ route('administracion.home') }}" class="logo logo-light" style="background-color: white; padding: 10px;">
                     <span class="logo-sm">
                         <img src="{{ asset('/imgs/adip-header2.svg') }}" alt="" height="200">
                     </span>
@@ -188,25 +181,33 @@
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active" href="#sidebarApps">
                                                                         <i class="fa-solid fa-bars"></i>
-                                                                        <span data-key="t-apps">Cedulas</span>
+                                                                        <span data-key="t-apps">Consultas Publicas</span>
                                                                     </a>
                                                                     <div class="collapse menu-dropdown show" id="sidebarApps">
                                                                         <ul class="nav nav-sm flex-column">
+                                                                            @if( Auth::check() && ( Auth::user()->rol == 'analisis' || Auth::user()->rol == 'administracion') )
                                                                             <li class="nav-item">
                                                                                 <a href="{{ route('administracion.evaluacionAnalisis') }}" class="nav-link" data-key="t-calendar">
                                                                                     Analisis
                                                                                 </a>
                                                                             </li>
+                                                                            @endif
+                                                                            
+                                                                            @if( Auth::check() && ( Auth::user()->rol == 'tecnica' || Auth::user()->rol == 'administracion') )
                                                                             <li class="nav-item">
                                                                                 <a href="{{ route('administracion.evaluacionTecnica') }}" class="nav-link" data-key="t-calendar">
                                                                                     Evaluación Tecnica
                                                                                 </a>
                                                                             </li>
+                                                                            @endif
+
+                                                                            @if( Auth::check() && ( Auth::user()->rol == 'juridica' || Auth::user()->rol == 'administracion') )
                                                                             <li class="nav-item">
                                                                                 <a href="{{ route('administracion.evaluacionJuridica') }}" class="nav-link" data-key="t-calendar">
                                                                                     Evaluación Juridica
                                                                                 </a>
                                                                             </li>
+                                                                            @endif
                                                                         </ul>
                                                                     </div>
                                                                 </li>
@@ -225,6 +226,7 @@
                                                                         </ul>
                                                                     </div>
                                                                 </li>
+                                                                @if( Auth::check() && Auth::user()->rol == 'administracion' )
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active" href="{{ route('usuariosSistema') }}">
                                                                         <i class="fa-solid fa-bars"></i>
@@ -241,7 +243,7 @@
                                                                         </li>
                                                                     </ul>
                                                                 </li>
-
+                                                                @endif
 
                                                             </div>
                                                         </div>

@@ -20,26 +20,26 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
 | Consulta Publica
 |--------------------------------------------------------------------------
 */
-Route::get('/consulta-publica/registrar', [ConsultaPublicaController::class, 'registrar'])->name('cedula.registrar');
-Route::post('/consulta-publica', [ConsultaPublicaController::class, 'store'])->name('cedula.store');
-Route::get('/consulta-publica/confirmacion/{numero_folio}', [ConsultaPublicaController::class, 'confirmacion'])->name('cedula.confirmacion');
-Route::get('/cedula/pdf/{numero_folio}', [ConsultaPublicaController::class, 'generarFormatoPDF'])->name('cedula.pdf');
+    Route::get('/consulta-publica/registrar', [ConsultaPublicaController::class, 'registrar'])->name('cedula.registrar');
+    Route::post('/consulta-publica', [ConsultaPublicaController::class, 'store'])->name('cedula.store');
+    Route::get('/consulta-publica/confirmacion/{numero_folio}', [ConsultaPublicaController::class, 'confirmacion'])->name('cedula.confirmacion');
+    Route::get('/cedula/pdf/{numero_folio}', [ConsultaPublicaController::class, 'generarFormatoPDF'])->name('cedula.pdf');
 
 /*
 |--------------------------------------------------------------------------
 | Consulta Indigena
 |--------------------------------------------------------------------------
 */
-Route::get('/consulta-indigena', [ConsultaIndigenaController::class, 'registrar'])->name('consultaIndigena.registrar');
-Route::post('/consulta-indigena', [ConsultaIndigenaController::class, 'store'])->name('consultaIndigena.store');
-Route::get('/consulta-indigena/confirmacion/{numero_folio}', [ConsultaIndigenaController::class, 'confirmacion'])->name('consultaIndigena.confirmacion');
-Route::get('/consulta-indigena/pdf/{numero_folio}', [ConsultaIndigenaController::class, 'generarFormatoPDF'])->name('consulta_indigena.pdf');
+    Route::get('/consulta-indigena', [ConsultaIndigenaController::class, 'registrar'])->name('consultaIndigena.registrar');
+    Route::post('/consulta-indigena', [ConsultaIndigenaController::class, 'store'])->name('consultaIndigena.store');
+    Route::get('/consulta-indigena/confirmacion/{numero_folio}', [ConsultaIndigenaController::class, 'confirmacion'])->name('consultaIndigena.confirmacion');
+    Route::get('/consulta-indigena/pdf/{numero_folio}', [ConsultaIndigenaController::class, 'generarFormatoPDF'])->name('consulta_indigena.pdf');
 
 
 
 // ADMIN
     // EVALUACION ANALISIS 
-    Route::get('/administracion', [AdministracionController::class, 'evaluacionAnalisis'])->name('administracion')->middleware('auth');
+    Route::get('/administracion', [AdministracionController::class, 'home'])->name('administracion.home')->middleware('auth');
     Route::get('/administracion/analisis', [AdministracionController::class, 'evaluacionAnalisis'])->name('administracion.evaluacionAnalisis')->middleware('auth');
     Route::post('/administracion/analisis/guardar-evaluacion', [AdministracionController::class, 'guardarEvaluacionAnalisis'])->name('administracion.guardarEvaluacionAnalisis')->middleware('auth');
     Route::get('/administracion/analisis/detalle-consulta/{folio}', [AdministracionController::class, 'detalleConsulta'])->name('administracion.detalleConsulta')->middleware('auth');
@@ -51,13 +51,13 @@ Route::get('/consulta-indigena/pdf/{numero_folio}', [ConsultaIndigenaController:
     
     // EVALUACION TECNICA
     Route::get('/administracion/evaluacion-juridica', [AdministracionController::class, 'evaluacionJuridica'])->name('administracion.evaluacionJuridica')->middleware('auth');
-    Route::post('/administracion/evaluacion-juridica/guardar', [AdministracionController::class, 'guardarEvaluacionJuridica'])->name('administracion.guardarEvaluacionJuridica');
+    Route::post('/administracion/evaluacion-juridica/guardar', [AdministracionController::class, 'guardarEvaluacionJuridica'])->name('administracion.guardarEvaluacionJuridica')->middleware('auth');
 
 // USUARIOS SISTEMA
     Route::get('/administracion/usuarios', [AdministracionController::class, 'usuariosSistema'])->name('usuariosSistema')->middleware('auth');
-    Route::get('/administracion/usuarios/registrar', [CustomAuthController::class, 'registration'])->name('administracion.registrarUsuario');
-    Route::post('custom-registration', [CustomAuthController::class, 'customRegistration'])->name('register.custom'); 
-    Route::get('/administracion/usuarios/borrar/{usuario_id}', [CustomAuthController::class, 'borrarUsuario'])->name('administracion.borrarUsuario');
+    Route::get('/administracion/usuarios/registrar', [CustomAuthController::class, 'registration'])->name('administracion.registrarUsuario')->middleware('auth');
+    Route::post('custom-registration', [CustomAuthController::class, 'customRegistration'])->name('register.custom')->middleware('auth');
+    Route::get('/administracion/usuarios/borrar/{usuario_id}', [CustomAuthController::class, 'borrarUsuario'])->name('administracion.borrarUsuario')->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------

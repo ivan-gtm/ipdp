@@ -25,9 +25,24 @@ class CustomAuthController extends Controller
 
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-            return redirect()->route('administracion')->with('status', 'Bienvenido!');
-            // return redirect()->intended('dashboard')
-            //     ->withSuccess('Signed in');
+            switch ( Auth::user()->rol ) {
+                case 'analisis':
+                    return redirect()->route('administracion.evaluacionAnalisis')->with('status', 'Bienvenido, equipo analisis !');
+                    break;
+                
+                case 'tecnica':
+                    return redirect()->route('administracion.evaluacionTecnica')->with('status', 'Bienvenido, equipo evaluación tecnica !');
+                    break;
+                
+                case 'juridica':
+                    return redirect()->route('administracion.evaluacionJuridica')->with('status', 'Bienvenido, equipo evaluación juridica !');
+                    break;
+                
+                default:
+                    return redirect()->route('administracion.home')->with('status', 'Bienvenido, equipo analisis !');
+                    break;
+            }
+
         }
 
         return redirect("login")->withSuccess('Login details are not valid');
@@ -55,6 +70,7 @@ class CustomAuthController extends Controller
     public function create(array $data)
     {
         return User::create([
+            'rol' => $data['rol'],
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password'])

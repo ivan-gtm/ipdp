@@ -48,7 +48,7 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
     // EVALUACION TECNICA
     Route::get('/administracion/evaluacion-tecnica', [AdministracionController::class, 'evaluacionTecnica'])->name('administracion.evaluacionTecnica')->middleware('auth');
     Route::post('/administracion/evaluacion-tecnica/guardar', [AdministracionController::class, 'guardarEvaluacionTecnica'])->name('administracion.guardarEvaluacionTecnica')->middleware('auth');
-    Route::get('/administracion/evaluacion-tecnica/consultar/{consulta_id}', [AdministracionController::class, 'obtenerEvaluacionJuridica'])->name('administracion.obtenerEvaluacionJuridica')->middleware('auth');
+    Route::get('/administracion/evaluacion-tecnica/consultar/{consulta_id?}', [AdministracionController::class, 'obtenerEvaluacionJuridica'])->name('administracion.obtenerEvaluacionJuridica')->middleware('auth');
     
     // EVALUACION TECNICA
     Route::get('/administracion/evaluacion-juridica', [AdministracionController::class, 'evaluacionJuridica'])->name('administracion.evaluacionJuridica')->middleware('auth');

@@ -55,7 +55,7 @@ class AdministracionController extends Controller
         ]);
     }
     
-    function obtenerEvaluacionJuridica( $consulta_id ){
+    function obtenerEvaluacionJuridica( $consulta_id = null){
         
         $query = '
         SELECT
@@ -72,16 +72,16 @@ class AdministracionController extends Controller
         
         $parametros = [];
         $tmp = [];
-        $resultado = [];
+        $evaluacion_parametros = [];
         $tmp['categoria']['id'] = "";
         $tmp['categoria']['descripcion'] = "";
 
-        $resultado_query_bd = DB::select( DB::raw($query) );
+        $evaluacion_parametros_query_bd = DB::select( DB::raw($query) );
         
-        foreach ($resultado_query_bd as $parametro) {
+        foreach ($evaluacion_parametros_query_bd as $parametro) {
             
             if( $tmp['categoria']['id'] != $parametro->categoria_id){
-                $resultado[] = $tmp;
+                $evaluacion_parametros[] = $tmp;
                 $tmp = [];
                 $tmp['categoria']['id'] = ucwords($parametro->categoria_id);
                 $tmp['categoria']['descripcion'] = ucwords($parametro->categoria_descripcion);
@@ -92,14 +92,22 @@ class AdministracionController extends Controller
 
         }
 
-        $resultado[] = $tmp;
-        unset($resultado[0]);
+        $evaluacion_parametros[] = $tmp;
+        unset($evaluacion_parametros[0]);
+
+        // $evaluacion_parametros
+        $evaluacion_tecnica = EvaluacionTecnica::where('consulta_fk', $consulta_id)->first();
+
+        $response = [
+            'parametros' => $evaluacion_parametros,
+            'comentario' => $evaluacion_tecnica->observacion
+        ];
         
         // echo "<pre>";
-        // print_r( $resultado );
+        // print_r( $evaluacion_parametros );
         // exit;
 
-        return response()->json($resultado);
+        return response()->json($response);
     }
 
     function evaluacionAnalisis(){
@@ -151,7 +159,29 @@ class AdministracionController extends Controller
         return response()->json(["exito"]);
     }
 
-    function guardarEvaluacionTecnica(){
+    function guardarEvaluacionTecnica(Request $request){
+
+        $evaluacion_tecnica = EvaluacionTecnica::create([
+            'consulta_fk' => $request->folio_id,
+            'observacion' => $request->observaciones
+        ]);
+        
+        $evaluacion_parametros = $request->parametros;
+        foreach ($evaluacion_parametros as $parametro) {
+            list($categoria_id, $apartado_id) = explode("-",$parametro);
+            EvualuacionTecnicaDetalle::create([
+                'evualuacion_tecnica_fk' => $evaluacion_tecnica->id,
+                'categoria_fk' => $categoria_id,
+                'apartado_fk' => $apartado_id,
+            ]);
+            // printf($categoria_id);
+        }
+
+        $consulta = Cedula::find($request->folio_id);
+        $consulta->status = 3;
+        $consulta->save();
+
+        return response()->json("exito");
     }
     
     function guardarEvaluacionJuridica(){

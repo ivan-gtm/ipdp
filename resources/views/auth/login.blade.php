@@ -1315,7 +1315,7 @@
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
                                 <a href="{{ route('ipdp.home') }}" class="d-inline-block auth-logo">
-                                    <img src="https://cdmx.gob.mx/resources/img/adip-header2.svg" alt="" height="80">
+                                    <img src="{{ asset('/imgs/adip-header2.svg') }}" alt="" height="80">
                                 </a>
                             </div>
                             <p class="mt-3 fs-15 fw-medium">

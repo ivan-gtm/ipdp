@@ -56,7 +56,7 @@
                             <div class="flex-row">
                                 <div class="flex-4">
                                     <a href="/index.html" class="ui-link ui-widget">
-                                        <img src="https://plazapublica.cdmx.gob.mx/assets/logo-d832e68a4bf0d893f62b192a2ab8233761432beb589c74ae807353bdb515df2d.svg"
+                                        <img src="{{ asset('imgs/logo-d832e68a4bf0d893f62b192a2ab8233761432beb589c74ae807353bdb515df2d.svg') }}"
                                             style="float: left;" class="img-header pt-1">
                                     </a>
                                 </div>
@@ -89,7 +89,7 @@
                             <div class="ui-grid-row">
                                 <div class="ui-panelgrid-cell ui-grid-col-4">
                                     <a href="https://www.cdmx.gob.mx" class="ui-link ui-widget" target="_blank"><img
-                                            src="https://cdmx.gob.mx/resources/img/adip-header2.svg"
+                                            src="{{ asset('/imgs/adip-header2.svg') }}"
                                             style="float: left;" class="img-header pt-1 menu-responsive"></a>
                                 </div>
                                 <div class="ui-panelgrid-cell ui-grid-col-8"><button id="formHeader:j_idt38"
@@ -132,7 +132,7 @@
                             <div class="ui-grid-row">
                                 <div class="ui-panelgrid-cell ui-grid-col-12 ZeroPadding">
                                     <a href="https://www.cdmx.gob.mx" class="ui-link ui-widget" target="_blank"><img
-                                            src="https://cdmx.gob.mx/resources/img/adip-header2.svg"
+                                            src="{{ asset('/imgs/adip-header2.svg') }}"
                                             style="float: left;" class="img-header"></a>
                                 </div>
                                 <div class="ui-panelgrid-cell ui-grid-col-12 ZeroPadding opcionxmenuGreen">

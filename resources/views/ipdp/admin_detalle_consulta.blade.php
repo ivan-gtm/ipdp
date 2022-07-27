@@ -144,10 +144,10 @@
                 <!-- Light Logo-->
                 <a href="index.html" class="logo logo-light" style="background-color: white; padding: 10px;">
                     <span class="logo-sm">
-                        <img src="https://cdmx.gob.mx/resources/img/adip-header2.svg" alt="" height="200">
+                        <img src="{{ asset('/imgs/adip-header2.svg') }}" alt="" height="200">
                     </span>
                     <span class="logo-lg">
-                        <img src="https://cdmx.gob.mx/resources/img/adip-header2.svg" alt="" height="50">
+                        <img src="{{ asset('/imgs/adip-header2.svg') }}" alt="" height="50">
                     </span>
                 </a>
                 <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"

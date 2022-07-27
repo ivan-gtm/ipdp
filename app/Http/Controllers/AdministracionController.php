@@ -108,9 +108,8 @@ class AdministracionController extends Controller
             $user_mail = Auth::user()->email;
         }
 
-
         $perPage = 2;
-        $cedulas = Cedula::paginate($perPage);
+        $cedulas = Cedula::where('status','=',1)->paginate($perPage);
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
@@ -143,6 +142,19 @@ class AdministracionController extends Controller
             'archivos_cedula' => $archivos_cedula
         ]);
 
+    }
+
+    function guardarEvaluacionAnalisis(Request $request){
+        $consulta = Cedula::find($request->consulta_id);
+        $consulta->status = 2;
+        $consulta->save();
+        return response()->json(["exito"]);
+    }
+
+    function guardarEvaluacionTecnica(){
+    }
+    
+    function guardarEvaluacionJuridica(){
     }
 
     function obtenerParametrosValoracionTecnica(){

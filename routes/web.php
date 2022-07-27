@@ -42,16 +42,17 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
     // EVALUACION ANALISIS 
     Route::get('/administracion', [AdministracionController::class, 'evaluacionAnalisis'])->name('administracion')->middleware('auth');
     Route::get('/administracion/analisis', [AdministracionController::class, 'evaluacionAnalisis'])->name('administracion.evaluacionAnalisis')->middleware('auth');
+    Route::post('/administracion/analisis/guardar-evaluacion', [AdministracionController::class, 'guardarEvaluacionAnalisis'])->name('administracion.guardarEvaluacionAnalisis')->middleware('auth');
     Route::get('/administracion/analisis/detalle-consulta/{folio}', [AdministracionController::class, 'detalleConsulta'])->name('administracion.detalleConsulta')->middleware('auth');
 
     // EVALUACION TECNICA
     Route::get('/administracion/evaluacion-tecnica', [AdministracionController::class, 'evaluacionTecnica'])->name('administracion.evaluacionTecnica')->middleware('auth');
-    Route::post('/administracion/evaluacion-tecnica/guardar', [AdministracionController::class, 'guardarEvaluacionAnalisisTecnico'])->name('administracion.guardarEvaluacionAnalisisTecnico')->middleware('auth');
+    Route::post('/administracion/evaluacion-tecnica/guardar', [AdministracionController::class, 'guardarEvaluacionTecnica'])->name('administracion.guardarEvaluacionTecnica')->middleware('auth');
     Route::get('/administracion/evaluacion-tecnica/consultar/{consulta_id}', [AdministracionController::class, 'obtenerEvaluacionJuridica'])->name('administracion.obtenerEvaluacionJuridica')->middleware('auth');
     
     // EVALUACION TECNICA
     Route::get('/administracion/evaluacion-juridica', [AdministracionController::class, 'evaluacionJuridica'])->name('administracion.evaluacionJuridica')->middleware('auth');
-    // Route::post('/administracion/evaluacion-juridica/guardar', [AdministracionController::class, 'guardarEvaluacionAnalisisTecnico'])->name('administracion.guardarEvaluacionAnalisisTecnico');
+    Route::post('/administracion/evaluacion-juridica/guardar', [AdministracionController::class, 'guardarEvaluacionJuridica'])->name('administracion.guardarEvaluacionJuridica');
 
 // USUARIOS SISTEMA
     Route::get('/administracion/usuarios', [AdministracionController::class, 'usuariosSistema'])->name('usuariosSistema')->middleware('auth');

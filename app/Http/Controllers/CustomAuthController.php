@@ -26,6 +26,10 @@ class CustomAuthController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             switch ( Auth::user()->rol ) {
+                case 'administracion':
+                    return redirect()->route('administracion.home')->with('status', 'Bienvenido, administrador!');
+                    break;
+                
                 case 'analisis':
                     return redirect()->route('administracion.evaluacionAnalisis')->with('status', 'Bienvenido, equipo analisis !');
                     break;
@@ -75,22 +79,6 @@ class CustomAuthController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password'])
         ]);
-    }
-
-    public function dashboard()
-    {
-        if (Auth::check()) {
-            // $user = Auth::user();
-            // echo "<pre>";
-            // print_r(Auth::id());
-            // print_r($user);
-            // exit;
-            
-            return view('auth.dashboard');
-        }
-
-
-        return redirect("login")->withSuccess('are not allowed to access');
     }
 
     public function signOut()

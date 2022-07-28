@@ -29,7 +29,7 @@
                                 <th>Fecha</th>
                                 <th>Tipo</th>
                                 <th>Registrado por</th>
-                                <th>Estado de la solicitud</th>
+                                <th>Situación</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -52,7 +52,8 @@
                                     {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                                 </td>
                                 <td>
-                                    {{ $cedula->status }}
+                                    <!-- {{ $cedula->status }} -->
+                                    <span class="badge bg-success text-uppercase">Pendiente Analisis de propuesta</span>
                                 </td>
                                 <td class="create_date">
                                     <ul class="panel-acciones">

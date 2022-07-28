@@ -2,7 +2,7 @@
 @section('title', 'Evaluacion Tecnica')
 @section('modulo_titulo', 'Evaluacion Tecnica')
 @section('head')
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 @endsection
 @section('content')
 <div class="table-responsive table-card mb-4">
@@ -14,7 +14,7 @@
                 <th>Fecha</th>
                 <th>Tipo</th>
                 <th>Registrado por</th>
-                <th>Estado de la solicitud</th>
+                <th>Situación</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -37,8 +37,9 @@
                     {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                 </td>
                 <td>
-                    <span class="badge badge-soft-warning text-uppercase">
-                        {{ $cedula->status }}
+                    <!-- {{ $cedula->status }} -->
+                    <span class="badge badge-soft-warning">
+                        Pendiente Valoración Técnica
                     </span>
                 </td>
                 <td class="create_date">

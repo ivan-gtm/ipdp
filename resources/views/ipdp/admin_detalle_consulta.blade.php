@@ -546,31 +546,40 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-12 text-center">
-                            <br>    
-                            <hr>
-                                <h3>ARCHIVOS</h3>
-                            </div>
-                            <div class="col-12">
-                                @foreach ($archivos_cedula as $archivo)
-                                    @if( substr($archivo->file_path,-3) == 'jpg' 
-                                        || substr($archivo->file_path,-3) == 'jpeg' 
-                                        || substr($archivo->file_path,-3) == 'png' 
-                                        )
-                                        <img class="img-fluid" src="{{ asset('storage/'.$archivo->file_path ) }}">
-                                    @elseif( substr($archivo->file_path,-3) == 'pdf' )
-                                        <a href="{{ asset('storage/'.$archivo->file_path ) }}" class="edit-item-btn" download>
-                                            <i class="fa-solid fa-file-pdf"></i>
-                                            <!-- Descargar como PDF -->
-                                        </a>
-                                    @elseif( substr($archivo->file_path,-3) == 'doc' || substr($archivo->file_path,-3) == 'ocx' )
-                                        <a href="{{ substr($archivo->file_path,-3) }}" class="edit-item-btn" download>
-                                            <i class="fa-solid fa-file-pdf"></i>
-                                            <!-- Descargar como PDF -->
-                                        </a>
-                                    @endif
-                                    
-                                @endforeach
+                            <div class="col-md-12">
+                                @if( sizeof($archivos_cedula) > 0 )
+                                <h2 class="text-center">ARCHIVOS</h2>
+                                <div class="row pb-3">
+                                    @foreach ($archivos_cedula as $archivo)
+                                    <div class="col-md-3">
+                                        <div class="card">
+                                            <a href="{{ asset('storage/'.$archivo->file_path) }}" class="card-link" target="_blank">
+                                            @if( substr( $archivo->file_path , strrpos( $archivo->file_path ,".")+1, strlen( $archivo->file_path )) == 'jpg'
+                                            || substr( $archivo->file_path , strrpos( $archivo->file_path ,".")+1, strlen( $archivo->file_path )) == 'png'
+                                            || substr( $archivo->file_path , strrpos( $archivo->file_path ,".")+1, strlen( $archivo->file_path )) == 'jpeg')
+                                                <img src="{{ asset('storage/'.$archivo->file_path) }}" class="card-img-top">
+                                            @else
+                                                <img src="https://via.placeholder.com/288x180.png/bc955c/fff?text={{ substr( $archivo->file_path , strrpos( $archivo->file_path ,".")+1, strlen( $archivo->file_path )) }}" class="card-img-top">
+                                            @endif
+                                            </a>
+                                            
+                                            <div class="card-body" style="display:none">
+                                                <h5 class="card-title">Card title</h5>
+                                                <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+                                            </div>
+                                            <ul class="list-group list-group-flush" style="display:none">
+                                                <li class="list-group-item">An item</li>
+                                                <li class="list-group-item">A second item</li>
+                                                <li class="list-group-item">A third item</li>
+                                            </ul>
+                                            <div class="card-body text-center">
+                                                <a href="{{ asset('storage/'.$archivo->file_path) }}" class="card-link" download>DESCARGAR ARCHIVO</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>

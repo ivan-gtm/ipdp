@@ -91,7 +91,7 @@ class ConsultaPublicaController extends Controller
         }
 
         $archivos = DB::table('cedula_archivo')->where('folio','=',$request->numero_folio)->get();
-        
+
         if($cedula != null){
             return view('ipdp.seguimiento_folios', [
                 'numero_folio' => $cedula->folio,

@@ -347,13 +347,14 @@
                                 </div>
                                 <div class="flex-8 ">
                                     <div class="flex flex-wrap card-container yellow-container " style="float:right !important;">
-                                        <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
+                                        <!-- <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
                                             <a href="/buscar_folio.html" class="ui-link ui-widget menu-header-principal">Seguimiento a Folios</a>
+                                        </div> -->
+                                        <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
+                                            <a href="{{ route('consultaIndigena.registrar') }}" class="ui-link ui-widget menu-header-principal">Consulta Indigena</a>
                                         </div>
                                         <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
-                                            <a href="{{ route('login') }}" class="btn btn-sm btn-outline-primary mr-1" data-icon="fa-sign-in-alt">
-                                                <i class="fa fa-sign-in-alt"></i>
-                                                <i class="fa fa-sign-in"></i>
+                                            <a href="{{ route('login') }}" class="ui-link ui-widget menu-header-principal">
                                                 Ingresar
                                             </a>
                                         </div>

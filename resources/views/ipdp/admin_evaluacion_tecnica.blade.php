@@ -266,7 +266,7 @@
         return parametros;
     }
 
-    function rechazarSolicitud(consulta_id) {
+    function rechazarSolicitud() {
         requestBody = {
             "consulta_id": $('#folio_id_rechazo').val(),
             "motivo_rechazo": $('#motivo_rechazo').val()

@@ -51,8 +51,9 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
     Route::post('/administracion/evaluacion-tecnica/rechazo', [AdministracionController::class, 'guardarRechazoEvaluacionTecnica'])->name('administracion.guardarRechazoEvaluacionTecnica')->middleware('auth');
     Route::get('/administracion/evaluacion-tecnica/consultar/{consulta_id?}', [AdministracionController::class, 'obtenerEvaluacionJuridica'])->name('administracion.obtenerEvaluacionJuridica')->middleware('auth');
     
-    // EVALUACION TECNICA
+    // EVALUACION JURIDICA
     Route::get('/administracion/evaluacion-juridica', [AdministracionController::class, 'evaluacionJuridica'])->name('administracion.evaluacionJuridica')->middleware('auth');
+    Route::post('/administracion/evaluacion-juridica/rechazo', [AdministracionController::class, 'guardarRechazoEvaluacionJuridica'])->name('administracion.guardarRechazoEvaluacionJuridica')->middleware('auth');
     Route::post('/administracion/evaluacion-juridica/guardar', [AdministracionController::class, 'guardarEvaluacionJuridica'])->name('administracion.guardarEvaluacionJuridica')->middleware('auth');
 
 // USUARIOS SISTEMA

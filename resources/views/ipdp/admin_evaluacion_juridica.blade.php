@@ -83,7 +83,7 @@
                                             </button>
                                         </li>
                                         <li>
-                                            <button type="button" class="remove-item-btn" data-bs-toggle="modal" data-bs-target="#rechazoModal">
+                                            <button type="button" class="remove-item-btn" data-bs-toggle="modal" onclick="actualizarFolioIdRechazo({{ $cedula->id }})" data-bs-target="#rechazoModal">
                                                 <i class="fa-solid fa-circle-xmark"></i>
                                                 <!-- Rechazar -->
                                             </button>
@@ -155,11 +155,12 @@
             </div>
             <div class="modal-body">
                 Escriba una breve descripción, con el motivo del rechazo:
-                <textarea class="form-control" name="motivo_rechazo" id="" rows="10"></textarea>
+                <input type="hidden" name="folio_id_rechazo" id="folio_id_rechazo">
+                <textarea class="form-control" name="motivo_rechazo" id="motivo_rechazo" rows="10"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Enviar Rechazo</button>
+                <button type="button" class="btn btn-primary" onclick="rechazarSolicitud()">Enviar Rechazo</button>
             </div>
         </div>
     </div>
@@ -199,6 +200,7 @@
 @section('js')
 <script>
     const modalEvaluacionJuridica = new bootstrap.Modal(document.getElementById('modalEvaluacionJuridica'));
+    const rechazoModal = new bootstrap.Modal(document.getElementById('rechazoModal'));
 
     function setTitulo(titulo) {
         $("table#evaluacion-juridica>tbody").append(getTituloHTML(titulo));
@@ -293,6 +295,40 @@
                     console.log("La solicitud a fallado: " + textStatus);
                 }
             });
+    }
+
+    function actualizarFolioIdRechazo(folio_id) {
+        $('#folio_id_rechazo').val(folio_id);
+    }
+
+    function rechazarSolicitud() {
+        requestBody = {
+            "consulta_id": $('#folio_id_rechazo').val(),
+            "motivo_rechazo": $('#motivo_rechazo').val()
+        };
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('administracion.guardarRechazoEvaluacionJuridica') }}",
+            method: "POST",
+            data: JSON.stringify(requestBody),
+            contentType: 'application/json; charset=utf-8'
+        })
+        .done(function(data, textStatus, jqXHR) {
+            rechazoModal.hide();
+            location.reload();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            if (console && console.log) {
+                console.log("La solicitud a fallado: " + textStatus);
+            }
+            $("#status").text("FAIL REQUEST").show();
+        });
     }
 </script>
 @endsection

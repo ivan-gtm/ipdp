@@ -12,6 +12,7 @@ use App\Models\EvaluacionTecnica;
 use App\Models\EvualuacionTecnicaDetalle;
 use App\Models\EvaluacionAnalisis;
 use App\Models\EvaluacionTecnicaRechazo;
+use App\Models\EvaluacionJuridicaRechazo;
 use Illuminate\Support\Facades\Auth;
 
 class AdministracionController extends Controller
@@ -201,7 +202,7 @@ class AdministracionController extends Controller
         ]);
 
         $consulta = Cedula::find( $request->consulta_id );
-        $consulta->status = 100;
+        $consulta->status = 101;
         $consulta->save();
         
         return response()->json("exito");
@@ -215,7 +216,21 @@ class AdministracionController extends Controller
         ]);
 
         $consulta = Cedula::find( $request->consulta_id );
-        $consulta->status = 101; // Rechazo evaluacion tecnica
+        $consulta->status = 102; // Rechazo evaluacion tecnica
+        $consulta->save();
+        
+        return response()->json("exito");
+    }
+    
+    function guardarRechazoEvaluacionJuridica(Request $request){
+
+        $rechazo_analisis = EvaluacionJuridicaRechazo::create([
+            'consulta_fk' => $request->consulta_id,
+            'motivo_rechazo' => $request->motivo_rechazo
+        ]);
+
+        $consulta = Cedula::find( $request->consulta_id );
+        $consulta->status = 103; // Rechazo evaluacion tecnica
         $consulta->save();
         
         return response()->json("exito");

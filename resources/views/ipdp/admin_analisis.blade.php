@@ -83,7 +83,7 @@
                                             </button>
                                         </li>
                                         <li>
-                                            <button type="button" class="remove-item-btn" data-bs-toggle="modal" data-bs-target="#rechazoModal">
+                                            <button type="button" class="remove-item-btn" data-bs-toggle="modal" onclick="actualizarFolioIdRechazo({{ $cedula->id }})" data-bs-target="#rechazoModal">
                                                 <i class="fa-solid fa-circle-xmark"></i>
                                                 <!-- Rechazar -->
                                             </button>
@@ -155,11 +155,12 @@
             </div>
             <div class="modal-body">
                 Escriba una breve descripción, con el motivo del rechazo:
+                <input type="hidden" name="folio_id_rechazo" id="folio_id_rechazo">
                 <textarea class="form-control" name="motivo_rechazo" id="motivo_rechazo" rows="10"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="rechazarSolicitud({{ $cedula->id }})">Enviar Rechazo</button>
+                <button type="button" class="btn btn-primary" onclick="rechazarSolicitud()">Enviar Rechazo</button>
             </div>
         </div>
     </div>
@@ -224,9 +225,13 @@
         });
     }
     
-    function rechazarSolicitud(consulta_id) {
+    function actualizarFolioIdRechazo(folio_id) {
+        $('#folio_id_rechazo').val(folio_id);
+    }
+
+    function rechazarSolicitud() {
         requestBody = {
-            "consulta_id": consulta_id,
+            "consulta_id": $('#folio_id_rechazo').val(),
             "motivo_rechazo": $('#motivo_rechazo').val()
         };
         

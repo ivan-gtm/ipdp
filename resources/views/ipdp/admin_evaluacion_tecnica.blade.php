@@ -67,7 +67,7 @@
                             </button>
                         </li>
                         <li>
-                            <button type="button" class="remove-item-btn" data-bs-toggle="modal" data-bs-target="#rechazoModal">
+                            <button type="button" class="remove-item-btn" onclick="actualizarFolioIdRechazo({{ $cedula->id }})" data-bs-toggle="modal" data-bs-target="#rechazoModal">
                                 <i class="fa-solid fa-circle-xmark"></i>
                                 <!-- Rechazar -->
                             </button>
@@ -132,11 +132,12 @@
             </div>
             <div class="modal-body">
                 Escriba una breve descripción, con el motivo del rechazo:
-                <textarea class="form-control" name="motivo_rechazo" id="" rows="10"></textarea>
+                <input type="hidden" name="folio_id_rechazo" id="folio_id_rechazo">
+                <textarea class="form-control" name="motivo_rechazo" id="motivo_rechazo" rows="10"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Enviar Rechazo</button>
+                <button type="button" class="btn btn-primary" onclick="rechazarSolicitud()">Enviar Rechazo</button>
             </div>
         </div>
     </div>
@@ -147,9 +148,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -200,9 +199,14 @@
 @section('js')
 <script>
     const modalEvaluacionTecnica = new bootstrap.Modal(document.getElementById('modalEvaluacionTecnica'));
+    const rechazoModal = new bootstrap.Modal(document.getElementById('rechazoModal'));
 
     function actualizarFolioId(folio_id) {
         $('#folio_id').val(folio_id);
+    }
+    
+    function actualizarFolioIdRechazo(folio_id) {
+        $('#folio_id_rechazo').val(folio_id);
     }
 
     function guardarEvaluacionAnalisis() {
@@ -260,6 +264,38 @@
         });
 
         return parametros;
+    }
+
+    function rechazarSolicitud(consulta_id) {
+        requestBody = {
+            "consulta_id": $('#folio_id_rechazo').val(),
+            "motivo_rechazo": $('#motivo_rechazo').val()
+        };
+        
+        // rechazoModal.show();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('administracion.guardarRechazoEvaluacionTecnica') }}",
+            method: "POST",
+            data: JSON.stringify(requestBody),
+            contentType: 'application/json; charset=utf-8'
+        })
+        .done(function(data, textStatus, jqXHR) {
+            rechazoModal.hide();
+            location.reload();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            if (console && console.log) {
+                console.log("La solicitud a fallado: " + textStatus);
+            }
+            $("#status").text("FAIL REQUEST").show();
+        });
     }
 </script>
 @endsection

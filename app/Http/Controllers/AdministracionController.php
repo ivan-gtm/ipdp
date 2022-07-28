@@ -10,6 +10,8 @@ use App\Models\Cedula;
 use App\Models\User;
 use App\Models\EvaluacionTecnica;
 use App\Models\EvualuacionTecnicaDetalle;
+use App\Models\EvaluacionAnalisis;
+use App\Models\EvaluacionTecnicaRechazo;
 use Illuminate\Support\Facades\Auth;
 
 class AdministracionController extends Controller
@@ -130,16 +132,12 @@ class AdministracionController extends Controller
         }
 
         $perPage = 2;
-        $cedulas = Cedula::where('status','=',1)->paginate($perPage);
+        $cedulas = Cedula::whereIn('status', [1, 100])->paginate($perPage);
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
         $parametros = self::obtenerParametrosValoracionTecnica();
-        // $columnas = ceil(sizeof($parametros) / 2);
-        // echo "<pre>";
-        // print_r( $parametros );
-        // exit;
-
+        
         return view('ipdp.admin_analisis', [
             'page_number' => $page_number,
             'cedulas' => $cedulas,
@@ -192,6 +190,34 @@ class AdministracionController extends Controller
         $consulta->status = 3;
         $consulta->save();
 
+        return response()->json("exito");
+    }
+    
+    function guardarRechazoAnalisisSolicitud(Request $request){
+
+        $rechazo_analisis = EvaluacionAnalisis::create([
+            'consulta_fk' => $request->consulta_id,
+            'motivo_rechazo' => $request->motivo_rechazo
+        ]);
+
+        $consulta = Cedula::find( $request->consulta_id );
+        $consulta->status = 100;
+        $consulta->save();
+        
+        return response()->json("exito");
+    }
+    
+    function guardarRechazoEvaluacionTecnica(Request $request){
+
+        $rechazo_analisis = EvaluacionTecnicaRechazo::create([
+            'consulta_fk' => $request->consulta_id,
+            'motivo_rechazo' => $request->motivo_rechazo
+        ]);
+
+        $consulta = Cedula::find( $request->consulta_id );
+        $consulta->status = 101; // Rechazo evaluacion tecnica
+        $consulta->save();
+        
         return response()->json("exito");
     }
     

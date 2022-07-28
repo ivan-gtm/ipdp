@@ -52,8 +52,12 @@
                                     {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                                 </td>
                                 <td>
-                                    <!-- {{ $cedula->status }} -->
-                                    <span class="badge bg-success text-uppercase">Pendiente Analisis de propuesta</span>
+                                    @if( $cedula->status == 1)
+                                        <!-- {{ $cedula->status }} -->
+                                        <span class="badge bg-success text-uppercase">Pendiente Analisis de propuesta</span>
+                                    @elseif( $cedula->status == 100)
+                                        <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
+                                    @endif
                                 </td>
                                 <td class="create_date">
                                     <ul class="panel-acciones">
@@ -71,6 +75,7 @@
                                                 <!-- Descargar como PDF -->
                                             </a>
                                         </li>
+                                        @if( $cedula->status == 1)
                                         <li>
                                             <button type="button" class="edit-item-btn" onclick="aprobarSolicitud({{ $cedula->id }})">
                                                 <i class="fa-solid fa-circle-check"></i>
@@ -83,6 +88,7 @@
                                                 <!-- Rechazar -->
                                             </button>
                                         </li>
+                                        @endif
                                     </ul>
                                 </td>
                             </tr>
@@ -149,11 +155,11 @@
             </div>
             <div class="modal-body">
                 Escriba una breve descripción, con el motivo del rechazo:
-                <textarea class="form-control" name="motivo_rechazo" id="" rows="10"></textarea>
+                <textarea class="form-control" name="motivo_rechazo" id="motivo_rechazo" rows="10"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Enviar Rechazo</button>
+                <button type="button" class="btn btn-primary" onclick="rechazarSolicitud({{ $cedula->id }})">Enviar Rechazo</button>
             </div>
         </div>
     </div>
@@ -208,6 +214,38 @@
         .done(function(data, textStatus, jqXHR) {
             console.log(data);
             console.log("COMPLETE");
+            location.reload();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            if (console && console.log) {
+                console.log("La solicitud a fallado: " + textStatus);
+            }
+            $("#status").text("FAIL REQUEST").show();
+        });
+    }
+    
+    function rechazarSolicitud(consulta_id) {
+        requestBody = {
+            "consulta_id": consulta_id,
+            "motivo_rechazo": $('#motivo_rechazo').val()
+        };
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('administracion.guardarRechazoAnalisisSolicitud') }}",
+            method: "POST",
+            data: JSON.stringify(requestBody),
+            contentType: 'application/json; charset=utf-8'
+        })
+        .done(function(data, textStatus, jqXHR) {
+            // console.log(data);
+            // console.log("COMPLETE");
+            rechazoModal.hide();
             location.reload();
         })
         .fail(function(jqXHR, textStatus, errorThrown) {

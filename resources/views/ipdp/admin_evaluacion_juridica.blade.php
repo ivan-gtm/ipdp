@@ -53,10 +53,16 @@
                                     {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                                 </td>
                                 <td>
-                                    <span class="badge badge-soft-warning text-uppercase">
+                                    @if( $cedula->status == 3)
                                         <!-- {{ $cedula->status }} -->
-                                        Pendiente Valoración Júridica
-                                    </span>
+                                        <span class="badge badge-soft-warning text-uppercase">
+                                            Pendiente Valoración Júridica
+                                        </span>
+                                    @elseif( $cedula->status == 103)
+                                        <span class="badge bg-danger text-uppercase">
+                                            Solicitud Rechazada
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="create_date">
                                     <ul class="panel-acciones">
@@ -76,6 +82,7 @@
                                                 <!-- Descargar como PDF -->
                                             </a>
                                         </li>
+                                        @if( $cedula->status == 3)
                                         <li>
                                             <button type="button" class="edit-item-btn" onclick="obtenerEvaluacion({{ $cedula->id }})">
                                                 <i class="fa-solid fa-circle-check"></i>
@@ -88,6 +95,7 @@
                                                 <!-- Rechazar -->
                                             </button>
                                         </li>
+                                        @endif
                                     </ul>
                                 </td>
                             </tr>

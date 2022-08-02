@@ -1,4 +1,4 @@
-@extends('layouts.frontend')
+@extends('layouts.admin')
 @section('title', 'Registro de Consulta Indigena')
 
 @section('head')
@@ -6,14 +6,20 @@
 <meta name="folio" content="{{ $numero_folio }}" />
 <link type="text/css" rel="stylesheet" href="{{asset('css/uppy.min.css')}}" rel="stylesheet" />
 <script src="{{asset('css/uppy.min.js')}}"></script>
+<style>
+.label-red{
+    color: red;
+}
+</style>
 @endsection
 
 @section('content')
 <div class="row">
     <div class="col-12">
         <strong>
-            Instrucciones: Todos los campos marcados con (*) son obligatorios.
+            Instrucciones: Todos los campos marcados con <span class="label-red">(*)</span> son obligatorios.
         </strong>
+        <br>
     </div>
     <div class="col-12">
         <div class="bd-example">

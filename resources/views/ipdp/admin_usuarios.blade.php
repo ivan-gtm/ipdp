@@ -22,7 +22,7 @@
                         <table class="table align-middle table-nowrap mb-0" id="ticketTable">
                             <thead>
                                 <tr>
-                                    <th>Id Usuario</th>
+                                    <th class="text-center">Id Usuario</th>
                                     <th>Creado</th>
                                     <th>Actualizado</th>
                                     <th>Rol de Usuario</th>
@@ -34,7 +34,7 @@
                             <tbody class="list form-check-all" id="ticket-list-data">
                                 @foreach ($usuarios as $usuario)
                                 <tr>
-                                    <td>{{ $usuario->id }}</td>
+                                    <td class="text-center">{{ $usuario->id }}</td>
                                     <td>{{ $usuario->created_at }}</td>
                                     <td>{{ $usuario->updated_at }}</td>
                                     <td>{{ strtoupper($usuario->rol) }}</td>
@@ -44,8 +44,8 @@
                                         <!-- <span class="badge bg-success text-uppercase">CEDULA</span> -->
                                         <ul class="panel-acciones">
                                             <li>
-                                                <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
-                                                                            'folio' => $usuario->id
+                                                <a class="edit-item-btn" href="{{ route('administracion.editarUsuario',[
+                                                                            'usuario_id' => $usuario->id
                                                                         ]) }}">
                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                     <!-- Detalles -->

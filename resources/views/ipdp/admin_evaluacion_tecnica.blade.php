@@ -37,10 +37,16 @@
                     {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                 </td>
                 <td>
-                    <!-- {{ $cedula->status }} -->
-                    <span class="badge badge-soft-warning">
-                        Pendiente Valoración Técnica
-                    </span>
+                    @if( $cedula->status == 2)
+                        <!-- {{ $cedula->status }} -->
+                        <span class="badge badge-soft-warning">
+                            Pendiente Valoración Técnica
+                        </span>
+                    @elseif( $cedula->status == 102)
+                        <span class="badge bg-danger text-uppercase">
+                            Solicitud Rechazada
+                        </span>
+                    @endif
                 </td>
                 <td class="create_date">
                     <ul class="panel-acciones">
@@ -60,6 +66,7 @@
                                 <!-- Descargar como PDF -->
                             </a>
                         </li>
+                        @if( $cedula->status == 2)
                         <li>
                             <button type="button" class="edit-item-btn" onclick="actualizarFolioId({{ $cedula->id }})" data-bs-toggle="modal" data-bs-target="#modalEvaluacionTecnica">
                                 <i class="fa-solid fa-circle-check"></i>
@@ -72,6 +79,7 @@
                                 <!-- Rechazar -->
                             </button>
                         </li>
+                        @endif
                     </ul>
                 </td>
             </tr>
@@ -204,7 +212,7 @@
     function actualizarFolioId(folio_id) {
         $('#folio_id').val(folio_id);
     }
-    
+
     function actualizarFolioIdRechazo(folio_id) {
         $('#folio_id_rechazo').val(folio_id);
     }
@@ -271,7 +279,7 @@
             "consulta_id": $('#folio_id_rechazo').val(),
             "motivo_rechazo": $('#motivo_rechazo').val()
         };
-        
+
         // rechazoModal.show();
 
         $.ajaxSetup({
@@ -281,21 +289,21 @@
         });
 
         $.ajax({
-            url: "{{ route('administracion.guardarRechazoEvaluacionTecnica') }}",
-            method: "POST",
-            data: JSON.stringify(requestBody),
-            contentType: 'application/json; charset=utf-8'
-        })
-        .done(function(data, textStatus, jqXHR) {
-            rechazoModal.hide();
-            location.reload();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            if (console && console.log) {
-                console.log("La solicitud a fallado: " + textStatus);
-            }
-            $("#status").text("FAIL REQUEST").show();
-        });
+                url: "{{ route('administracion.guardarRechazoEvaluacionTecnica') }}",
+                method: "POST",
+                data: JSON.stringify(requestBody),
+                contentType: 'application/json; charset=utf-8'
+            })
+            .done(function(data, textStatus, jqXHR) {
+                rechazoModal.hide();
+                location.reload();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                if (console && console.log) {
+                    console.log("La solicitud a fallado: " + textStatus);
+                }
+                $("#status").text("FAIL REQUEST").show();
+            });
     }
 </script>
 @endsection

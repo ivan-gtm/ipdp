@@ -55,7 +55,7 @@
                                     @if( $cedula->status == 1)
                                         <!-- {{ $cedula->status }} -->
                                         <span class="badge bg-success text-uppercase">Pendiente Analisis de propuesta</span>
-                                    @elseif( $cedula->status == 100)
+                                    @elseif( $cedula->status == 101)
                                         <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
                                     @endif
                                 </td>

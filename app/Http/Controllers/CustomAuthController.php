@@ -56,6 +56,32 @@ class CustomAuthController extends Controller
     {
         return view('auth.registration');
     }
+    
+    public function editarUsuario($usuario_id)
+    {
+        $usuario = User::where('id', $usuario_id)->first();
+        // echo "<pre>";
+        // print_r($usuario);
+        // exit;
+        return view('auth.editar_usuario',[
+            'usuario' => $usuario
+        ]);
+    }
+    
+    public function actualizarUsuario( Request $request_usuario )
+    {
+        $usuario = User::find($request_usuario->id);
+        
+        $usuario->name = $request_usuario->name;
+        $usuario->email = $request_usuario->email;
+        $usuario->rol = $request_usuario->rol;
+        if( isset($request_usuario->password) && strlen( $request_usuario->password ) > 0){
+            $usuario->password = Hash::make( $request_usuario->password );
+        }
+        $usuario->save();
+        
+        return redirect()->route('usuariosSistema')->with('status', 'Usuario actualizado con exito!');;
+    }
 
     public function customRegistration(Request $request)
     {

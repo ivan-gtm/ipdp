@@ -6,6 +6,11 @@
 <meta name="folio" content="{{ $numero_folio }}" />
 <link type="text/css" rel="stylesheet" href="{{asset('css/uppy.min.css')}}" rel="stylesheet" />
 <script src="{{asset('css/uppy.min.js')}}"></script>
+<style>
+.label-red{
+    color: red;
+}
+</style>
 @endsection
 @section('content')
 
@@ -78,7 +83,7 @@
                             <div class="col-md-4">
                                 <label for="inputEdad" class="form-label">Edad</label>
                                 <div class="input-group has-validation">
-                                    <input type="number" class="form-control" id="inputEdad" name="inputEdad" max="99" min="1" required>
+                                    <input type="number" class="form-control" id="inputEdad" name="inputEdad" max="99" min="1">
                                     <div class="invalid-feedback">
                                         Por favor especifique su edad.
                                     </div>
@@ -88,7 +93,7 @@
                                 <label for="inputOcupacion" class="form-label">Ocupación</label>
                                 <label class="label-red">*</label>
                                 <div class="input-group has-validation">
-                                    <select class="form-control" id="inputOcupacion" name="inputOcupacion" required>
+                                    <select class="form-control" id="inputOcupacion" name="inputOcupacion">
                                         <option></option>
                                         <option>Profesionista</option>
                                         <option>Empleado en sector privado</option>
@@ -115,13 +120,13 @@
                             <div class="col-md-4">
                                 <label for="optionGenero" class="form-label">Género</label>
                                 <br>
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoHombre" value="Hombre" required>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoHombre" value="Hombre">
                                 <label class="form-check-label" for="generoHombre">Hombre</label>
 
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoMujer" value="Mujer" required>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoMujer" value="Mujer">
                                 <label class="form-check-label" for="generoMujer">Mujer</label>
 
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoOtro" value="Otro" required>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoOtro" value="Otro">
                                 <label class="form-check-label" for="generoOtro">Otro</label>
 
                                 <div class="invalid-feedback">Seleccione su genero</div>
@@ -140,7 +145,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="inputCelular" class="form-label">Teléfono celular (10 digitos)</label>
-                                    <input type="number" class="form-control" id="inputCelular" name="inputCelular" pattern="[0-9]{10}" required>
+                                    <input type="number" class="form-control" id="inputCelular" name="inputCelular" pattern="[0-9]{10}">
                                 </div>
                             </div>
                             <div class="row" style="padding-top: 30px;">

@@ -108,21 +108,21 @@ class ConsultaPublicaController extends Controller
 
         $validatedData = $request->validate([
             'folio' => 'required|digits:6',
-            'primer_apellido' => 'required',
             'nombre' => 'required',
+            'primer_apellido' => 'required',
             'segundo_apellido' => 'required',
-            'edad' => 'required|min:1|max:99',
-            'ocupacion' => 'required',
-            'genero' => ['required',Rule::in(['Hombre', 'Mujer','Otro'])],
+            'edad' => 'nullable|min:1|max:99',
+            'ocupacion' => 'nullable',
+            'genero' => ['nullable',Rule::in(['Hombre', 'Mujer','Otro'])],
             'correo' => 'required|email|unique:cedulas',
-            'celular' => 'required|digits:10',
-            'calle' => 'required',
-            'num_exterior' => 'required',
-            'num_interior' => 'required',
-            'manzana' => 'required',
+            'celular' => 'nullable|digits:10',
+            'calle' => 'nullable',
+            'num_exterior' => 'nullable',
+            'num_interior' => 'nullable',
+            'manzana' => 'nullable',
             'cp' => 'required|digits:5',
             'alcaldia' => 'required',
-            'colonia' => 'required',
+            'colonia' => 'nullable',
             'representante' => 'required',
             'instrumento_observar' => 'required',
             'comentarios' => 'required',
@@ -207,6 +207,7 @@ class ConsultaPublicaController extends Controller
             <br><br>
             <div class="row">
                 <div class="col-12">
+                    <center><h4>FOLIO '.$cedula->folio.'</h4></center>
                     <center><h3>PERSONA PARTICIPANTE</h3></center>
                     <br>
                     <table class="table">

@@ -28,8 +28,7 @@ class AdministracionController extends Controller
         }
         
         $perPage = 2;
-        $cedulas = Cedula::where('status','=',2)
-            ->paginate($perPage);
+        $cedulas = Cedula::whereIn('status', [2, 102])->paginate($perPage);
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
@@ -53,8 +52,7 @@ class AdministracionController extends Controller
         }
 
         $perPage = 2;
-        $cedulas = Cedula::where('status','=',3)
-            ->paginate($perPage);
+        $cedulas = Cedula::whereIn('status', [3, 103])->paginate($perPage);
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
@@ -133,7 +131,7 @@ class AdministracionController extends Controller
         }
 
         $perPage = 2;
-        $cedulas = Cedula::whereIn('status', [1, 100])->paginate($perPage);
+        $cedulas = Cedula::whereIn('status', [1, 101])->paginate($perPage);
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
@@ -293,7 +291,28 @@ class AdministracionController extends Controller
             return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
         }
         
-        $perPage = 2;
+        $perPage = 10;
+        $usuarios = User::paginate($perPage);
+        $total = $usuarios->total();
+        $page_number = round($total / $perPage);
+
+        // $columnas = ceil(sizeof($parametros) / 2);
+        // echo "<pre>";
+        // print_r( $parametros );
+        // exit;
+
+        return view('ipdp.admin_usuarios', [
+            'page_number' => $page_number,
+            'usuarios' => $usuarios,
+        ]);
+    }
+    
+    function usuarios(){
+        if( Auth::check() && Auth::user()->rol != 'administracion') {
+            return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
+        }
+        
+        $perPage = 10;
         $usuarios = User::paginate($perPage);
         $total = $usuarios->total();
         $page_number = round($total / $perPage);

@@ -33,13 +33,14 @@
                                 <!-- <input type="password" placeholder="Contraseña" id="password" class="form-control" name="password" required> -->
                                 <select class="form-control" name="rol" id="rol">
                                     <option></option>
-                                    <option value="analisis">Equipo Analisis</option>
+                                    <option value="recepcion">Equipo de Recepción</option>
+                                    <option value="analisis">Equipo de Analisis</option>
                                     <option value="tecnica">Equipo Evaluacion Tecnica</option>
                                     <option value="juridica">Equipo Evaluacion Juridica</option>
                                     <option value="administracion">Administracion</option>
                                 </select>
                                 @if ($errors->has('password'))
-                                <span class="text-danger">{{ $errors->first('password') }}</span>
+                                    <span class="text-danger">{{ $errors->first('password') }}</span>
                                 @endif
                             </div>
                             <!-- <div class="form-group mb-3">

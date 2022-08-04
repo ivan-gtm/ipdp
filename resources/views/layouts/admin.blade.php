@@ -178,6 +178,11 @@
                                                         <div class="simplebar-content-wrapper" style="height: auto; overflow: hidden;">
                                                             <div class="simplebar-content" style="padding: 0px;">
                                                                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
+                                                                @if( Auth::check() && ( 
+                                                                    Auth::user()->rol == 'analisis' 
+                                                                    || Auth::user()->rol == 'tecnica' 
+                                                                    || Auth::user()->rol == 'juridica' 
+                                                                    || Auth::user()->rol == 'administracion') )
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active" href="#sidebarApps">
                                                                         <i class="fa-solid fa-bars"></i>
@@ -211,21 +216,27 @@
                                                                         </ul>
                                                                     </div>
                                                                 </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link menu-link collapsed active" href="#">
-                                                                        <i class="fa-solid fa-bars"></i>
-                                                                        <span data-key="t-apps">Consulta
-                                                                            Indigena</span>
-                                                                    </a>
-                                                                    <div class="collapse menu-dropdown show" id="sidebarApps">
-                                                                        <ul class="nav nav-sm flex-column">
-                                                                            <li class="nav-item">
-                                                                                <a href="{{ route('consultaIndigena.store') }}" class="nav-link" data-key="t-calendar">Registrar
-                                                                                    Nueva</a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </li>
+                                                                @endif
+
+                                                                @if( Auth::check() && Auth::user()->rol == 'recepcion' )
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link menu-link collapsed active" href="#">
+                                                                            <i class="fa-solid fa-bars"></i>
+                                                                            <span data-key="t-apps">Consulta
+                                                                                Indigena</span>
+                                                                        </a>
+                                                                        <div class="collapse menu-dropdown show" id="sidebarApps">
+                                                                            <ul class="nav nav-sm flex-column">
+                                                                                <li class="nav-item">
+                                                                                    <a href="{{ route('consultaIndigena.store') }}" class="nav-link" data-key="t-calendar">
+                                                                                        Registrar Nueva Cedula
+                                                                                    </a>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </li>
+                                                                @endif
+                                                                
                                                                 @if( Auth::check() && Auth::user()->rol == 'administracion' )
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active" href="{{ route('usuariosSistema') }}">

@@ -105,6 +105,9 @@ class ConsultaPublicaController extends Controller
 
     public function store(Request $request)
     {
+        // echo "<pre>";
+        // print_r( $request->all() );
+        // exit;
 
         $validatedData = $request->validate([
             'folio' => 'required|digits:6',
@@ -113,7 +116,7 @@ class ConsultaPublicaController extends Controller
             'segundo_apellido' => 'required',
             'edad' => 'nullable|min:1|max:99',
             'ocupacion' => 'nullable',
-            'genero' => ['nullable',Rule::in(['Hombre', 'Mujer','Otro'])],
+            'genero' => ['required',Rule::in(['Masculino', 'Femenino','Otro'])],
             'correo' => 'required|email|unique:cedulas',
             'celular' => 'nullable|digits:10',
             'calle' => 'nullable',
@@ -124,16 +127,34 @@ class ConsultaPublicaController extends Controller
             'alcaldia' => 'required',
             'colonia' => 'nullable',
             'representante' => 'required',
-            'instrumento_observar' => 'required',
+            'instrumento_observar' => ['required',Rule::in(['2020-2040', '2020-2035','2020-2040,2020-2035'])],
             'comentarios' => 'required',
             'incluye_documentos' => 'required',
             'numero_documentos' => 'required|numeric|min:1|max:99',
             'conocimiento_datos_personales' => ['required',Rule::in(['si','no'])],
         ]);
 
+        // $validatedData->genero = implode(',',$)
+
         $show = Cedula::create($validatedData);
         return response()->json([]);
 
+    }
+
+    function obtenerInstrumentosAObservar( $instrumentos ){
+        $arreglo_instrumentos = explode(',',$instrumentos);
+        foreach ($arreglo_instrumentos as $anio_instrumento) {
+            if( $anio_instrumento == '2020-2040' ){
+                $instrumento_x['periodo'] = $anio_instrumento;
+                $instrumento_x['descripcion'] = "PLAN GENERAL DE DESARROLLO DE LA CIUDAD DE MÉXICO";
+            } elseif( $anio_instrumento == '2020-2035' ){
+                $instrumento_x['periodo'] = $anio_instrumento;
+                $instrumento_x['descripcion'] = "PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA CIUDAD DE MÉXICO";
+            }
+            $respuesta[] = $instrumento_x;
+        }
+
+        return $respuesta;
     }
     
     public function generarFormatoPDF($numero_folio)
@@ -142,9 +163,23 @@ class ConsultaPublicaController extends Controller
         if( preg_match("/^[\w\d]{6}$/", $numero_folio) == false){
             abort(404);
         }
-
+        
         $cedula = DB::table('cedulas')->where('folio', '=', $numero_folio)->first();
         
+        $instrumento_observar = self::obtenerInstrumentosAObservar( $cedula->instrumento_observar );
+
+        $instrumentos_observar_html = '';
+        foreach ($instrumento_observar  as $instrumento) {
+            $instrumentos_observar_html .= '<tr>
+                <td style="text-align: center;">
+                     '.$instrumento['periodo'].'
+                </td>
+                <td>
+                    '.$instrumento['descripcion'].'
+                </td>
+            </tr>';
+        }
+
         $pdf_html = '
         <style>
             @page { margin: 0px; }body { margin: 0px; }
@@ -200,14 +235,13 @@ class ConsultaPublicaController extends Controller
             <table style="width:100%">
               <tr >
                 <td style="background-color:#00312d;color:white; padding:20px;text-align:center">
-                    CÉDULA PARA LA PRESENTACIÓN DE RECOMENDACIONES, OPINIONES O PROPUESTAS A LOS PROYECTOS DEL PLAN GENERAL DE DESARROLLO Y DEL PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL. AMBOS DE LA CIUDAD DE MÉXICO
+                    CONSULTA PÚBLICA Y CONSULTA INDÍGENA PARA EL PLAN GENERAL DE DESARROLLO Y PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA CIUDAD DE MÉXICO
                 </td>
               </tr>
             </table>
-            <br><br>
             <div class="row">
                 <div class="col-12">
-                    <center><h4>FOLIO '.$cedula->folio.'</h4></center>
+                    <center><h2>FOLIO '.$cedula->folio.'</h2></center>
                     <center><h3>PERSONA PARTICIPANTE</h3></center>
                     <br>
                     <table class="table">
@@ -320,15 +354,12 @@ class ConsultaPublicaController extends Controller
                         <tbody><tr>
                             <td style="text-align: center;">
                                 <strong>VIGENCIA</strong>
-                                <br>
-                                '.$cedula->instrumento_observar.'
                             </td>
                             <td>
                                 <strong>INSTRUMENTO DE PLANEACIÓN A OBSERVAR</strong>
-                                <br>
-                                PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA CIUDAD DE MÉXICO
                             </td>
                         </tr>
+                        '.$instrumentos_observar_html.'
                     </tbody></table>
                     
 
@@ -345,7 +376,7 @@ class ConsultaPublicaController extends Controller
             <table style="width:100%">
               <tr >
                 <td style="background-color:#00312d;color:white; padding:20px;text-align:center">
-                    CÉDULA PARA LA PRESENTACIÓN DE RECOMENDACIONES, OPINIONES O PROPUESTAS A LOS PROYECTOS DEL PLAN GENERAL DE DESARROLLO Y DEL PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL. AMBOS DE LA CIUDAD DE MÉXICO
+                    CONSULTA PÚBLICA Y CONSULTA INDÍGENA PARA EL PLAN GENERAL DE DESARROLLO Y PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA CIUDAD DE MÉXICO
                 </td>
               </tr>
             </table>

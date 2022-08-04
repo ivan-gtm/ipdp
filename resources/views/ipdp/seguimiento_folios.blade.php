@@ -183,8 +183,8 @@
                                         <div class="col-md-4">
                                             <label for="optionGenero" class="form-label">Género</label>
                                             <br>
-                                            <input class="form-check-input" type="radio" name="optionGenero" id="generoHombre" value="Hombre" disabled checked>
-                                            <label class="form-check-label" for="generoHombre">{{ $cedula->genero }}</label>
+                                            <input class="form-check-input" type="radio" name="optionGenero" id="generoPersona" value="Hombre" disabled checked>
+                                            <label class="form-check-label" for="generoPersona">{{ $cedula->genero }}</label>
                                         </div>
 
                                         <div class="row">

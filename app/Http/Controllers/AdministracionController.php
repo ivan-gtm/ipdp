@@ -152,12 +152,34 @@ class AdministracionController extends Controller
                     ->where('tipo_consulta','=','consulta-publica')
                     ->where('folio','=',$folio)
                     ->get();
-        
+
+        $instrumento_observar = self::obtenerInstrumentosAObservar( $cedula->instrumento_observar );
+        // echo "<pre>";
+        // print_r( self::obtenerInstrumentosAObservar( $cedula->instrumento_observar ) );
+        // exit;
+                
         return view('ipdp.admin_detalle_consulta', [
             'cedula' => $cedula,
+            'instrumento_observar' => $instrumento_observar,
             'archivos_cedula' => $archivos_cedula
         ]);
 
+    }
+
+    function obtenerInstrumentosAObservar( $instrumentos ){
+        $arreglo_instrumentos = explode(',',$instrumentos);
+        foreach ($arreglo_instrumentos as $anio_instrumento) {
+            if( $anio_instrumento == '2020-2040' ){
+                $instrumento_x['periodo'] = $anio_instrumento;
+                $instrumento_x['descripcion'] = "PLAN GENERAL DE DESARROLLO DE LA CIUDAD DE MÉXICO";
+            } elseif( $anio_instrumento == '2020-2035' ){
+                $instrumento_x['periodo'] = $anio_instrumento;
+                $instrumento_x['descripcion'] = "PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA CIUDAD DE MÉXICO";
+            }
+            $respuesta[] = $instrumento_x;
+        }
+
+        return $respuesta;
     }
 
     function guardarEvaluacionAnalisis(Request $request){

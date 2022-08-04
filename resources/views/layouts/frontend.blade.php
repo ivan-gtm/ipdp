@@ -351,9 +351,6 @@
                                             <a href="/buscar_folio.html" class="ui-link ui-widget menu-header-principal">Seguimiento a Folios</a>
                                         </div> -->
                                         <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
-                                            <a href="{{ route('consultaIndigena.registrar') }}" class="ui-link ui-widget menu-header-principal">Consulta Indigena</a>
-                                        </div>
-                                        <div class="flex align-items-center justify-content-center h-2rem font-bold border-round m-2">
                                             <a href="{{ route('login') }}" class="ui-link ui-widget menu-header-principal">
                                                 Ingresar
                                             </a>
@@ -379,7 +376,9 @@
                 </div>
 
                 <div class="col-12 text-center" style="background-color: #00312d; color: white; padding: 15px;">
-                    <div class="container" style="background-color: #00312d; color: white;">CÉDULA PARA LA PRESENTACIÓN DE RECOMENDACIONES, OPINIONES O PROPUESTAS A LOS PROYECTOS DEL PLAN GENERAL DE DESARROLLO Y DEL PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL. AMBOS DE LA CIUDAD DE MÉXICO</div>
+                    <div class="container" style="background-color: #00312d; color: white;">
+                        CONSULTA PÚBLICA Y CONSULTA INDÍGENA PARA EL PLAN GENERAL DE DESARROLLO Y PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA CIUDAD DE MÉXICO
+                    </div>
                 </div>
                 <!-- <div class="col-12 p-3 text-center">
                     <h4>Consultar estado de solicitud</h4>

@@ -260,6 +260,17 @@
                                     </tr>
                                     <tr>
                                         <td>
+                                            <label class="form-check-label" for="ningunaOpcion">NINGUNA</label>
+                                        </td>
+                                        <td>
+                                            <input class="form-check-input" type="radio" name="opcionTipoOrganizacion" id="ningunaOpcion" value="NINGUNA" required>
+                                            <div class="invalid-feedback">
+                                                Por favor indique tipo de organizacion.
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
                                             <label class="form-check-label" for="otra">OTRA</label>
                                         </td>
                                         <td>
@@ -371,11 +382,11 @@
                             <div class="col-md-4">
                                 <label for="optionGenero" class="form-label">Género</label>
                                 <br>
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoHombre" value="Hombre" required>
-                                <label class="form-check-label" for="generoHombre">Hombre</label>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoMasculino" value="Masculino" required>
+                                <label class="form-check-label" for="generoMasculino">Masculino</label>
 
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoMujer" value="Mujer" required>
-                                <label class="form-check-label" for="generoMujer">Mujer</label>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoFemenino" value="Femenino" required>
+                                <label class="form-check-label" for="generoFemenino">Femenino</label>
 
                                 <input class="form-check-input" type="radio" name="optionGenero" id="generoOtro" value="Otro" required>
                                 <label class="form-check-label" for="generoOtro">Otro</label>

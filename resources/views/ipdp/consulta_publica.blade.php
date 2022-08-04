@@ -7,9 +7,9 @@
 <link type="text/css" rel="stylesheet" href="{{asset('css/uppy.min.css')}}" rel="stylesheet" />
 <script src="{{asset('css/uppy.min.js')}}"></script>
 <style>
-.label-red{
-    color: red;
-}
+    .label-red {
+        color: red;
+    }
 </style>
 @endsection
 @section('content')
@@ -119,14 +119,15 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="optionGenero" class="form-label">Género</label>
+                                <label class="label-red">*</label>
                                 <br>
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoHombre" value="Hombre">
-                                <label class="form-check-label" for="generoHombre">Hombre</label>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoMasculino" value="Masculino" required>
+                                <label class="form-check-label" for="generoMasculino">Masculino</label>
 
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoMujer" value="Mujer">
-                                <label class="form-check-label" for="generoMujer">Mujer</label>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoFemenino" value="Femenino" required>
+                                <label class="form-check-label" for="generoFemenino">Femenino</label>
 
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoOtro" value="Otro">
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoOtro" value="Otro" required>
                                 <label class="form-check-label" for="generoOtro">Otro</label>
 
                                 <div class="invalid-feedback">Seleccione su genero</div>
@@ -185,6 +186,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label for="inputAlcaldia" class="form-label">Alcaldía</label>
+                                    <label class="label-red">*</label>
                                     <div class="input-group has-validation">
                                         <input type="text" class="form-control" id="inputAlcaldia" name="inputAlcaldia" required>
                                         <div class="invalid-feedback">
@@ -255,6 +257,14 @@
                                             </tr>
                                             <tr>
                                                 <td>
+                                                    <label class="form-check-label" for="ningunaOpcion">NINGUNA</label>
+                                                </td>
+                                                <td>
+                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="ningunaOpcion" value="NINGUNA" required>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
                                                     <label class="form-check-label" for="representanteOtra">OTRA</label>
                                                 </td>
                                                 <td>
@@ -318,7 +328,7 @@
                                                         </label>
                                                     </td>
                                                     <td>
-                                                        <input class="form-check-input" type="radio" name="opcionInstrumentoObservar" id="opcion2020-2040" value="2020-2040" required>
+                                                        <input class="form-check-input" type="checkbox" name="opcionInstrumentoObservar" id="opcion2020-2040" value="2020-2040" required>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -335,18 +345,7 @@
                                                         </label>
                                                     </td>
                                                     <td>
-                                                        <input class="form-check-input" type="radio" name="opcionInstrumentoObservar" id="opcion2020-2035" value="2020-2035" required>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">
-                                                        <label for="opcionAmbos">
-                                                            AMBOS INSTRUMENTOS
-                                                        </label>
-                                                    </th>
-                                                    <td>-</td>
-                                                    <td>
-                                                        <input class="form-check-input" type="radio" name="opcionInstrumentoObservar" id="opcionAmbos" value="ambos" required>
+                                                        <input class="form-check-input" type="checkbox" name="opcionInstrumentoObservar" id="opcion2020-2035" value="2020-2035" required>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -377,25 +376,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <hr>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <strong><label for="opcionIncluyeDocumentos" class="form-label">SE ANEXAN DOCUMENTOS CON ESTA CEDULA:</label></strong>
-                                                <br>
-                                                SÍ <input class="form-check-input" type="radio" name="opcionIncluyeDocumentos" id="conDocumentos" value="1" required>
-                                                &nbsp;&nbsp;
-                                                NO <input class="form-check-input" type="radio" name="opcionIncluyeDocumentos" id="sinDocumentos" value="0" required>
-
-                                                <div class="invalid-feedback">Especifique si se anexan documentos</div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <strong>NÚMERO DE DOCUMENTOS</strong>
-                                                <br>
-                                                <div class="input-group has-validation">
-                                                    <input class="form-control" type="number" id="numeroDocumentos" name="numeroDocumentos" value="0" disabled>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -411,6 +391,22 @@
                             </div>
                             <div class="col-10 offset-md-1">
                                 <div class="row">
+                                    <div class="col-md-6">
+                                        <strong><label for="opcionIncluyeDocumentos" class="form-label">SE ANEXAN DOCUMENTOS CON ESTA CEDULA:</label></strong>
+                                        <br>
+                                        SÍ <input class="form-check-input" type="radio" name="opcionIncluyeDocumentos" id="conDocumentos" value="1" required>
+                                        &nbsp;&nbsp;
+                                        NO <input class="form-check-input" type="radio" name="opcionIncluyeDocumentos" id="sinDocumentos" value="0" required>
+
+                                        <div class="invalid-feedback">Especifique si se anexan documentos</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>NÚMERO DE DOCUMENTOS</strong>
+                                        <br>
+                                        <div class="input-group has-validation">
+                                            <input class="form-control" type="number" id="numeroDocumentos" name="numeroDocumentos" value="0" disabled>
+                                        </div>
+                                    </div>
                                     <div class="col-12">
                                         <div id="notification-center"></div>
                                         <div class="uploaded-files">
@@ -487,11 +483,17 @@
                                                 712, col. Del Valle Sur, Alcaldía Benito
                                                 Juárez, C.P. 03100, Ciudad de México con número telefónico
                                                 55-51-30-21-00.
+                                                <br>
                                                 El Aviso de Privacidad Integral podrá consultarse a través del
                                                 siguiente enlace electrónico
                                                 atención.ipdp@cdmx.gob.mx, al correo electrónico:
                                                 atención.ipdp@cdmx.gob.mx o acudir directamente a la
                                                 Jefatura de Unidad Departamental de Transparencia.
+                                                
+                                                PARA CONOCER EL AVISO DE PRIVACIDAD INTEGRAL PUEDE ACUDIR DIRECTAMENTE A LA UNIDAD DE TRANSPARENCIA O INGRESAR A LA PÁGINA
+                                                <a href="https://ipdp.cdmx.gob.mx">https://ipdp.cdmx.gob.mx</a>
+                                                <br>
+                                                FECHA DE ÚLTIMA ACTUALIZACIÓN 20 DE JULIO DE 2022
                                             </p>
                                         </div>
                                     </div>
@@ -614,7 +616,7 @@
             });
     });
 
-    function registrarCedula() {
+    function registrarCedula(){
 
         var inputNombre = $('[name="inputNombre"]').val();
         var inputPrimerApellido = $('[name="inputPrimerApellido"]').val();
@@ -632,11 +634,17 @@
         var inputAlcaldia = $('[name="inputAlcaldia"]').val();
         var inputColonia = $('[name="inputColonia"]').val();
         var optionRepresentante = $('[name="optionRepresentante"]').val();
-        var opcionInstrumentoObservar = $('[name="opcionInstrumentoObservar"]').val();
         var textComentarios = $('[name="textComentarios"]').val();
         var opcionIncluyeDocumentos = $('[name="opcionIncluyeDocumentos"]').val();
         var numeroDocumentos = $('[name="numeroDocumentos"]').val();
         var conocimientoDatosPersonales = $('[name="conocimientoDatosPersonales"]').val();
+        
+        var valInstrumentoAObservar = [];
+        $('[name="opcionInstrumentoObservar"]:checkbox:checked').each(function(i){
+            valInstrumentoAObservar[i] = $(this).val();
+        });
+        var opcionInstrumentoObservar = valInstrumentoAObservar.join(',');
+        // valInstrumentoAObservar;
 
         var requestBody = {
             "folio": folio,
@@ -751,7 +759,10 @@
         }
     };
     const onUploadSuccess = (elForUploadedFiles) => (file, response) => {
-        console.log(response);
+        
+        // console.log("file");
+        // console.log(file);
+        // console.log(response);
 
         const url = response.uploadURL
         const fileName = file.name
@@ -867,6 +878,26 @@
             $("#notification-center").append(element);
         });
 
+    });
+
+    // uppy.close({ reason = 'user' })
+    // ('[name="opcionIncluyeDocumentos"]:checked')
+    $('[name="opcionIncluyeDocumentos"]').change(
+    function(){
+        if ($(this).is(':checked') && $(this).val() == '0') {
+            // uppy.close();
+            $('.UppyDragDrop').fadeOut();
+            $('.for-ProgressBar').fadeOut();
+            $('#numeroDocumentos').fadeOut();
+            $('.uploaded-files > h5').fadeOut();
+            $('.uploaded-files').fadeOut();
+        } else if ($(this).is(':checked') && $(this).val() == '1') {
+            $('.UppyDragDrop').fadeIn();
+            $('.for-ProgressBar').fadeIn();
+            $('#numeroDocumentos').fadeIn();
+            $('.uploaded-files > h5').fadeIn();
+            $('.uploaded-files').fadeIn();
+        }
     });
 </script>
 @endsection

@@ -160,20 +160,24 @@
             </tbody>
         </table>
         <br>
+        <h4 class="text-center">INSTRUMENTO DE PLANEACIÓN A OBSERVAR</h4>
         <table class="table">
             <tbody>
+                @foreach ($instrumento_observar as $instrumento)
                 <tr>
                     <td style="text-align: center;">
                         <strong>VIGENCIA</strong>
                         <br>
-                        {{ $cedula->instrumento_observar }}
+                        {{ $instrumento['periodo'] }}
                     </td>
                     <td>
-                        <strong>INSTRUMENTO DE PLANEACIÓN A OBSERVAR</strong>
+                        <strong>
+                            {{ $instrumento['descripcion'] }}
+                        </strong>
                         <br>
-                        PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA CIUDAD DE MÉXICO
                     </td>
                 </tr>
+                @endforeach
             </tbody>
         </table>
 

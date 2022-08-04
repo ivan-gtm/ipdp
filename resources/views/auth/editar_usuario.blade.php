@@ -26,7 +26,7 @@
                                 @endif
                             </div>
                             <div class="form-group mb-3">
-                                <input type="password" placeholder="Contraseña" id="password" class="form-control" name="password" required>
+                                <input type="password" placeholder="Contraseña" id="password" class="form-control" name="password">
                                 @if ($errors->has('password'))
                                 <span class="text-danger">{{ $errors->first('password') }}</span>
                                 @endif
@@ -35,8 +35,9 @@
                                 <!-- <input type="password" placeholder="Contraseña" id="password" class="form-control" name="password" required> -->
                                 <select class="form-control" name="rol" id="rol">
                                     <option></option>
+                                    <option {{ $usuario->rol == 'recepcion' ? 'selected' : null }} value="recepcion">Equipo de Recepción</option>
                                     <option {{ $usuario->rol == 'analisis' ? 'selected' : null }} value="analisis">Equipo Analisis</option>
-                                    <option {{ $usuario->rol == 'tecnica' ? 'selected' : null }} value="tecnica">Equipo Evaluacion Tecnica</option>
+                                    <option {{ $usuario->rol == 'tecnica' ? 'selected' : null }} value="tecnica">Equipo Evaluacion Técnica</option>
                                     <option {{ $usuario->rol == 'juridica' ? 'selected' : null }} value="juridica">Equipo Evaluacion Juridica</option>
                                     <option {{ $usuario->rol == 'administracion' ? 'selected' : null }} value="administracion">Administracion</option>
                                 </select>

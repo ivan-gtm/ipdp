@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Cedula;
 use App\Models\User;
 use App\Models\EvaluacionTecnica;
+use App\Models\EvaluacionAnalisisSubtemas;
 use App\Models\EvualuacionTecnicaDetalle;
 use App\Models\EvaluacionAnalisis;
 use App\Models\EvaluacionTecnicaRechazo;
 use App\Models\EvaluacionJuridicaRechazo;
-use Illuminate\Support\Facades\Auth;
+use App\Models\EvaluacionAnalisisTemas;
 
 class AdministracionController extends Controller
 {
@@ -27,8 +29,8 @@ class AdministracionController extends Controller
             return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
         }
         
-        $perPage = 2;
-        $cedulas = Cedula::whereIn('status', [2, 102])->paginate($perPage);
+        $perPage = 10;
+        $cedulas = Cedula::whereIn('status', [2, 102])->orderByDesc('id')->paginate($perPage);
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
@@ -51,8 +53,8 @@ class AdministracionController extends Controller
             return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
         }
 
-        $perPage = 2;
-        $cedulas = Cedula::whereIn('status', [3, 103])->paginate($perPage);
+        $perPage = 10;
+        $cedulas = Cedula::whereIn('status', [3, 103])->orderByDesc('id')->paginate($perPage);
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
@@ -130,14 +132,43 @@ class AdministracionController extends Controller
             return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
         }
 
-        $perPage = 2;
-        $cedulas = Cedula::whereIn('status', [1, 101])->paginate($perPage);
+        
+        $perPage = 10;
+        $cedulas = Cedula::whereIn('status', [1, 101])->orderByDesc('id')->paginate($perPage);
+        $total = $cedulas->total();
+        $page_number = round( $total / $perPage );
+        
+        $temas = EvaluacionAnalisisTemas::get()->toArray();
+        $parametros = self::obtenerParametrosValoracionTecnica();
+
+        // echo "<pre>";
+        // print_r( $temas );
+        // exit;
+        
+        return view('ipdp.admin_analisis', [
+            'page_number' => $page_number,
+            'cedulas' => $cedulas,
+            'parametros' => $parametros,
+            'temas' => $temas
+        ]);
+
+    }
+    
+    function evaluacionRecepcion(){
+        
+        if( Auth::check() && ( Auth::user()->rol != 'recepcion' && Auth::user()->rol != 'administracion') ) {
+            return redirect()->route('administracion.home')->with('status', 'Usuario sin permisos para reproducir este modulo!');
+        }
+
+        $perPage = 10;
+        $cedulas = Cedula::whereIn('status', [1, 101])->orderByDesc('id')->paginate($perPage);
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
         $parametros = self::obtenerParametrosValoracionTecnica();
         
-        return view('ipdp.admin_analisis', [
+        // admin_recepcion
+        return view('ipdp.admin_recepcion', [
             'page_number' => $page_number,
             'cedulas' => $cedulas,
             'parametros' => $parametros
@@ -154,10 +185,7 @@ class AdministracionController extends Controller
                     ->get();
 
         $instrumento_observar = self::obtenerInstrumentosAObservar( $cedula->instrumento_observar );
-        // echo "<pre>";
-        // print_r( self::obtenerInstrumentosAObservar( $cedula->instrumento_observar ) );
-        // exit;
-                
+        
         return view('ipdp.admin_detalle_consulta', [
             'cedula' => $cedula,
             'instrumento_observar' => $instrumento_observar,
@@ -186,7 +214,19 @@ class AdministracionController extends Controller
         $consulta = Cedula::find($request->consulta_id);
         $consulta->status = 2;
         $consulta->save();
+        
+        $rechazo_analisis = EvaluacionAnalisis::create([
+            'consulta_fk' => $request->consulta_id,
+            'tema_fk' => $request->tema_evaluacion,
+            'subtema_fk' => $request->subtema_evaluacion
+        ]);
+
         return response()->json(["exito"]);
+    }
+    
+    function obtenerSubtemasAnalisis( $tema_id = null ){
+        $subtemas = EvaluacionAnalisisSubtemas::where('fk_tema', $tema_id)->get();
+        return $subtemas->toJson(JSON_PRETTY_PRINT);
     }
 
     function guardarEvaluacionTecnica(Request $request){

@@ -1,4 +1,4 @@
-@extends('layouts.frontend')
+@extends('layouts.admin')
 @section('title', 'Registro de Consulta Publica')
 
 @section('head')
@@ -391,9 +391,6 @@
                             </div>
                             <div class="col-10 offset-md-1">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        
-                                    </div>
                                     <div class="col-md-6">
                                         <strong><label for="opcionIncluyeDocumentos" class="form-label">SE ANEXAN DOCUMENTOS CON ESTA CEDULA:</label></strong>
                                         <br>

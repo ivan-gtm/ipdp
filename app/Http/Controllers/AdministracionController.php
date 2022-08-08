@@ -17,6 +17,7 @@ use App\Models\EvaluacionAnalisis;
 use App\Models\EvaluacionTecnicaRechazo;
 use App\Models\EvaluacionJuridica;
 use App\Models\EvaluacionAnalisisTemas;
+use App\Models\EvaluacionIntegracion;
 
 class AdministracionController extends Controller
 {
@@ -75,39 +76,148 @@ class AdministracionController extends Controller
     }
     
     function evaluacionIntegracion(){
-        
-        if( Auth::check() && ( ( Auth::user()->rol != 'integracion_pgot' || Auth::user()->rol != 'integracion_pgd' ) && Auth::user()->rol != 'administracion') ) {
+        // echo Auth::user()->rol;
+        // exit;
+        if( Auth::check() && ( Auth::user()->rol != 'integracion_pgot' && Auth::user()->rol != 'integracion_pgd' && Auth::user()->rol != 'administracion') ) {
             return redirect()->route('administracion.home')->with('status', 'No tiene permisos para visualizar este modulo!');
         }
 
         $rol_usuario = Auth::user()->rol;
         $tipos_de_instrumentos_visibles = ['PGD+PGOT'];
+        // $where_raw = "( OR evaluador_pgd_fk IS NULL)";
+        $where_raw = "(";
         
         if( $rol_usuario == 'administracion'){
             array_push($tipos_de_instrumentos_visibles, 'PGD');
             array_push($tipos_de_instrumentos_visibles, 'PGOT');
+            $where_raw .= "evaluador_pgot_fk IS NULL || evaluador_pgd_fk IS NULL";
         } elseif( $rol_usuario == 'integracion_pgd'){
             array_push($tipos_de_instrumentos_visibles, 'PGD');
+            $where_raw .= "evaluador_pgd_fk IS NULL";
         } elseif( $rol_usuario == 'integracion_pgot'){
             array_push($tipos_de_instrumentos_visibles, 'PGOT');
+            $where_raw .= "evaluador_pgot_fk IS NULL";
         }
+        $where_raw .= ")";
 
         $perPage = 10;
+        
+            
         $cedulas = DB::table('cedulas')
+            ->leftJoin('evualuacion_integracion', 'cedulas.id', '=', 'evualuacion_integracion.consulta_fk')
             ->join('evualuacion_tecnica', 'cedulas.id', '=', 'evualuacion_tecnica.consulta_fk')
             ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
-            ->select('cedulas.id','cedulas.folio', 'cedulas.created_at','cedulas.status', 'cedulas.nombre','cedulas.primer_apellido','cedulas.segundo_apellido','c_instrumento.descripcion as instrumento')
+            ->select('cedulas.id','cedulas.origen','cedulas.folio', 'cedulas.created_at','cedulas.status', 'cedulas.nombre','cedulas.primer_apellido','cedulas.segundo_apellido','c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk')
             ->whereIn('cedulas.status', [4, 104])
             ->whereIn('c_instrumento.descripcion', $tipos_de_instrumentos_visibles)
+            ->whereRaw( $where_raw )
             ->orderByDesc('cedulas.id')
             ->paginate($perPage);
+            
         $total = $cedulas->total();
+
         $page_number = round($total / $perPage);
+
+        // echo "<pre>";
+        // print_r( Auth::user()->rol );
+        // print_r( $cedulas[0] );
+        // exit;
 
         return view('ipdp.admin_evaluacion_integracion', [
             'page_number' => $page_number,
             'cedulas' => $cedulas
         ]);
+    }
+
+    function guardarEvaluacionIntegracion(Request $request){
+        
+        // if( Auth::check() && ( ( Auth::user()->rol != 'integracion_pgot' || Auth::user()->rol != 'integracion_pgd' ) && Auth::user()->rol != 'administracion') ) {
+        //     return redirect()->route('administracion.home')->with('status', 'No tiene permisos para visualizar este modulo!');
+        // }
+
+        $info_cedula = DB::table('cedulas')
+            ->leftJoin('evualuacion_integracion', 'cedulas.id', '=', 'evualuacion_integracion.consulta_fk')
+            ->join('evualuacion_tecnica', 'cedulas.id', '=', 'evualuacion_tecnica.consulta_fk')
+            ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
+            ->select('cedulas.id','cedulas.origen','cedulas.folio', 'cedulas.status', 'c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk')
+            ->where('cedulas.id', $request->consulta_fk)
+            ->orderByDesc('cedulas.id')
+            ->first();
+        
+        $evaluador_pgd_fk = null;
+        $evaluador_pgot_fk = null;
+        
+        $cedula = Cedula::find($request->consulta_fk);
+
+        if( Auth::check() && Auth::user()->rol == 'integracion_pgd' ) {
+            $evaluador_pgd_fk = Auth::user()->id;
+            
+            // Si la cedula es solo PGD, cambiamos el estado para que no sea visible por el resto
+            if( $info_cedula->instrumento ==  'PGD' ){
+                $cedula->status = 5;
+            }
+            
+        } elseif( Auth::check() && Auth::user()->rol == 'integracion_pgot' ) {
+            $evaluador_pgot_fk = Auth::user()->id;
+
+            // Si la cedula es solo PGOT, cambiamos el estado para que no sea visible por el resto
+            if( $info_cedula->instrumento ==  'PGOT' ){
+                $cedula->status = 5;
+            }
+
+        } elseif( Auth::check() && Auth::user()->rol == 'administracion' ) {
+            $evaluador_pgot_fk = Auth::user()->id;
+            $evaluador_pgd_fk = Auth::user()->id;
+
+            $cedula->status = 5;
+        }
+
+        if( $info_cedula->instrumento ==  'PGD+PGOT' 
+            && Auth::check() 
+            && (
+                (
+                    Auth::user()->rol == 'integracion_pgot' 
+                    && intval($info_cedula->evaluador_pgd_fk) > 0 
+                ) ||
+                (
+                    Auth::user()->rol == 'integracion_pgd' 
+                    && intval($info_cedula->evaluador_pgot_fk) > 0
+                )
+            ) ){
+            $cedula->status = 5;
+        }
+
+        if( $info_cedula->instrumento ==  'PGD+PGOT' && intval( $info_cedula->evaluador_pgot_fk ) > 0 ){
+            $evaluador_pgot_fk = $info_cedula->evaluador_pgot_fk;
+        }
+
+        if( $info_cedula->instrumento ==  'PGD+PGOT' && intval($info_cedula->evaluador_pgd_fk) > 0 ){
+            $evaluador_pgd_fk = $info_cedula->evaluador_pgd_fk;
+        }
+        
+        $cedula->save();
+        
+        $count = EvaluacionIntegracion::where('consulta_fk', $request->consulta_fk)->count();
+        
+        if( $count == 0){
+            $integracion = EvaluacionIntegracion::create([
+                'consulta_fk' => $request->consulta_fk,
+                'evaluador_pgot_fk' => $evaluador_pgot_fk,
+                'evaluador_pgd_fk' => $evaluador_pgd_fk,
+                'eje_estrategia' => $request->eje_estrategia,
+                'accion_objetivo' => $request->accion_objetivo
+            ]);
+        } else {
+            EvaluacionIntegracion::where('consulta_fk' , $request->consulta_fk)
+            ->update([
+                'evaluador_pgot_fk' => $evaluador_pgot_fk,
+                'evaluador_pgd_fk' => $evaluador_pgd_fk,
+                'eje_estrategia' => $request->eje_estrategia,
+                'accion_objetivo' => $request->accion_objetivo
+            ]);
+        }
+
+        return response()->json(["exito"]);
     }
     
     function obtenerEvaluacionJuridica( $consulta_id = null){

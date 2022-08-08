@@ -3,7 +3,7 @@
 @section('modulo_titulo', 'Gestión de CEDULAS | Análisis')
 
 @section('head')
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 @endsection
 
 @section('content')
@@ -29,6 +29,7 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Folio<br>Solicitud</th>
+                                <th>Origen<br>Solicitud</th>
                                 <th>Fecha</th>
                                 <th>Tipo</th>
                                 <th>Registrado por</th>
@@ -47,6 +48,13 @@
                                     {{ $cedula->folio }}
                                 </td>
                                 <td>
+                                    @if( $cedula->origen == 'publica' )
+                                    <span class="badge bg-info text-uppercase">Pública</span>
+                                    @else
+                                    <span class="badge bg-dark text-uppercase">Privada</span>
+                                    @endif
+                                </td>
+                                <td>
                                     {{ $cedula->created_at }}
                                 </td>
                                 <td>
@@ -56,15 +64,19 @@
                                     {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                                 </td>
                                 <td>
-                                    @if( $cedula->status == 3)
-                                        <!-- {{ $cedula->status }} -->
-                                        <span class="badge badge-soft-warning text-uppercase">
-                                            Pendiente Valoración Júridica
-                                        </span>
-                                    @elseif( $cedula->status == 103)
-                                        <span class="badge bg-danger text-uppercase">
-                                            Solicitud Rechazada
-                                        </span>
+                                    @if( $cedula->status == 4 && $cedula->instrumento == 'PGD')
+                                    <!-- {{ $cedula->status }} -->
+                                    <span class="badge badge-soft-warning text-uppercase">
+                                        Pendiente de evaluación PDG
+                                    </span>
+                                    @elseif( ( $cedula->status == 4 || $cedula->status == 5  ) && $cedula->instrumento == 'PGOT' && isset($cedula->evaluador_pgot_fk) && $cedula->evaluador_pgot_fk == null)
+                                    <span class="badge badge-soft-warning text-uppercase">
+                                        Pendiente de evaluación PGOT
+                                    </span>
+                                    @elseif( $cedula->status == 104)
+                                    <span class="badge bg-danger text-uppercase">
+                                        Solicitud Rechazada
+                                    </span>
                                     @endif
                                 </td>
                                 <td>
@@ -88,21 +100,41 @@
                                                 <!-- Descargar como PDF -->
                                             </a>
                                         </li>
-                                        <!-- 4:: PGOT -->
-                                        <!-- 5:: PGD  -->
-                                        @if( $cedula->status == 4 || $cedula->status == 5)
                                         <li>
-                                            <button type="button" class="edit-item-btn" onclick="obtenerEvaluacion({{ $cedula->id }})">
-                                                <i class="fa-solid fa-circle-check"></i>
-                                                <!-- Aprobar -->
-                                            </button>
+                                            {{ Auth::user()->rol }}
+                                            <br>
+                                            {{ intval($cedula->evaluador_pgot_fk) }}
                                         </li>
-                                        <li>
-                                            <button type="button" class="remove-item-btn" data-bs-toggle="modal" onclick="actualizarFolioIdRechazo({{ $cedula->id }})" data-bs-target="#rechazoModal">
-                                                <i class="fa-solid fa-circle-xmark"></i>
-                                                <!-- Rechazar -->
-                                            </button>
-                                        </li>
+                                        {{-- // 4:: PGOT --}}
+                                        {{-- // 5:: PGD  --}}
+                                        @if( ( Auth::user()->rol == 'integracion_pgd' && intval($cedula->evaluador_pgd_fk) == 0 ) 
+                                            ||
+                                            ( Auth::user()->rol == 'integracion_pgot' && intval($cedula->evaluador_pgot_fk) == 0 ) 
+                                        )
+                                            <li>
+                                                <button type="button" class="edit-item-btn" 
+                                                    data-cedula-id="{{ $cedula->id }}" 
+                                                    data-cedula-folio="{{ $cedula->folio }}" 
+                                                    onclick="abrirModalEvaluacionIntegracion(this)">
+
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                        <!-- Aprobar -->
+
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="remove-item-btn" 
+                                                    data-bs-toggle="modal" 
+                                                    data-cedula-id="{{ $cedula->id }}" 
+                                                    data-cedula-folio="{{ $cedula->folio }}" 
+                                                    onclick="actualizarFolioIdRechazo(this)" 
+                                                    data-bs-target="#rechazoModal">
+                                                        
+                                                        <i class="fa-solid fa-circle-xmark"></i>
+                                                        <!-- Rechazar -->
+
+                                                </button>
+                                            </li>
                                         @endif
                                     </ul>
                                 </td>
@@ -182,11 +214,14 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalEvaluacionJuridica" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="modalEvaluacionJuridica" tabindex="-1" role="dialog" aria-labelledby="aprobarIntegracionModal" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Evaluación Integración</h5>
+                <h5 class="modal-title" id="aprobarIntegracionModal">
+                    Evaluación Integración
+                    <span id="titulo_modal_aprobacion"></span>
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -199,7 +234,8 @@
                                 </td>
                             </tr>
                         </table>
-                        <textarea class="form-control" name="eje" id="" rows="10" placeholder="Escriba aqui la propuesta de eje/estrategia al que va dirigido esta cedula" required></textarea>
+                        <input type="hidden" id="modal_cedula_id" name="modal_cedula_id">
+                        <textarea class="form-control" name="eje_estrategia" id="eje_estrategia" rows="6" placeholder="Escriba aqui la propuesta de eje/estrategia al que va dirigido esta cedula" required></textarea>
                     </div>
                     <div class="col-12">
                         <br>
@@ -210,13 +246,13 @@
                                 </td>
                             </tr>
                         </table>
-                        <textarea class="form-control" name="eje" id="" rows="10" placeholder="Escriba aqui la propuesta de linea de acción/objetivo al que va dirigido" required></textarea>
+                        <textarea class="form-control" name="accion_objetivo" id="accion_objetivo" rows="6" placeholder="Escriba aqui la propuesta de linea de acción/objetivo al que va dirigido" required></textarea>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCELAR</button>
-                <button type="button" class="btn btn-primary" onclick="aprobarSolicitudJuridica()">PROCEDENTE</button>
+                <button type="button" class="btn btn-primary" onclick="aprobarFaseIntegracion()">PROCEDENTE</button>
             </div>
         </div>
     </div>
@@ -248,59 +284,29 @@
         $("table#evaluacion-juridica>tbody").append('<tr><td colspan="2">&nbsp;</td></tr>');
     }
 
-    function obtenerEvaluacion(consulta_id) {
+    function abrirModalEvaluacionIntegracion(element) {
         modalEvaluacionJuridica.show();
-        // $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        // });
-        // $.ajax({
-        //         url: "{{ route('administracion.obtenerEvaluacionJuridica',['consulta_id' => null]) }}/" + consulta_id,
-        //         method: "GET",
-        //         contentType: 'application/json; charset=utf-8',
-        //         dataType: 'json'
-        //     })
-        //     .done(function(result, textStatus, jqXHR) {
-        //         console.log("consulta_id");
-        //         console.log(consulta_id);
-        //         $("#folio_id").val(consulta_id);
-        //         $("#observaciones_tecnica").text("");
-        //         $("#observaciones_juridica").text("");
-        //         $("table#evaluacion-juridica>tbody").html("");
-        //         evaluacion = result;
 
-        //         // console.log(evaluacion);
-        //         $("#observaciones_tecnica").text(evaluacion.comentario);
-        //         var numero_de_categorias = Object.keys(evaluacion.parametros).length;
-        //         for (let index = 1; index <= numero_de_categorias; index++) {
-        //             const elemento = evaluacion.parametros[index];
-        //             setTitulo(elemento.categoria.descripcion);
+        var cedula_id = $(element).attr("data-cedula-id");
+        var cedula_folio = $(element).attr("data-cedula-folio");
 
-        //             var numero_de_parametros = Object.keys(elemento.parametros).length;
-        //             console.log("numero_de_parametros");
-        //             console.log(numero_de_parametros);
-
-        //             for (let i = 0; i < numero_de_parametros; i++) {
-        //                 // console.log( elemento.parametros[i].descripcion );
-        //                 setParametro(elemento.parametros[i].descripcion);
-        //             }
-        //         }
-
-        //         modalEvaluacionJuridica.show();
-        //     })
-        //     .fail(function(jqXHR, textStatus, errorThrown) {
-        //         if (console && console.log) {
-        //             console.log("La solicitud a fallado: " + textStatus);
-        //         }
-        //     });
+        $("span#titulo_modal_aprobacion").text("Folio " + cedula_folio);
+        $("#modal_cedula_id").val(cedula_id);
     }
 
-    function aprobarSolicitudJuridica() {
-        var consulta_id = $("#folio_id").val();
+    function aprobarFaseIntegracion() {
+
+        var consulta_id = $("#modal_cedula_id").val();
+        var eje_estrategia = $("#eje_estrategia").val();
+        var accion_objetivo = $("#accion_objetivo").val();
+
         var requestBody = {
-            "consulta_id": consulta_id
+            "consulta_fk": consulta_id,
+            "eje_estrategia": eje_estrategia,
+            "accion_objetivo": accion_objetivo
         };
+
+        console.log(requestBody);
 
         $.ajaxSetup({
             headers: {
@@ -308,7 +314,7 @@
             }
         });
         $.ajax({
-                url: "{{ route('administracion.guardarEvaluacionJuridica') }}/",
+                url: "{{ route('administracion.guardarEvaluacionIntegracion') }}/",
                 method: "POST",
                 data: JSON.stringify(requestBody),
                 contentType: 'application/json; charset=utf-8'
@@ -333,7 +339,7 @@
             "consulta_id": $('#folio_id_rechazo').val(),
             "motivo_rechazo": $('#motivo_rechazo').val()
         };
-        
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -341,21 +347,21 @@
         });
 
         $.ajax({
-            url: "{{ route('administracion.guardarRechazoEvaluacionJuridica') }}",
-            method: "POST",
-            data: JSON.stringify(requestBody),
-            contentType: 'application/json; charset=utf-8'
-        })
-        .done(function(data, textStatus, jqXHR) {
-            rechazoModal.hide();
-            location.reload();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            if (console && console.log) {
-                console.log("La solicitud a fallado: " + textStatus);
-            }
-            $("#status").text("FAIL REQUEST").show();
-        });
+                url: "{{ route('administracion.guardarRechazoEvaluacionJuridica') }}",
+                method: "POST",
+                data: JSON.stringify(requestBody),
+                contentType: 'application/json; charset=utf-8'
+            })
+            .done(function(data, textStatus, jqXHR) {
+                rechazoModal.hide();
+                location.reload();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                if (console && console.log) {
+                    console.log("La solicitud a fallado: " + textStatus);
+                }
+                $("#status").text("FAIL REQUEST").show();
+            });
     }
 </script>
 @endsection

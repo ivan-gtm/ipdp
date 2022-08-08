@@ -29,6 +29,7 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Folio<br>Solicitud</th>
+                                <th>Origen<br>Solicitud</th>
                                 <th>Fecha</th>
                                 <th>Tipo</th>
                                 <th>Registrado por</th>
@@ -44,6 +45,13 @@
                                 </td>
                                 <td>
                                     {{ $cedula->folio }}
+                                </td>
+                                <td>
+                                    @if( $cedula->origen == 'publica' )
+                                        <span class="badge bg-info text-uppercase">Pública</span>
+                                    @else
+                                        <span class="badge bg-dark text-uppercase">Privada</span>
+                                    @endif
                                 </td>
                                 <td>
                                     {{ $cedula->created_at }}

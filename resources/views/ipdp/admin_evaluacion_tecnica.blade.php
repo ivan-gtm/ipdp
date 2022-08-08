@@ -11,6 +11,7 @@
             <tr>
                 <th>No.</th>
                 <th>Folio<br>Solicitud</th>
+                <th>Origen<br>Solicitud</th>
                 <th>Fecha</th>
                 <th>Tipo</th>
                 <th>Registrado por</th>
@@ -28,6 +29,13 @@
                     {{ $cedula->folio }}
                 </td>
                 <td>
+                    @if( $cedula->origen == 'publica' )
+                    <span class="badge bg-info text-uppercase">Pública</span>
+                    @else
+                    <span class="badge bg-dark text-uppercase">Privada</span>
+                    @endif
+                </td>
+                <td>
                     {{ $cedula->created_at }}
                 </td>
                 <td>
@@ -38,14 +46,14 @@
                 </td>
                 <td>
                     @if( $cedula->status == 2)
-                        <!-- {{ $cedula->status }} -->
-                        <span class="badge badge-soft-warning">
-                            Pendiente Valoración Técnica
-                        </span>
+                    <!-- {{ $cedula->status }} -->
+                    <span class="badge badge-soft-warning">
+                        Pendiente Valoración Técnica
+                    </span>
                     @elseif( $cedula->status == 102)
-                        <span class="badge bg-danger text-uppercase">
-                            Solicitud Rechazada
-                        </span>
+                    <span class="badge bg-danger text-uppercase">
+                        Solicitud Rechazada
+                    </span>
                     @endif
                 </td>
                 <td class="create_date">
@@ -180,7 +188,7 @@
 
                             </tr>
                             @endforeach
-                        </table>                    
+                        </table>
                         <table class="table evaluacionParametros">
                             @foreach ($parametros as $categoria)
                             <tr>
@@ -277,7 +285,7 @@
     }
 
     function limpiarFormularioEvaluacion() {
-        
+
         $('#numero_folio').val("");
         $('#observacionesValoracion').val("");
         $('input:radio:checked').each(function(index) {

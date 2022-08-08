@@ -183,7 +183,10 @@
                                                                     || Auth::user()->rol == 'analisis' 
                                                                     || Auth::user()->rol == 'tecnica' 
                                                                     || Auth::user()->rol == 'juridica' 
-                                                                    || Auth::user()->rol == 'administracion') )
+                                                                    || Auth::user()->rol == 'administracion'
+                                                                    || Auth::user()->rol == 'integracion_pgd' 
+                                                                    || Auth::user()->rol == 'integracion_pgot'
+                                                                    ) )
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active" href="#sidebarApps">
                                                                         <i class="fa-solid fa-bars"></i>
@@ -202,7 +205,7 @@
                                                                             @if( Auth::check() && ( Auth::user()->rol == 'analisis' || Auth::user()->rol == 'administracion') )
                                                                             <li class="nav-item">
                                                                                 <a href="{{ route('administracion.evaluacionAnalisis') }}" class="nav-link" data-key="t-calendar">
-                                                                                    Analisis
+                                                                                    Análisis
                                                                                 </a>
                                                                             </li>
                                                                             @endif
@@ -223,7 +226,7 @@
                                                                             </li>
                                                                             @endif
                                                                             
-                                                                            @if( Auth::check() && ( Auth::user()->rol == 'integracion' || Auth::user()->rol == 'administracion') )
+                                                                            @if( Auth::check() && ( Auth::user()->rol == 'integracion_pgd' || Auth::user()->rol == 'integracion_pgot' || Auth::user()->rol == 'administracion') )
                                                                             <li class="nav-item">
                                                                                 <a href="{{ route('administracion.evaluacionIntegracion') }}" class="nav-link" data-key="t-calendar">
                                                                                     Integración

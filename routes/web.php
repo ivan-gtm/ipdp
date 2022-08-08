@@ -58,8 +58,8 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
     
     // EVALUACION INTEGRACION
     Route::get('/administracion/evaluacion-integracion', [AdministracionController::class, 'evaluacionIntegracion'])->name('administracion.evaluacionIntegracion')->middleware('auth');
+    Route::post('/administracion/evaluacion-integracion/guardar', [AdministracionController::class, 'guardarEvaluacionIntegracion'])->name('administracion.guardarEvaluacionIntegracion')->middleware('auth');
     // Route::post('/administracion/evaluacion-juridica/rechazo', [AdministracionController::class, 'guardarRechazoEvaluacionJuridica'])->name('administracion.guardarRechazoEvaluacionJuridica')->middleware('auth');
-    // Route::post('/administracion/evaluacion-juridica/guardar', [AdministracionController::class, 'guardarEvaluacionJuridica'])->name('administracion.guardarEvaluacionJuridica')->middleware('auth');
 
 // USUARIOS SISTEMA
     Route::get('/administracion/usuarios', [AdministracionController::class, 'usuariosSistema'])->name('usuariosSistema')->middleware('auth');

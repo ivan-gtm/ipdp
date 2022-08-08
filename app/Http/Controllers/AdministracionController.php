@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Cedula;
 use App\Models\User;
 use App\Models\EvaluacionTecnica;
+use App\Models\Instrumento;
 use App\Models\EvaluacionAnalisisSubtemas;
 use App\Models\EvualuacionTecnicaDetalle;
 use App\Models\EvaluacionAnalisis;
 use App\Models\EvaluacionTecnicaRechazo;
-use App\Models\EvaluacionJuridicaRechazo;
+use App\Models\EvaluacionJuridica;
 use App\Models\EvaluacionAnalisisTemas;
 
 class AdministracionController extends Controller
@@ -32,9 +33,10 @@ class AdministracionController extends Controller
         $perPage = 10;
         $cedulas = Cedula::whereIn('status', [2, 102])->orderByDesc('id')->paginate($perPage);
         $total = $cedulas->total();
-        $page_number = round($total / $perPage);
+        $page_number = round( $total / $perPage );
 
         $parametros = self::obtenerParametrosValoracionTecnica();
+        $instrumentos = self::obtenerCatalogoInstrumentos();
         // $columnas = ceil(sizeof($parametros) / 2);
         // echo "<pre>";
         // print_r( $parametros );
@@ -43,7 +45,8 @@ class AdministracionController extends Controller
         return view('ipdp.admin_evaluacion_tecnica', [
             'page_number' => $page_number,
             'cedulas' => $cedulas,
-            'parametros' => $parametros
+            'parametros' => $parametros,
+            'instrumentos' => $instrumentos
         ]);
     }
     
@@ -68,6 +71,42 @@ class AdministracionController extends Controller
             'page_number' => $page_number,
             'cedulas' => $cedulas,
             'parametros' => $parametros
+        ]);
+    }
+    
+    function evaluacionIntegracion(){
+        
+        if( Auth::check() && ( ( Auth::user()->rol != 'integracion_pgot' || Auth::user()->rol != 'integracion_pgd' ) && Auth::user()->rol != 'administracion') ) {
+            return redirect()->route('administracion.home')->with('status', 'No tiene permisos para visualizar este modulo!');
+        }
+
+        $rol_usuario = Auth::user()->rol;
+        $tipos_de_instrumentos_visibles = ['PGD+PGOT'];
+        
+        if( $rol_usuario == 'administracion'){
+            array_push($tipos_de_instrumentos_visibles, 'PGD');
+            array_push($tipos_de_instrumentos_visibles, 'PGOT');
+        } elseif( $rol_usuario == 'integracion_pgd'){
+            array_push($tipos_de_instrumentos_visibles, 'PGD');
+        } elseif( $rol_usuario == 'integracion_pgot'){
+            array_push($tipos_de_instrumentos_visibles, 'PGOT');
+        }
+
+        $perPage = 10;
+        $cedulas = DB::table('cedulas')
+            ->join('evualuacion_tecnica', 'cedulas.id', '=', 'evualuacion_tecnica.consulta_fk')
+            ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
+            ->select('cedulas.id','cedulas.folio', 'cedulas.created_at','cedulas.status', 'cedulas.nombre','cedulas.primer_apellido','cedulas.segundo_apellido','c_instrumento.descripcion as instrumento')
+            ->whereIn('cedulas.status', [4, 104])
+            ->whereIn('c_instrumento.descripcion', $tipos_de_instrumentos_visibles)
+            ->orderByDesc('cedulas.id')
+            ->paginate($perPage);
+        $total = $cedulas->total();
+        $page_number = round($total / $perPage);
+
+        return view('ipdp.admin_evaluacion_integracion', [
+            'page_number' => $page_number,
+            'cedulas' => $cedulas
         ]);
     }
     
@@ -230,25 +269,26 @@ class AdministracionController extends Controller
     }
 
     function guardarEvaluacionTecnica(Request $request){
-
+        
         $evaluacion_tecnica = EvaluacionTecnica::create([
             'consulta_fk' => $request->folio_id,
+            'instrumento_fk' => $request->instrumento,
             'observacion' => $request->observaciones
         ]);
         
         $evaluacion_parametros = $request->parametros;
         foreach ($evaluacion_parametros as $parametro) {
             list($categoria_id, $apartado_id) = explode("-",$parametro);
+            
             EvualuacionTecnicaDetalle::create([
                 'evualuacion_tecnica_fk' => $evaluacion_tecnica->id,
                 'categoria_fk' => $categoria_id,
                 'apartado_fk' => $apartado_id,
             ]);
-            // printf($categoria_id);
         }
-
+        
         $consulta = Cedula::find($request->folio_id);
-        $consulta->status = 3;
+        $consulta->status = 3; // Aprobado tecnicamente
         $consulta->save();
 
         return response()->json("exito");
@@ -284,7 +324,7 @@ class AdministracionController extends Controller
     
     function guardarRechazoEvaluacionJuridica(Request $request){
 
-        $rechazo_analisis = EvaluacionJuridicaRechazo::create([
+        $rechazo_analisis = EvaluacionJuridica::create([
             'consulta_fk' => $request->consulta_id,
             'motivo_rechazo' => $request->motivo_rechazo
         ]);
@@ -388,6 +428,10 @@ class AdministracionController extends Controller
             'page_number' => $page_number,
             'usuarios' => $usuarios,
         ]);
+    }
+
+    function obtenerCatalogoInstrumentos(){
+        return Instrumento::get()->toArray();
     }
 
 }

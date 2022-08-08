@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EvaluacionJuridicaRechazo extends Model
+class evaluacionJuridica extends Model
 {
-    protected $table = 'evualuacion_juridica_rechazo';
+    protected $table = 'evualuacion_juridica';
     
     protected $fillable = ['consulta_fk','motivo_rechazo'];
 

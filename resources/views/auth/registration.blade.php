@@ -34,10 +34,12 @@
                                 <select class="form-control" name="rol" id="rol">
                                     <option></option>
                                     <option value="recepcion">Equipo de Recepción</option>
-                                    <option value="analisis">Equipo de Analisis</option>
-                                    <option value="tecnica">Equipo Evaluacion Tecnica</option>
-                                    <option value="juridica">Equipo Evaluacion Juridica</option>
-                                    <option value="administracion">Administracion</option>
+                                    <option value="analisis">Equipo de Análisis</option>
+                                    <option value="tecnica">Equipo Evaluación Tecnica</option>
+                                    <option value="juridica">Equipo Evaluación Juridica</option>
+                                    <option value="integracion_pgd">Integración (PGD)</option>
+                                    <option value="integracion_pgot">Integración (PGOT)</option>
+                                    <option value="administracion">Administración</option>
                                 </select>
                                 @if ($errors->has('password'))
                                     <span class="text-danger">{{ $errors->first('password') }}</span>

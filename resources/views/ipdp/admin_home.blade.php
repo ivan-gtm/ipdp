@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Gestión de CEDULAS | Analisis')
+@section('title', 'Gestión de CEDULAS | Análisis')
 @section('modulo_titulo', 'HOME')
 
 @section('content')

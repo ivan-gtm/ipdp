@@ -222,6 +222,14 @@
                                                                                 </a>
                                                                             </li>
                                                                             @endif
+                                                                            
+                                                                            @if( Auth::check() && ( Auth::user()->rol == 'integracion' || Auth::user()->rol == 'administracion') )
+                                                                            <li class="nav-item">
+                                                                                <a href="{{ route('administracion.evaluacionIntegracion') }}" class="nav-link" data-key="t-calendar">
+                                                                                    Integración
+                                                                                </a>
+                                                                            </li>
+                                                                            @endif
                                                                         </ul>
                                                                     </div>
                                                                 </li>

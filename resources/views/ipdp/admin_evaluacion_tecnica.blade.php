@@ -162,6 +162,26 @@
                 <div class="row">
                     <div class="col-md-12">
                         <table class="table">
+                            <tr>
+                                <td colspan="2" style="background-color: #9f2442; color: white;">
+                                    SELECCIONE TIPO DE INSTRUMENTO
+                                </td>
+                            </tr>
+                            @foreach ($instrumentos as $instrumento)
+                            <tr>
+                                <td class="text-center">
+                                    <input class="form-check-input" type="radio" name="evaluacion_instrumento" id="instrumento{{ $instrumento['id'] }}" value="{{ $instrumento['id'] }}">
+                                </td>
+                                <td>
+                                    <label class="form-check-label" for="instrumento{{ $instrumento['id'] }}">
+                                        {{ $instrumento['descripcion'] }}
+                                    </label>
+                                </td>
+
+                            </tr>
+                            @endforeach
+                        </table>                    
+                        <table class="table evaluacionParametros">
                             @foreach ($parametros as $categoria)
                             <tr>
                                 <td colspan="2">&nbsp;</td>
@@ -222,6 +242,7 @@
 
         requestBody = {
             "folio_id": $('#folio_id').val(),
+            "instrumento": $("input[name='evaluacion_instrumento']:checked").val(),
             "observaciones": $('#observacionesValoracion').val(),
             "parametros": prm
         };
@@ -256,6 +277,7 @@
     }
 
     function limpiarFormularioEvaluacion() {
+        
         $('#numero_folio').val("");
         $('#observacionesValoracion').val("");
         $('input:radio:checked').each(function(index) {
@@ -266,7 +288,7 @@
     function obtenerParametros() {
         parametros = [];
 
-        $('input:radio:checked').each(function(index) {
+        $('.evaluacionParametros input:radio:checked').each(function(index) {
             console.log(index + ": " + $(this).val());
             parametros.push($(this).val());
         });

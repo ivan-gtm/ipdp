@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Gestión de CEDULAS | Analisis')
-@section('modulo_titulo', 'Analisis de Propuestas')
+@section('modulo_titulo', 'Recepción de Propuestas')
 
 @section('head')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -29,6 +29,7 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Folio<br>Solicitud</th>
+                                <th>Origen<br>Solicitud</th>
                                 <th>Fecha</th>
                                 <th>Tipo</th>
                                 <th>Registrado por</th>
@@ -46,6 +47,13 @@
                                     {{ $cedula->folio }}
                                 </td>
                                 <td>
+                                    @if( $cedula->origen == 'publica' )
+                                        <span class="badge bg-info text-uppercase">Pública</span>
+                                    @else
+                                        <span class="badge bg-dark text-uppercase">Privada</span>
+                                    @endif
+                                </td>
+                                <td>
                                     {{ $cedula->created_at }}
                                 </td>
                                 <td>
@@ -57,7 +65,7 @@
                                 <td>
                                     @if( $cedula->status == 1)
                                         <!-- {{ $cedula->status }} -->
-                                        <span class="badge bg-success text-uppercase">Pendiente Analisis de propuesta</span>
+                                        <span class="badge bg-success text-uppercase">Pendiente Análisis de propuesta</span>
                                     @elseif( $cedula->status == 101)
                                         <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
                                     @endif

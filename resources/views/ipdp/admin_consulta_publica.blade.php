@@ -17,7 +17,7 @@
 <div class="row">
     <div class="col-12">
         <strong>
-            Instrucciones: Todos los campos marcados con (<label class="label-red">*</label>) son obligatorios.
+            Instrucciones: Todos los campos marcados con () son obligatorios.
         </strong>
     </div>
     <div class="col-12">
@@ -49,9 +49,9 @@
                         </div>
                         <div class="col-md-4">
                             <label for="inputNombre" class="form-label">Nombre(s)</label>
-                            <label class="label-red">*</label>
+                            
                             <div class="input-group has-validation">
-                                <input type="text" class="form-control" id="inputNombre" name="inputNombre" required>
+                                <input type="text" class="form-control" id="inputNombre" name="inputNombre" >
                                 <div class="invalid-feedback">
                                     Por favor especifique un nombre.
                                 </div>
@@ -59,9 +59,9 @@
                         </div>
                         <div class="col-md-4">
                             <label for="inputPrimerApellido" class="form-label">Primer Apellido</label>
-                            <label class="label-red">*</label>
+                            
                             <div class="input-group has-validation">
-                                <input type="text" class="form-control" id="inputPrimerApellido" name="inputPrimerApellido" required>
+                                <input type="text" class="form-control" id="inputPrimerApellido" name="inputPrimerApellido" >
                                 <div class="invalid-feedback">
                                     Por favor especifique su primer apellido.
                                 </div>
@@ -69,9 +69,9 @@
                         </div>
                         <div class="col-md-4">
                             <label for="inputSegundoApellido" class="form-label">Segundo Apellido</label>
-                            <label class="label-red">*</label>
+                            
                             <div class="input-group has-validation">
-                                <input type="text" class="form-control" id="inputSegundoApellido" name="inputSegundoApellido" required>
+                                <input type="text" class="form-control" id="inputSegundoApellido" name="inputSegundoApellido" >
                                 <div class="invalid-feedback">
                                     Por favor especifique su segundo apellido.
                                 </div>
@@ -91,7 +91,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="inputOcupacion" class="form-label">Ocupación</label>
-                                <label class="label-red">*</label>
+                                
                                 <div class="input-group has-validation">
                                     <select class="form-control" id="inputOcupacion" name="inputOcupacion">
                                         <option></option>
@@ -119,15 +119,15 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="optionGenero" class="form-label">Género</label>
-                                <label class="label-red">*</label>
+                                
                                 <br>
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoMasculino" value="Masculino" required>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoMasculino" value="Masculino" >
                                 <label class="form-check-label" for="generoMasculino">Masculino</label>
 
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoFemenino" value="Femenino" required>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoFemenino" value="Femenino" >
                                 <label class="form-check-label" for="generoFemenino">Femenino</label>
 
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoOtro" value="Otro" required>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoOtro" value="Otro" >
                                 <label class="form-check-label" for="generoOtro">Otro</label>
 
                                 <div class="invalid-feedback">Seleccione su genero</div>
@@ -136,9 +136,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="inputCorreo" class="form-label">Correo electrónico</label>
-                                    <label class="label-red">*</label>
+                                    
                                     <div class="input-group has-validation">
-                                        <input type="email" class="form-control" id="inputCorreo" name="inputCorreo" required>
+                                        <input type="email" class="form-control" id="inputCorreo" name="inputCorreo" >
                                         <div class="invalid-feedback">
                                             Por favor indique su correo electrónico.
                                         </div>
@@ -176,9 +176,9 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="inputCP" class="form-label">Código Postal</label>
-                                    <label class="label-red">*</label>
+                                    
                                     <div class="input-group has-validation">
-                                        <input type="text" class="form-control" id="inputCP" name="inputCP" required>
+                                        <input type="text" class="form-control" id="inputCP" name="inputCP" >
                                         <div class="invalid-feedback">
                                             Por favor especifique su codigo postal.
                                         </div>
@@ -186,9 +186,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label for="inputAlcaldia" class="form-label">Alcaldía</label>
-                                    <label class="label-red">*</label>
+                                    
                                     <div class="input-group has-validation">
-                                        <input type="text" class="form-control" id="inputAlcaldia" name="inputAlcaldia" required>
+                                        <input type="text" class="form-control" id="inputAlcaldia" name="inputAlcaldia" >
                                         <div class="invalid-feedback">
                                             Por favor especifique su alcaldía.
                                         </div>
@@ -224,7 +224,7 @@
                                                     </label>
                                                 </td>
                                                 <td>
-                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="representanteOrganizacion" value="ORGANIZACIÓN SOCIAL" required>
+                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="representanteOrganizacion" value="ORGANIZACIÓN SOCIAL" >
                                                 </td>
                                             </tr>
                                             <tr>
@@ -232,7 +232,7 @@
                                                     <label class="form-check-label" for="representanteAcademia">ACADEMIA</label>
                                                 </td>
                                                 <td>
-                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="representanteAcademia" value="ACADEMIA" required>
+                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="representanteAcademia" value="ACADEMIA" >
                                                 </td>
                                             </tr>
                                             <tr>
@@ -242,7 +242,7 @@
                                                     </label>
                                                 </td>
                                                 <td>
-                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="representanteCamaraColegio" value="CÁMARA O COLEGIO" required>
+                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="representanteCamaraColegio" value="CÁMARA O COLEGIO" >
                                                 </td>
                                             </tr>
                                             <tr>
@@ -252,7 +252,7 @@
                                                     </label>
                                                 </td>
                                                 <td>
-                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="representanteAlcaldia" value="ALCALDÍA O ADMINISTRACIÓN PUBLICA" required>
+                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="representanteAlcaldia" value="ALCALDÍA O ADMINISTRACIÓN PUBLICA" >
                                                 </td>
                                             </tr>
                                             <tr>
@@ -260,7 +260,7 @@
                                                     <label class="form-check-label" for="ningunaOpcion">NINGUNA</label>
                                                 </td>
                                                 <td>
-                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="ningunaOpcion" value="NINGUNA" required>
+                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="ningunaOpcion" value="NINGUNA" >
                                                 </td>
                                             </tr>
                                             <tr>
@@ -268,7 +268,7 @@
                                                     <label class="form-check-label" for="representanteOtra">OTRA</label>
                                                 </td>
                                                 <td>
-                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="representanteOtra" value="OTRA" required>
+                                                    <input class="form-check-input" type="radio" name="optionRepresentante" id="representanteOtra" value="OTRA" >
                                                 </td>
                                             </tr>
                                         </table>
@@ -328,7 +328,7 @@
                                                         </label>
                                                     </td>
                                                     <td>
-                                                        <input class="form-check-input" type="checkbox" name="opcionInstrumentoObservar" id="opcion2020-2040" value="2020-2040" required>
+                                                        <input class="form-check-input" type="checkbox" name="opcionInstrumentoObservar" id="opcion2020-2040" value="2020-2040" >
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -345,7 +345,7 @@
                                                         </label>
                                                     </td>
                                                     <td>
-                                                        <input class="form-check-input" type="checkbox" name="opcionInstrumentoObservar" id="opcion2020-2035" value="2020-2035" required>
+                                                        <input class="form-check-input" type="checkbox" name="opcionInstrumentoObservar" id="opcion2020-2035" value="2020-2035" >
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -370,7 +370,7 @@
                                             <div class="col-md-12">
                                                 <div class="mb-3">
                                                     <label for="textComentarios" class="form-label">Comentarios</label>
-                                                    <textarea class="form-control" id="textComentarios" name="textComentarios" placeholder="Por favor deje algún comentario" required></textarea>
+                                                    <textarea class="form-control" id="textComentarios" name="textComentarios" placeholder="Por favor deje algún comentario" ></textarea>
                                                     <div class="invalid-feedback">
                                                         Es requerido que describa la propuesta.
                                                     </div>
@@ -391,12 +391,15 @@
                             </div>
                             <div class="col-10 offset-md-1">
                                 <div class="row">
+                                    <div class="col-md-12">
+                                        
+                                    </div>
                                     <div class="col-md-6">
                                         <strong><label for="opcionIncluyeDocumentos" class="form-label">SE ANEXAN DOCUMENTOS CON ESTA CEDULA:</label></strong>
                                         <br>
-                                        SÍ <input class="form-check-input" type="radio" name="opcionIncluyeDocumentos" id="conDocumentos" value="1" required>
+                                        SÍ <input class="form-check-input" type="radio" name="opcionIncluyeDocumentos" id="conDocumentos" value="1" >
                                         &nbsp;&nbsp;
-                                        NO <input class="form-check-input" type="radio" name="opcionIncluyeDocumentos" id="sinDocumentos" value="0" required>
+                                        NO <input class="form-check-input" type="radio" name="opcionIncluyeDocumentos" id="sinDocumentos" value="0" >
 
                                         <div class="invalid-feedback">Especifique si se anexan documentos</div>
                                     </div>
@@ -442,10 +445,10 @@
                                 <div class="modal-header">
                                     <div class="row">
                                         <div class="col-sm-10">OTORGA SU CONSENTIMIENTO PARA EL TRATAMIENTO DE LOS
-                                            DATOS PERSONALES<label class="label-red">*</label></div>
+                                            DATOS PERSONALES</div>
                                         <div class="col-sm-2">
-                                            SI <input class="form-check-input" type="radio" name="conocimientoDatosPersonales" id="conocimientoDatosPersonales" value="si" required>
-                                            NO <input class="form-check-input" type="radio" name="conocimientoDatosPersonales" id="conocimientoDatosPersonales" value="no" required>
+                                            SI <input class="form-check-input" type="radio" name="conocimientoDatosPersonales" id="conocimientoDatosPersonales" value="si" >
+                                            NO <input class="form-check-input" type="radio" name="conocimientoDatosPersonales" id="conocimientoDatosPersonales" value="no" >
 
                                             <div class="invalid-feedback">De favor, indique si otorga su consentimiento.</div>
                                         </div>

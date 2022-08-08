@@ -127,7 +127,7 @@ class ConsultaPublicaController extends Controller
             'alcaldia' => 'required',
             'colonia' => 'nullable',
             'representante' => 'required',
-            'instrumento_observar' => ['required',Rule::in(['2020-2040', '2020-2035','2020-2040,2020-2035'])],
+            'instrumento_observar' => ['nullable',Rule::in(['2020-2040', '2020-2035','2020-2040,2020-2035'])],
             'comentarios' => 'required',
             'incluye_documentos' => 'required',
             'numero_documentos' => 'required|numeric|min:1|max:99',

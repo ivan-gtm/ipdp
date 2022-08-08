@@ -328,7 +328,7 @@
                                                         </label>
                                                     </td>
                                                     <td>
-                                                        <input class="form-check-input" type="checkbox" name="opcionInstrumentoObservar" id="opcion2020-2040" value="2020-2040" required>
+                                                        <input class="form-check-input" type="checkbox" name="opcionInstrumentoObservar" id="opcion2020-2040" value="2020-2040">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -345,7 +345,7 @@
                                                         </label>
                                                     </td>
                                                     <td>
-                                                        <input class="form-check-input" type="checkbox" name="opcionInstrumentoObservar" id="opcion2020-2035" value="2020-2035" required>
+                                                        <input class="form-check-input" type="checkbox" name="opcionInstrumentoObservar" id="opcion2020-2035" value="2020-2035">
                                                     </td>
                                                 </tr>
                                             </tbody>

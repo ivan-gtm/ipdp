@@ -36,7 +36,7 @@
                                 <select class="form-control" name="rol" id="rol">
                                     <option></option>
                                     <option {{ $usuario->rol == 'recepcion' ? 'selected' : null }} value="recepcion">Equipo de Recepción</option>
-                                    <option {{ $usuario->rol == 'analisis' ? 'selected' : null }} value="analisis">Equipo Analisis</option>
+                                    <option {{ $usuario->rol == 'analisis' ? 'selected' : null }} value="analisis">Equipo Análisis</option>
                                     <option {{ $usuario->rol == 'tecnica' ? 'selected' : null }} value="tecnica">Equipo Evaluacion Técnica</option>
                                     <option {{ $usuario->rol == 'juridica' ? 'selected' : null }} value="juridica">Equipo Evaluacion Juridica</option>
                                     <option {{ $usuario->rol == 'administracion' ? 'selected' : null }} value="administracion">Administracion</option>

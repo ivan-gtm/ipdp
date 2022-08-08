@@ -1,9 +1,11 @@
 @extends('layouts.admin')
 @section('title', 'Gestión de CEDULAS | Análisis')
-@section('modulo_titulo', 'Análisis de Propuestas')
+@section('modulo_titulo', 'Gestión de CEDULAS | Análisis')
+
 @section('head')
-<meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 @endsection
+
 @section('content')
 <div class="row">
     <div class="col-lg-12">
@@ -12,6 +14,7 @@
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">Folios por analizar</h5>
                     <div class="flex-shrink-0 d-none">
+
                         <input type="text" class="btn btn-danger add-btn" placeholder="Buscar por nombre, razon, numero">
                         <button class="btn btn-soft-danger" onclick="deleteMultiple()">
                             <i class="fa-solid fa-search"></i>
@@ -30,6 +33,7 @@
                                 <th>Tipo</th>
                                 <th>Registrado por</th>
                                 <th>Situación</th>
+                                <th>Dirigido al instrumento</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -52,12 +56,19 @@
                                     {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                                 </td>
                                 <td>
-                                    @if( $cedula->status == 1)
-                                    <!-- {{ $cedula->status }} -->
-                                    <span class="badge bg-success text-uppercase">Pendiente Análisis de propuesta</span>
-                                    @elseif( $cedula->status == 101)
-                                    <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
+                                    @if( $cedula->status == 3)
+                                        <!-- {{ $cedula->status }} -->
+                                        <span class="badge badge-soft-warning text-uppercase">
+                                            Pendiente Valoración Júridica
+                                        </span>
+                                    @elseif( $cedula->status == 103)
+                                        <span class="badge bg-danger text-uppercase">
+                                            Solicitud Rechazada
+                                        </span>
                                     @endif
+                                </td>
+                                <td>
+                                    {{ $cedula->instrumento }}
                                 </td>
                                 <td class="create_date">
                                     <ul class="panel-acciones">
@@ -70,14 +81,18 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
+                                            <a href="{{ route('cedula.pdf',[
+                                                                            'numero_folio' => $cedula->folio
+                                                                        ]) }}" class="edit-item-btn" download>
                                                 <i class="fa-solid fa-file-pdf"></i>
                                                 <!-- Descargar como PDF -->
                                             </a>
                                         </li>
-                                        @if( $cedula->status == 1)
+                                        <!-- 4:: PGOT -->
+                                        <!-- 5:: PGD  -->
+                                        @if( $cedula->status == 4 || $cedula->status == 5)
                                         <li>
-                                            <button type="button" class="edit-item-btn" onclick="aprobarSolicitud( {{ $cedula->id }} )">
+                                            <button type="button" class="edit-item-btn" onclick="obtenerEvaluacion({{ $cedula->id }})">
                                                 <i class="fa-solid fa-circle-check"></i>
                                                 <!-- Aprobar -->
                                             </button>
@@ -93,6 +108,7 @@
                                 </td>
                             </tr>
                             @endforeach
+
                         </tbody>
                     </table>
                     <div class="noresult" style="display: none">
@@ -146,7 +162,7 @@
 @section('modales')
 <!-- Modal -->
 <div class="modal fade" id="rechazoModal" tabindex="-1" aria-labelledby="rechazoModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="rechazoModalLabel">Rechazar Folio "342344"
@@ -166,34 +182,41 @@
     </div>
 </div>
 
-<div class="modal fade" id="aprobarSolicitudModal" tabindex="-1" aria-labelledby="aprobarSolicitudModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="modalEvaluacionJuridica" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Aceptar Folio "<span id="noFolioAceptar"></span>"
-                </h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Evaluación Integración</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="mb-3">
-                    <input type="hidden" name="aprobarSolicitudId" id="aprobarSolicitudId" value="2">
-                    <label for="temasEvaluacion" class="form-label">Seleccione el tema:</label>
-                    <select class="form-select" 
-                        name="temasEvaluacion" id="temasEvaluacion"
-                        onchange="obtenerSubTemasEvaluacion( this )">
-                        @foreach ($temas as $tema)
-                        <option value="{{ $tema['id'] }}">{{ $tema['descripcion'] }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="subtemasEvaluacion" class="form-label">Seleccione el tema:</label>
-                    <select class="form-select" aria-label="Default select example" name="subtemasEvaluacion" id="subtemasEvaluacion" disabled></select>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table">
+                            <tr>
+                                <td colspan="2" style="background-color: #9f2442; color: white;">
+                                    <strong>PROPUESTA DE EJE/ESTRATEGIA AL QUE VA DIRIGIDO:</strong>
+                                </td>
+                            </tr>
+                        </table>
+                        <textarea class="form-control" name="eje" id="" rows="10" placeholder="Escriba aqui la propuesta de eje/estrategia al que va dirigido esta cedula" required></textarea>
+                    </div>
+                    <div class="col-12">
+                        <br>
+                        <table class="table">
+                            <tr>
+                                <td colspan="2" style="background-color: #9f2442; color: white;">
+                                    <strong>PROPUESTA DE LINEA DE ACCIÓN/OBJETIVO AL QUE VA DIRIGIDO:</strong>
+                                </td>
+                            </tr>
+                        </table>
+                        <textarea class="form-control" name="eje" id="" rows="10" placeholder="Escriba aqui la propuesta de linea de acción/objetivo al que va dirigido" required></textarea>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarAprobacion()">Aceptar Consulta</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCELAR</button>
+                <button type="button" class="btn btn-primary" onclick="aprobarSolicitudJuridica()">PROCEDENTE</button>
             </div>
         </div>
     </div>
@@ -202,19 +225,81 @@
 
 @section('js')
 <script>
-    const aprobarSolicitudModal = new bootstrap.Modal(document.getElementById('aprobarSolicitudModal'));
+    const modalEvaluacionJuridica = new bootstrap.Modal(document.getElementById('modalEvaluacionJuridica'));
     const rechazoModal = new bootstrap.Modal(document.getElementById('rechazoModal'));
 
-    function aprobarSolicitud( consulta_id ){
-        aprobarSolicitudModal.show();
-        $('#aprobarSolicitudId').val( consulta_id );
+    function setTitulo(titulo) {
+        $("table#evaluacion-juridica>tbody").append(getTituloHTML(titulo));
     }
 
-    function guardarAprobacion() {
-        requestBody = {
-            "consulta_id": $('#aprobarSolicitudId').val(),
-            "tema_evaluacion": $('#temasEvaluacion').val(),
-            "subtema_evaluacion": $('#subtemasEvaluacion').val()
+    function getTituloHTML(titulo) {
+        return '<tr><td colspan="2" style="background-color: #9f2442; color: white;">{titulo}</td></tr>'.replace("{titulo}", titulo);
+    }
+
+    function setParametro(parametro) {
+        $("table#evaluacion-juridica>tbody").append(getParametroHTML(parametro));
+    }
+
+    function getParametroHTML(parametro) {
+        return '<tr><td>{parametro}</td></tr>'.replace("{parametro}", parametro);
+    }
+
+    function setEspacio() {
+        $("table#evaluacion-juridica>tbody").append('<tr><td colspan="2">&nbsp;</td></tr>');
+    }
+
+    function obtenerEvaluacion(consulta_id) {
+        modalEvaluacionJuridica.show();
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        // });
+        // $.ajax({
+        //         url: "{{ route('administracion.obtenerEvaluacionJuridica',['consulta_id' => null]) }}/" + consulta_id,
+        //         method: "GET",
+        //         contentType: 'application/json; charset=utf-8',
+        //         dataType: 'json'
+        //     })
+        //     .done(function(result, textStatus, jqXHR) {
+        //         console.log("consulta_id");
+        //         console.log(consulta_id);
+        //         $("#folio_id").val(consulta_id);
+        //         $("#observaciones_tecnica").text("");
+        //         $("#observaciones_juridica").text("");
+        //         $("table#evaluacion-juridica>tbody").html("");
+        //         evaluacion = result;
+
+        //         // console.log(evaluacion);
+        //         $("#observaciones_tecnica").text(evaluacion.comentario);
+        //         var numero_de_categorias = Object.keys(evaluacion.parametros).length;
+        //         for (let index = 1; index <= numero_de_categorias; index++) {
+        //             const elemento = evaluacion.parametros[index];
+        //             setTitulo(elemento.categoria.descripcion);
+
+        //             var numero_de_parametros = Object.keys(elemento.parametros).length;
+        //             console.log("numero_de_parametros");
+        //             console.log(numero_de_parametros);
+
+        //             for (let i = 0; i < numero_de_parametros; i++) {
+        //                 // console.log( elemento.parametros[i].descripcion );
+        //                 setParametro(elemento.parametros[i].descripcion);
+        //             }
+        //         }
+
+        //         modalEvaluacionJuridica.show();
+        //     })
+        //     .fail(function(jqXHR, textStatus, errorThrown) {
+        //         if (console && console.log) {
+        //             console.log("La solicitud a fallado: " + textStatus);
+        //         }
+        //     });
+    }
+
+    function aprobarSolicitudJuridica() {
+        var consulta_id = $("#folio_id").val();
+        var requestBody = {
+            "consulta_id": consulta_id
         };
 
         $.ajaxSetup({
@@ -223,21 +308,19 @@
             }
         });
         $.ajax({
-                url: "{{ route('administracion.guardarEvaluacionAnalisis') }}",
+                url: "{{ route('administracion.guardarEvaluacionJuridica') }}/",
                 method: "POST",
                 data: JSON.stringify(requestBody),
                 contentType: 'application/json; charset=utf-8'
             })
-            .done(function(data, textStatus, jqXHR) {
-                console.log(data);
-                console.log("COMPLETE");
+            .done(function(result, textStatus, jqXHR) {
+                modalEvaluacionJuridica.hide();
                 location.reload();
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 if (console && console.log) {
                     console.log("La solicitud a fallado: " + textStatus);
                 }
-                $("#status").text("FAIL REQUEST").show();
             });
     }
 
@@ -245,60 +328,12 @@
         $('#folio_id_rechazo').val(folio_id);
     }
 
-    function obtenerSubTemasEvaluacion( element ) {
-        $('#subtemasEvaluacion').find('option').remove().end();
-        // console.log("dasdas");
-        var tema_id = $(element).val();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-                url: "{{ route('administracion.obtenerSubtemasAnalisis',['tema_id' => null]) }}" + "/" + tema_id,
-                method: "GET",
-                contentType: 'application/json; charset=utf-8'
-            })
-            .done(function(subtemas, textStatus, jqXHR) {
-                
-                subtemasObj = JSON.parse(subtemas);
-                var numero_de_subtemas = subtemasObj.length;
-                console.log("numero_de_subtemas");
-                console.log(numero_de_subtemas);
-
-                for (let index = 0; index < numero_de_subtemas; index++) {
-                    const subtemaObj = subtemasObj[index];
-                    // console.log( subtemaObj.id );
-                    agregarOpcion(subtemaObj.id, subtemaObj.descripcion);
-                }
-                $('#subtemasEvaluacion').removeAttr("disabled");
-
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                if (console && console.log) {
-                    console.log("La solicitud a fallado: " + textStatus);
-                }
-                $("#status").text("FAIL REQUEST").show();
-            });
-    }
-
-    function agregarOpcion(valueParameter, descriptionParameter) {
-        $('#subtemasEvaluacion').append($('<option>', {
-            value: valueParameter,
-            text: descriptionParameter
-        }));
-    }
-
     function rechazarSolicitud() {
-        
         requestBody = {
-            "consulta_id": $('#aprobarSolicitudId').val(),
             "consulta_id": $('#folio_id_rechazo').val(),
             "motivo_rechazo": $('#motivo_rechazo').val()
         };
-
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -306,23 +341,21 @@
         });
 
         $.ajax({
-                url: "{{ route('administracion.guardarRechazoAnalisisSolicitud') }}",
-                method: "POST",
-                data: JSON.stringify(requestBody),
-                contentType: 'application/json; charset=utf-8'
-            })
-            .done(function(data, textStatus, jqXHR) {
-                // console.log(data);
-                // console.log("COMPLETE");
-                rechazoModal.hide();
-                location.reload();
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                if (console && console.log) {
-                    console.log("La solicitud a fallado: " + textStatus);
-                }
-                $("#status").text("FAIL REQUEST").show();
-            });
+            url: "{{ route('administracion.guardarRechazoEvaluacionJuridica') }}",
+            method: "POST",
+            data: JSON.stringify(requestBody),
+            contentType: 'application/json; charset=utf-8'
+        })
+        .done(function(data, textStatus, jqXHR) {
+            rechazoModal.hide();
+            location.reload();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            if (console && console.log) {
+                console.log("La solicitud a fallado: " + textStatus);
+            }
+            $("#status").text("FAIL REQUEST").show();
+        });
     }
 </script>
 @endsection

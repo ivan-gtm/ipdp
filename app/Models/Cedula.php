@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cedula extends Model
 {
     protected $fillable = [
+        'origen',
         'folio',
         'status',
         'nombre',

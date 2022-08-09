@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cedula;
 use App\Models\CedulaArchivo;
+use App;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -105,9 +106,8 @@ class ConsultaPublicaController extends Controller
 
     public function store(Request $request)
     {
-        // echo "<pre>";
-        // print_r( $request->all() );
-        // exit;
+        
+        App::setLocale('es');
 
         $validatedData = $request->validate([
             'folio' => 'required|digits:6',
@@ -130,12 +130,11 @@ class ConsultaPublicaController extends Controller
             'instrumento_observar' => ['nullable',Rule::in(['2020-2040', '2020-2035','2020-2040,2020-2035'])],
             'comentarios' => 'required',
             'incluye_documentos' => 'required',
-            'numero_documentos' => 'required|numeric|min:1|max:99',
+            'numero_documentos' => 'required|numeric|min:0|max:3',
             'conocimiento_datos_personales' => ['required',Rule::in(['si','no'])],
         ]);
 
-        // $validatedData->genero = implode(',',$)
-
+        $validatedData['origen'] = 'publica';
         $show = Cedula::create($validatedData);
         return response()->json([]);
 

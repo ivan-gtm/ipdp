@@ -21,15 +21,9 @@
         </strong>
     </div>
     <div class="col-12">
-        @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+        <div class="notification alert alert-danger" role="alert" style="display: none;">
+            <ul id="backend-errors"></ul>
         </div>
-        @endif
     </div>
     <div class="col-12">
         <div class="bd-example">
@@ -693,21 +687,26 @@
                 }
 
                 window.location.href = "{{ route('cedula.confirmacion',['numero_folio' => $numero_folio]) }}";
-                // $("#status").text("READY!");
+                
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
-                if (console && console.log) {
-                    console.log("La solicitud a fallado: " + textStatus);
+                if( errorThrown == "Unprocessable Content" && textStatus == "error"){
+                    
+                    $('.notification.alert').show();
+                    error_keys = Object.keys(jqXHR.responseJSON.errors);
+                    errorsObj = jqXHR.responseJSON.errors;
+                    
+                    error_keys.forEach(key_name => { 
+                        $("ul#backend-errors").html("").append('<li>' + errorsObj[key_name][0] + '</li>');
+                    });
+                    $('.notification.alert').focus();
+                    modalConsentimientoDatos.hide();
                 }
-                $("#status").text("FAIL REQUEST");
             });
 
     }
 </script>
 <script>
-    console.log("folio");
-    console.log(folio);
-
     var ejemplo = {
         strings: {
             addBulkFilesFailed: {

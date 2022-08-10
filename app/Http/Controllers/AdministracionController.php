@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
+use App;
 use App\Models\Cedula;
 use App\Models\User;
 use App\Models\EvaluacionTecnica;
@@ -72,6 +73,54 @@ class AdministracionController extends Controller
             'page_number' => $page_number,
             'cedulas' => $cedulas,
             'parametros' => $parametros
+        ]);
+    }
+
+    public function guardarConsultaPublica(Request $request)
+    {
+        
+        App::setLocale('es');
+
+        $validatedData = $request->validate([
+            'folio' => 'nullable|digits:6',
+            'nombre' => 'nullable',
+            'primer_apellido' => 'nullable',
+            'segundo_apellido' => 'nullable',
+            'edad' => 'nullable|min:1|max:99',
+            'ocupacion' => 'nullable',
+            'genero' => ['nullable',Rule::in(['Masculino', 'Femenino','Otro'])],
+            'correo' => 'nullable|email|unique:cedulas',
+            'celular' => 'nullable|digits:10',
+            'calle' => 'nullable',
+            'num_exterior' => 'nullable',
+            'num_interior' => 'nullable',
+            'manzana' => 'nullable',
+            'cp' => 'nullable|digits:5',
+            'alcaldia' => 'nullable',
+            'colonia' => 'nullable',
+            'representante' => 'nullable',
+            'instrumento_observar' => ['nullable',Rule::in(['2020-2040', '2020-2035','2020-2040,2020-2035'])],
+            'comentarios' => 'nullable',
+            'incluye_documentos' => 'nullable',
+            'numero_documentos' => 'nullable|numeric|min:0|max:3',
+            'conocimiento_datos_personales' => ['nullable',Rule::in(['si','no'])],
+        ]);
+
+        $validatedData['origen'] = 'publica';
+        $show = Cedula::create($validatedData);
+        return response()->json([]);
+
+    }
+
+    function registrarConsultaPublica(){
+        if( Auth::check() && ( Auth::user()->rol != 'recepcion' && Auth::user()->rol != 'administracion') ) {
+            return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
+        }
+
+        $numero_folio = mt_rand(100000, 999999);
+
+        return view('ipdp.admin_consulta_publica', [
+            'numero_folio' => $numero_folio
         ]);
     }
     
@@ -504,14 +553,9 @@ class AdministracionController extends Controller
         }
         
         $perPage = 10;
-        $usuarios = User::paginate($perPage);
+        $usuarios = User::orderByDesc('id')->paginate($perPage);
         $total = $usuarios->total();
         $page_number = round($total / $perPage);
-
-        // $columnas = ceil(sizeof($parametros) / 2);
-        // echo "<pre>";
-        // print_r( $parametros );
-        // exit;
 
         return view('ipdp.admin_usuarios', [
             'page_number' => $page_number,

@@ -37,7 +37,7 @@
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade active show" id="nav-registro-cedula" role="tabpanel" aria-labelledby="nav-datos-generales-tab" tabindex="0">
-                    <form class="row g-3 needs-validation" id="formDatosGenerales" novalidate action="{{ route('cedula.store') }}">
+                    <form class="row g-3 needs-validation" id="formDatosGenerales" novalidate action="{{ route('administracion.guardarConsultaPublica') }}">
                         <div class="col-md-12">
                             <strong>PERSONA PARTICIPANTE:</strong>
                         </div>
@@ -696,9 +696,11 @@
                     error_keys = Object.keys(jqXHR.responseJSON.errors);
                     errorsObj = jqXHR.responseJSON.errors;
                     
+                    $("ul#backend-errors").html("");
                     error_keys.forEach(key_name => { 
-                        $("ul#backend-errors").html("").append('<li>' + errorsObj[key_name][0] + '</li>');
+                        $("ul#backend-errors").append('<li>' + errorsObj[key_name][0] + '</li>');
                     });
+
                     $('.notification.alert').focus();
                     modalConsentimientoDatos.hide();
                 }

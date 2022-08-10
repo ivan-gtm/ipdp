@@ -29,11 +29,14 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
     Route::get('/administracion', [AdministracionController::class, 'home'])->name('administracion.home')->middleware('auth');
     
     // FORMATO INTERNO
-    Route::get('/administracion/consulta-publica', [ConsultaIndigenaController::class, 'registrarConsultaPublica'])->name('administracion.registrarConsultaPublica')->middleware('auth');
     Route::get('/administracion/consulta-indigena', [ConsultaIndigenaController::class, 'registrar'])->name('consultaIndigena.registrar')->middleware('auth');
     Route::post('/administracion/consulta-indigena', [ConsultaIndigenaController::class, 'store'])->name('consultaIndigena.store')->middleware('auth');
     Route::get('/administracion/consulta-indigena/confirmacion/{numero_folio}', [ConsultaIndigenaController::class, 'confirmacion'])->name('consultaIndigena.confirmacion')->middleware('auth');
     Route::get('/administracion/consulta-indigena/pdf/{numero_folio}', [ConsultaIndigenaController::class, 'generarFormatoPDF'])->name('consulta_indigena.pdf')->middleware('auth');
+    
+    // CONSULTA PUBLICA
+    Route::get('/administracion/consulta-publica', [AdministracionController::class, 'registrarConsultaPublica'])->name('administracion.registrarConsultaPublica')->middleware('auth');
+    Route::post('/administracion/consulta-publica', [AdministracionController::class, 'guardarConsultaPublica'])->name('administracion.guardarConsultaPublica')->middleware('auth');
 
     // EVALUACION RECEPCION
     Route::get('/administracion/recepcion', [AdministracionController::class, 'evaluacionRecepcion'])->name('administracion.evaluacionRecepcion')->middleware('auth');

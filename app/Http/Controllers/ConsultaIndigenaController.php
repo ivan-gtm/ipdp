@@ -14,18 +14,6 @@ use Illuminate\Support\Facades\Auth;
 class ConsultaIndigenaController extends Controller
 {
     
-    function registrarConsultaPublica(){
-        if( Auth::check() && ( Auth::user()->rol != 'recepcion' && Auth::user()->rol != 'administracion') ) {
-            return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
-        }
-
-        $numero_folio = mt_rand(100000, 999999);
-
-        return view('ipdp.admin_consulta_publica', [
-            'numero_folio' => $numero_folio
-        ]);
-    }
-    
     function registrar(){
         if( Auth::check() && ( Auth::user()->rol != 'recepcion' && Auth::user()->rol != 'administracion') ) {
             return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');

@@ -52,14 +52,6 @@ class ConsultaIndigenaController extends Controller
     public function store(Request $request)
     {
 
-        // 'folio' => 'required|digits:6',
-        // 'edad' => 'required|min:1|max:99',
-        // 'genero' => ['required',Rule::in(['Hombre', 'Mujer','Otro'])],
-        // 'correo' => 'required|email|unique:cedulas',
-        // 'celular' => 'required|digits:10',
-        // 'numero_documentos' => 'required|numeric|min:1|max:99',
-        // 'conocimiento_datos_personales' => ['required',Rule::in(['si','no'])],
-        
         $validatedData = $request->validate([
             'folio' => 'required',
             'tipoConsulta' => ['required',Rule::in([
@@ -118,9 +110,9 @@ class ConsultaIndigenaController extends Controller
 
         $consulta_indigena = DB::table('consulta_indigena')->where('folio', '=', $numero_folio)->first();
         
-        echo "<pre>";
-        print_r( $consulta_indigena );
-        exit;
+        // echo "<pre>";
+        // print_r( $consulta_indigena );
+        // exit;
         
         $pdf_html = '
         <style>

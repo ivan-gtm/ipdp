@@ -27,8 +27,8 @@
                                 <th>No.</th>
                                 <th>Folio<br>Solicitud</th>
                                 <th>Origen<br>Solicitud</th>
-                                <th>Fecha</th>
-                                <th>Tipo</th>
+                                <th class="text-center">Fecha</th>
+                                <th class="text-center">Tipo</th>
                                 <th>Registrado por</th>
                                 <th>Situación</th>
                                 <th>Acciones</th>
@@ -47,41 +47,63 @@
                                     @if( $cedula->origen == 'publica' )
                                         <span class="badge bg-info text-uppercase">Pública</span>
                                     @else
-                                        <span class="badge bg-dark text-uppercase">Privada</span>
+                                        <span class="badge bg-dark text-uppercase">Interna</span>
                                     @endif
                                 </td>
                                 <td>
                                     {{ $cedula->created_at }}
                                 </td>
-                                <td>
-                                    <span class="badge bg-success text-uppercase">CEDULA</span>
+                                <td class="text-center">
+                                    @if( $cedula->tipo == 'formato_interno' )
+                                        <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
+                                    @elseif( $cedula->tipo == 'cedula' )
+                                        <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
+                                            CEDULA
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>
                                     {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                                 </td>
                                 <td>
                                     @if( $cedula->status == 1)
-                                    <!-- {{ $cedula->status }} -->
-                                    <span class="badge bg-success text-uppercase">Pendiente Análisis de propuesta</span>
+                                        <span class="badge bg-success text-uppercase">Pendiente Análisis de propuesta</span>
                                     @elseif( $cedula->status == 101)
-                                    <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
+                                        <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
                                     @endif
                                 </td>
                                 <td class="create_date">
                                     <ul class="panel-acciones">
                                         <li>
-                                            <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
-                                                                        'folio' => $cedula->folio
-                                                                    ]) }}">
-                                                <i class="fa-solid fa-folder-plus"></i>
-                                                <!-- Detalles -->
-                                            </a>
+                                            @if( $cedula->tipo == 'formato_interno' )
+                                                <a class="edit-item-btn" href="{{ route('administracion.detalleFormatoInterno',[
+                                                                            'folio' => $cedula->folio
+                                                                        ]) }}">
+                                                    <i class="fa-solid fa-folder-plus"></i>
+                                                    <!-- Detalles -->
+                                                </a>
+                                            @elseif( $cedula->tipo == 'cedula' )
+                                                <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
+                                                                            'folio' => $cedula->folio
+                                                                        ]) }}">
+                                                    <i class="fa-solid fa-folder-plus"></i>
+                                                    <!-- Detalles -->
+                                                </a>
+                                            @endif
+                                            
                                         </li>
                                         <li>
-                                            <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
-                                                <i class="fa-solid fa-file-pdf"></i>
-                                                <!-- Descargar como PDF -->
-                                            </a>
+                                            @if( $cedula->tipo == 'formato_interno' )
+                                                <a href="{{ route('consulta_indigena.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
+                                                    <i class="fa-solid fa-file-pdf"></i>
+                                                    <!-- Descargar como PDF -->
+                                                </a>
+                                            @elseif( $cedula->tipo == 'cedula' )
+                                                <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
+                                                    <i class="fa-solid fa-file-pdf"></i>
+                                                    <!-- Descargar como PDF -->
+                                                </a>
+                                            @endif
                                         </li>
                                         @if( $cedula->status == 1)
                                         <li>

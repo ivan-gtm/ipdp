@@ -33,6 +33,7 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
     Route::post('/administracion/consulta-indigena', [ConsultaIndigenaController::class, 'store'])->name('consultaIndigena.store')->middleware('auth');
     Route::get('/administracion/consulta-indigena/confirmacion/{numero_folio}', [ConsultaIndigenaController::class, 'confirmacion'])->name('consultaIndigena.confirmacion')->middleware('auth');
     Route::get('/administracion/consulta-indigena/pdf/{numero_folio}', [ConsultaIndigenaController::class, 'generarFormatoPDF'])->name('consulta_indigena.pdf')->middleware('auth');
+    Route::get('/administracion/consulta-indigena/detalle-consulta/{folio}', [AdministracionController::class, 'detalleFormatoInterno'])->name('administracion.detalleFormatoInterno')->middleware('auth');
     
     // CONSULTA PUBLICA
     Route::get('/administracion/consulta-publica', [AdministracionController::class, 'registrarConsultaPublica'])->name('administracion.registrarConsultaPublica')->middleware('auth');
@@ -46,7 +47,7 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
     Route::get('/administracion/analisis', [AdministracionController::class, 'evaluacionAnalisis'])->name('administracion.evaluacionAnalisis')->middleware('auth');
     Route::post('/administracion/analisis/guardar-evaluacion', [AdministracionController::class, 'guardarEvaluacionAnalisis'])->name('administracion.guardarEvaluacionAnalisis')->middleware('auth');
     Route::post('/administracion/analisis/rechazo', [AdministracionController::class, 'guardarRechazoAnalisisSolicitud'])->name('administracion.guardarRechazoAnalisisSolicitud')->middleware('auth');
-    Route::get('/administracion/analisis/detalle-consulta/{folio}', [AdministracionController::class, 'detalleConsulta'])->name('administracion.detalleConsulta')->middleware('auth');
+    Route::get('/administracion/analisis/detalle-consulta/{folio}', [AdministracionController::class, 'detalleConsultaPublica'])->name('administracion.detalleConsulta')->middleware('auth');
 
     // EVALUACION TECNICA
     Route::get('/administracion/evaluacion-tecnica', [AdministracionController::class, 'evaluacionTecnica'])->name('administracion.evaluacionTecnica')->middleware('auth');

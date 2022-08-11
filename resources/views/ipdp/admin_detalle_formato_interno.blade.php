@@ -44,6 +44,80 @@
 @section('content')
 <div class="row">
     <div class="col-12">
+        <h4 class="text-center">DATOS DEL ENLACE</h4>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>
+                        <strong>FOLIO:</strong>
+                        <br>
+                        {{ isset($cedula->folio) ? $cedula->folio : null }}
+                    </td>
+                    <td>
+                        <strong>Tipo Consulta:</strong>
+                        <br>
+                        {{ isset($cedula->tipoConsulta) ? $cedula->tipoConsulta : null }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <strong>NOMBRE COMPLETO:</strong>
+                        <br>
+                        {{ isset($cedula->nombreCompleto) ? $cedula->nombreCompleto : null }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Correo Electrónico:</strong>
+                        <br>
+                        {{ isset($cedula->correo) ? $cedula->correo : null }}
+                    </td>
+                    <td>
+                        <strong>Telefono:</strong>
+                        <br>
+                        {{ isset($cedula->telefono) ? $cedula->telefono : null }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>¿Se tienen datos de quien participa?</strong>
+                        <br>
+                        {{ isset($cedula->tieneDatosParticipante) ? $cedula->tieneDatosParticipante : null }}
+                    </td>
+                    <td>
+                        <strong>¿Es representante?</strong>
+                        <br>
+                        {{ isset($cedula->esRepresentante) ? $cedula->esRepresentante : null }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>AUTORIDAD REPRESENTATIVA</strong>
+                        <br>
+                        {{ isset($cedula->tipoAutoridad) ? $cedula->tipoAutoridad : null }}
+                    </td>
+                    <td>
+                        <strong>Nombre:</strong>
+                        <br>
+                        {{ isset($cedula->nombrePuebloComunidad) ? $cedula->nombrePuebloComunidad : null }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Tipo Organizacion:</strong>
+                        <br>
+                        {{ isset($cedula->tipoOrganizacion) ? $cedula->tipoOrganizacion : null }}
+                    </td>
+                    <td>
+                        <strong>Nombre Organizacion:</strong>
+                        <br>
+                        {{ isset($cedula->nombreOrganizacion) ? $cedula->nombreOrganizacion : null }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br>
         <center>
             <h3>PERSONA PARTICIPANTE</h3>
         </center>
@@ -54,46 +128,46 @@
                     <td>
                         <strong>Nombre</strong>
                         <br>
-                        {{ $cedula->nombre }}
+                        {{ isset($cedula->nombre) ? $cedula->nombre : null }}
                     </td>
                     <td>
                         <strong>Primer Apellido</strong>
                         <br>
-                        {{ $cedula->primer_apellido }}
+                        {{ isset($cedula->primerApellido) ? $cedula->primerApellido : null }}
                     </td>
                     <td>
                         <strong>Segundo Apellido</strong>
                         <br>
-                        {{ $cedula->segundo_apellido }}
+                        {{ isset($cedula->segundoApellido) ? $cedula->segundoApellido : null }}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Ocupación</strong>
                         <br>
-                        {{ $cedula->ocupacion }}
+                        {{ isset($cedula->ocupacion) ? $cedula->ocupacion : null }}
                     </td>
                     <td>
                         <strong>Edad</strong>
                         <br>
-                        {{ $cedula->edad }}
+                        {{ isset($cedula->edad) ? $cedula->edad : null }}
                     </td>
                     <td>
                         <strong>Género</strong>
                         <br>
-                        {{ $cedula->genero }}
+                        {{ isset($cedula->genero) ? $cedula->genero : null }}
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <strong>Correo electrónico</strong>
                         <br>
-                        {{ $cedula->correo }}
+                        {{ isset($cedula->correo) ? $cedula->correo : null }}
                     </td>
                     <td>
                         <strong>Teléfono celular</strong>
                         <br>
-                        {{ $cedula->celular }}
+                        {{ isset($cedula->celular) ? $cedula->celular : null }}
                     </td>
                 </tr>
             </tbody>
@@ -109,88 +183,86 @@
                     <td>
                         <strong>Calle</strong>
                         <br>
-                        {{ $cedula->calle }}
+                        {{ isset($cedula->calle) ? $cedula->calle : null }}
                     </td>
                     <td>
                         <strong>Numero Exterior</strong>
                         <br>
-                        {{ $cedula->num_exterior }}
+                        {{ isset($cedula->numExterior) ? $cedula->numExterior : null }}
                     </td>
                     <td>
                         <strong>Numero Interior</strong>
                         <br>
-                        {{ $cedula->num_interior }}
+                        {{ isset($cedula->numInterior) ? $cedula->numInterior : null }}
                     </td>
                     <td>
                         <strong>Manzana / Lote</strong>
                         <br>
-                        {{ $cedula->manzana }}
+                        {{ isset($cedula->manzana) ? $cedula->manzana : null }}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Código Postal</strong>
                         <br>
-                        {{ $cedula->cp }}
+                        {{ isset($cedula->cp) ? $cedula->cp : null }}
                     </td>
                     <td>
                         <strong>Alcaldía</strong>
                         <br>
-                        {{ $cedula->alcaldia }}
+                        {{ isset($cedula->alcaldia) ? $cedula->alcaldia : null }}
                     </td>
                     <td colspan="2">
                         <strong>Colonia, Pueblo o Barrio</strong>
                         <br>
-                        {{ $cedula->colonia }}
+                        {{ isset($cedula->colonia) ? $cedula->colonia : null }}
                     </td>
                 </tr>
             </tbody>
         </table>
         <br>
         <br>
+
         <table class="table">
             <tbody>
                 <tr>
                     <td style="text-align: center;">
-                        <strong>TIPO DE REPRESENTANTE:</strong>
-
-                        {{ $cedula->representante }}
+                        <strong>FORMA DE PARTICIPACIÓN:</strong>
+                        <br>
+                        @if( isset($cedula->tipoParticipacion) )
+                            {{ isset($cedula->tipoParticipacion) ? $cedula->tipoParticipacion : null }}
+                        @elseif( isset($cedula->participacionOtro) )
+                            {{ isset($cedula->participacionOtro) ? $cedula->participacionOtro : null }}
+                        @endif
                     </td>
                 </tr>
             </tbody>
         </table>
+
         <br>
-        <h4 class="text-center">INSTRUMENTO DE PLANEACIÓN A OBSERVAR</h4>
+        <h4 class="text-center">INFORMACIÓN DE LA ACTIVIDAD</h4>
         <table class="table">
             <tbody>
-                @foreach ($instrumento_observar as $instrumento)
                 <tr>
                     <td style="text-align: center;">
-                        <strong>VIGENCIA</strong>
+                        <strong>NOMBRE DEL TALLER, FORO O ACTIVIDAD:</strong>
                         <br>
-                        {{ $instrumento['periodo'] }}
+                        {{ isset($cedula->nombreActividad) ? $cedula->nombreActividad : null }}
                     </td>
-                    <td>
-                        <strong>
-                            {{ $instrumento['descripcion'] }}
-                        </strong>
+                    <td style="text-align: center;">
+                        <strong>FECHA:</strong>
                         <br>
+                        {{ isset($cedula->fechaActividad) ? $cedula->fechaActividad : null }}
+                    </td>
+                    <td style="text-align: center;">
+                        <strong>LUGAR:</strong>
+                        <br>
+                        {{ isset($cedula->lugarActividad) ? $cedula->lugarActividad : null }}
                     </td>
                 </tr>
-                @endforeach
             </tbody>
         </table>
 
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12">
-        <br>
-        <center>
-            <h3>OPINIÓN, RECOMENDACIÓN PROPUESTA</h3>
-        </center>
-        <p>{{ $cedula->comentarios }}</p>
     </div>
 </div>
 
@@ -234,47 +306,3 @@
 @endsection
 
 
-@section('modales')
-<!-- Modal -->
-<div class="modal fade" id="rechazoModal" tabindex="-1" aria-labelledby="rechazoModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="rechazoModalLabel">Rechazar Folio "342344"
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Escriba una breve descripción, con el motivo del rechazo:
-                <textarea class="form-control" name="motivo_rechazo" id="" rows="10"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Enviar Rechazo</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="aceptarConsultaModal" tabindex="-1" aria-labelledby="rechazoModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- <div class="modal-header">
-                    <h5 class="modal-title"
-                        id="rechazoModalLabel">Aceptar Folio "342344"
-                    </h5>
-                    <button type="button" class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div> -->
-            <div class="modal-body">
-                ¿Esta seguro, el poder aceptar el folio "342344"?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Aceptar Consulta</button>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection

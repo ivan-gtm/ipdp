@@ -30,8 +30,8 @@
                                 <th>No.</th>
                                 <th>Folio<br>Solicitud</th>
                                 <th>Origen<br>Solicitud</th>
-                                <th>Fecha</th>
-                                <th>Tipo</th>
+                                <th class="text-center">Fecha</th>
+                                <th class="text-center">Tipo</th>
                                 <th>Registrado por</th>
                                 <th>Situación</th>
                                 <th>Acciones</th>
@@ -50,21 +50,26 @@
                                     @if( $cedula->origen == 'publica' )
                                         <span class="badge bg-info text-uppercase">Pública</span>
                                     @else
-                                        <span class="badge bg-dark text-uppercase">Privada</span>
+                                        <span class="badge bg-dark text-uppercase">Interna</span>
                                     @endif
                                 </td>
                                 <td>
                                     {{ $cedula->created_at }}
                                 </td>
-                                <td>
-                                    <span class="badge bg-success text-uppercase">CEDULA</span>
+                                <td class="text-center">
+                                    @if( $cedula->tipo == 'formato_interno' )
+                                        <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
+                                    @elseif( $cedula->tipo == 'cedula' )
+                                        <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
+                                            CEDULA
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>
                                     {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                                 </td>
                                 <td>
                                     @if( $cedula->status == 1)
-                                        <!-- {{ $cedula->status }} -->
                                         <span class="badge bg-success text-uppercase">Pendiente Análisis de propuesta</span>
                                     @elseif( $cedula->status == 101)
                                         <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
@@ -73,18 +78,35 @@
                                 <td class="create_date">
                                     <ul class="panel-acciones">
                                         <li>
-                                            <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
-                                                                        'folio' => $cedula->folio
-                                                                    ]) }}">
-                                                <i class="fa-solid fa-folder-plus"></i>
-                                                <!-- Detalles -->
-                                            </a>
+                                            @if( $cedula->tipo == 'formato_interno' )
+                                                <a class="edit-item-btn" href="{{ route('administracion.detalleFormatoInterno',[
+                                                                            'folio' => $cedula->folio
+                                                                        ]) }}">
+                                                    <i class="fa-solid fa-folder-plus"></i>
+                                                    <!-- Detalles -->
+                                                </a>
+                                            @elseif( $cedula->tipo == 'cedula' )
+                                                <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
+                                                                            'folio' => $cedula->folio
+                                                                        ]) }}">
+                                                    <i class="fa-solid fa-folder-plus"></i>
+                                                    <!-- Detalles -->
+                                                </a>
+                                            @endif
+                                            
                                         </li>
                                         <li>
-                                            <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
-                                                <i class="fa-solid fa-file-pdf"></i>
-                                                <!-- Descargar como PDF -->
-                                            </a>
+                                            @if( $cedula->tipo == 'formato_interno' )
+                                                <a href="{{ route('consulta_indigena.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
+                                                    <i class="fa-solid fa-file-pdf"></i>
+                                                    <!-- Descargar como PDF -->
+                                                </a>
+                                            @elseif( $cedula->tipo == 'cedula' )
+                                                <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
+                                                    <i class="fa-solid fa-file-pdf"></i>
+                                                    <!-- Descargar como PDF -->
+                                                </a>
+                                            @endif
                                         </li>
                                     </ul>
                                 </td>
@@ -138,124 +160,4 @@
     </div>
     <!--end col-->
 </div>
-@endsection
-
-@section('modales')
-<!-- Modal -->
-<div class="modal fade" id="rechazoModal" tabindex="-1" aria-labelledby="rechazoModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="rechazoModalLabel">Rechazar Folio "342344"
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Escriba una breve descripción, con el motivo del rechazo:
-                <input type="hidden" name="folio_id_rechazo" id="folio_id_rechazo">
-                <textarea class="form-control" name="motivo_rechazo" id="motivo_rechazo" rows="10"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="rechazarSolicitud()">Enviar Rechazo</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="aprobacionModal" tabindex="-1" aria-labelledby="aprobacionModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- <div class="modal-header">
-                    <h5 class="modal-title"
-                        id="rechazoModalLabel">Aceptar Folio "342344"
-                    </h5>
-                    <button type="button" class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div> -->
-            <div class="modal-body">
-                ¿Esta seguro, el poder aceptar el folio "342344"?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Aceptar Consulta</button>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
-
-@section('js')
-<script>
-    const aprobacionModal = new bootstrap.Modal(document.getElementById('aprobacionModal'));
-    const rechazoModal = new bootstrap.Modal(document.getElementById('rechazoModal'));
-
-    function aprobarSolicitud(consulta_id) {
-        requestBody = {
-            "consulta_id": consulta_id
-        };
-        
-        // aprobacionModal.show();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: "{{ route('administracion.guardarEvaluacionAnalisis') }}",
-            method: "POST",
-            data: JSON.stringify(requestBody),
-            contentType: 'application/json; charset=utf-8'
-        })
-        .done(function(data, textStatus, jqXHR) {
-            console.log(data);
-            console.log("COMPLETE");
-            location.reload();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            if (console && console.log) {
-                console.log("La solicitud a fallado: " + textStatus);
-            }
-            $("#status").text("FAIL REQUEST").show();
-        });
-    }
-    
-    function actualizarFolioIdRechazo(folio_id) {
-        $('#folio_id_rechazo').val(folio_id);
-    }
-
-    function rechazarSolicitud() {
-        requestBody = {
-            "consulta_id": $('#folio_id_rechazo').val(),
-            "motivo_rechazo": $('#motivo_rechazo').val()
-        };
-        
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: "{{ route('administracion.guardarRechazoAnalisisSolicitud') }}",
-            method: "POST",
-            data: JSON.stringify(requestBody),
-            contentType: 'application/json; charset=utf-8'
-        })
-        .done(function(data, textStatus, jqXHR) {
-            // console.log(data);
-            // console.log("COMPLETE");
-            rechazoModal.hide();
-            location.reload();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            if (console && console.log) {
-                console.log("La solicitud a fallado: " + textStatus);
-            }
-            $("#status").text("FAIL REQUEST").show();
-        });
-    }
-</script>
 @endsection

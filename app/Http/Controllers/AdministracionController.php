@@ -15,6 +15,7 @@ use App\Models\Instrumento;
 use App\Models\EvaluacionAnalisisSubtemas;
 use App\Models\EvualuacionTecnicaDetalle;
 use App\Models\EvaluacionAnalisis;
+use App\Models\FormatoInterno;
 use App\Models\EvaluacionTecnicaRechazo;
 use App\Models\EvaluacionJuridica;
 use App\Models\EvaluacionAnalisisTemas;
@@ -39,11 +40,7 @@ class AdministracionController extends Controller
 
         $parametros = self::obtenerParametrosValoracionTecnica();
         $instrumentos = self::obtenerCatalogoInstrumentos();
-        // $columnas = ceil(sizeof($parametros) / 2);
-        // echo "<pre>";
-        // print_r( $parametros );
-        // exit;
-
+        
         return view('ipdp.admin_evaluacion_tecnica', [
             'page_number' => $page_number,
             'cedulas' => $cedulas,
@@ -64,11 +61,7 @@ class AdministracionController extends Controller
         $page_number = round($total / $perPage);
 
         $parametros = self::obtenerParametrosValoracionTecnica();
-        // $columnas = ceil(sizeof($parametros) / 2);
-        // echo "<pre>";
-        // print_r( $parametros );
-        // exit;
-
+        
         return view('ipdp.admin_evaluacion_juridica', [
             'page_number' => $page_number,
             'cedulas' => $cedulas,
@@ -106,7 +99,7 @@ class AdministracionController extends Controller
             'conocimiento_datos_personales' => ['nullable',Rule::in(['si','no'])],
         ]);
 
-        $validatedData['origen'] = 'publica';
+        $validatedData['origen'] = 'interna';
         $show = Cedula::create($validatedData);
         return response()->json([]);
 
@@ -329,10 +322,23 @@ class AdministracionController extends Controller
         if( Auth::check() && ( Auth::user()->rol != 'analisis' && Auth::user()->rol != 'administracion') ) {
             return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
         }
-
         
         $perPage = 10;
-        $cedulas = Cedula::whereIn('status', [1, 101])->orderByDesc('id')->paginate($perPage);
+        $estados_validos = [1, 101];
+
+        $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
+            ->select('id','folio','created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
+            ->selectRaw("'interno' as origen")
+            ->selectRaw("'formato_interno' as tipo")
+            ->orderByDesc('id');
+        
+        $cedulas = Cedula::whereIn('status', $estados_validos)
+                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido','cedulas.origen')
+                    ->selectRaw("'cedula' as tipo")
+                    ->union($formatos_interno)
+                    ->orderByDesc('id')
+                    ->paginate($perPage);
+
         $total = $cedulas->total();
         $page_number = round( $total / $perPage );
         
@@ -359,22 +365,33 @@ class AdministracionController extends Controller
         }
 
         $perPage = 10;
-        $cedulas = Cedula::whereIn('status', [1, 101])->orderByDesc('id')->paginate($perPage);
-        $total = $cedulas->total();
-        $page_number = round($total / $perPage);
+        $estados_validos = [1, 101];
 
-        $parametros = self::obtenerParametrosValoracionTecnica();
+        $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
+            ->select('id','folio','created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
+            ->selectRaw("'interno' as origen")
+            ->selectRaw("'formato_interno' as tipo")
+            ->orderByDesc('id');
         
-        // admin_recepcion
+        $cedulas = Cedula::whereIn('status', $estados_validos)
+                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido','cedulas.origen')
+                    ->selectRaw("'cedula' as tipo")
+                    ->union($formatos_interno)
+                    ->orderByDesc('id')
+                    ->paginate($perPage);
+
+        $total = $cedulas->total();
+        $page_number = round( $total / $perPage );
+        
         return view('ipdp.admin_recepcion', [
             'page_number' => $page_number,
-            'cedulas' => $cedulas,
-            'parametros' => $parametros
+            'cedulas' => $cedulas
+            // 'parametros' => $parametros
         ]);
 
     }
     
-    function detalleConsulta( $folio ){
+    function detalleConsultaPublica( $folio ){
         
         $cedula = DB::table('cedulas')->where('folio','=',$folio)->first();
         $archivos_cedula = DB::table('cedula_archivo')
@@ -382,11 +399,33 @@ class AdministracionController extends Controller
                     ->where('folio','=',$folio)
                     ->get();
 
-        $instrumento_observar = self::obtenerInstrumentosAObservar( $cedula->instrumento_observar );
+        if( isset($cedula->instrumento_observar) ) {
+            $instrumento_observar = self::obtenerInstrumentosAObservar( $cedula->instrumento_observar );
+        } else {
+            $instrumento_observar = null;
+        }
         
-        return view('ipdp.admin_detalle_consulta', [
+        return view('ipdp.admin_detalle_consulta_publica', [
             'cedula' => $cedula,
             'instrumento_observar' => $instrumento_observar,
+            'archivos_cedula' => $archivos_cedula
+        ]);
+
+    }
+    
+    function detalleFormatoInterno( $folio ){
+        
+        $cedula = DB::table('consulta_indigena')->where('folio','=',$folio)->first();
+        $archivos_cedula = DB::table('cedula_archivo')
+                    ->where('tipo_consulta','=','consulta-indigena')
+                    ->where('folio','=',$folio)
+                    ->get();
+
+        // $instrumento_observar = self::obtenerInstrumentosAObservar( $cedula->instrumento_observar );
+        
+        return view('ipdp.admin_detalle_formato_interno', [
+            'cedula' => $cedula,
+            // 'instrumento_observar' => $instrumento_observar,
             'archivos_cedula' => $archivos_cedula
         ]);
 
@@ -395,6 +434,7 @@ class AdministracionController extends Controller
     function obtenerInstrumentosAObservar( $instrumentos ){
         $arreglo_instrumentos = explode(',',$instrumentos);
         foreach ($arreglo_instrumentos as $anio_instrumento) {
+            $instrumento_x = null;
             if( $anio_instrumento == '2020-2040' ){
                 $instrumento_x['periodo'] = $anio_instrumento;
                 $instrumento_x['descripcion'] = "PLAN GENERAL DE DESARROLLO DE LA CIUDAD DE MÉXICO";

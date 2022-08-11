@@ -34,7 +34,21 @@ class AdministracionController extends Controller
         }
         
         $perPage = 10;
-        $cedulas = Cedula::whereIn('status', [2, 102])->orderByDesc('id')->paginate($perPage);
+        $estados_validos = [2, 102];
+
+        $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
+            ->select('id','folio','created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
+            ->selectRaw("'interno' as origen")
+            ->selectRaw("'formato_interno' as tipo")
+            ->orderByDesc('id');
+        
+        $cedulas = Cedula::whereIn('status', $estados_validos)
+                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido','cedulas.origen')
+                    ->selectRaw("'cedula' as tipo")
+                    ->union($formatos_interno)
+                    ->orderByDesc('id')
+                    ->paginate($perPage);
+
         $total = $cedulas->total();
         $page_number = round( $total / $perPage );
 
@@ -56,9 +70,23 @@ class AdministracionController extends Controller
         }
 
         $perPage = 10;
-        $cedulas = Cedula::whereIn('status', [3, 103])->orderByDesc('id')->paginate($perPage);
+        $estados_validos = [3, 103];
+
+        $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
+            ->select('id','folio','created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
+            ->selectRaw("'interno' as origen")
+            ->selectRaw("'formato_interno' as tipo")
+            ->orderByDesc('id');
+        
+        $cedulas = Cedula::whereIn('status', $estados_validos)
+                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido','cedulas.origen')
+                    ->selectRaw("'cedula' as tipo")
+                    ->union($formatos_interno)
+                    ->orderByDesc('id')
+                    ->paginate($perPage);
+
         $total = $cedulas->total();
-        $page_number = round($total / $perPage);
+        $page_number = round( $total / $perPage );
 
         $parametros = self::obtenerParametrosValoracionTecnica();
         
@@ -262,7 +290,7 @@ class AdministracionController extends Controller
         return response()->json(["exito"]);
     }
     
-    function obtenerEvaluacionJuridica( $consulta_id = null){
+    function obtenerEvaluacionJuridica(Request $request){
         
         $query = '
         SELECT
@@ -275,7 +303,9 @@ class AdministracionController extends Controller
             LEFT JOIN evualuacion_tecnica_detalle ed ON et.id = ed.evualuacion_tecnica_fk
             LEFT JOIN c_categoria_evaluacion_tecnica ec ON ed.categoria_fk = ec.id
             LEFT JOIN c_apartados_evaluacion_tecnica ae ON ed.apartado_fk = ae.id
-        WHERE et.consulta_fk ='.$consulta_id;
+        WHERE 
+            et.tipo_documento = \''.$request->tipo_documento.'\'
+            AND et.consulta_fk ='.$request->consulta_id;
         
         $parametros = [];
         $tmp = [];
@@ -303,7 +333,9 @@ class AdministracionController extends Controller
         unset($evaluacion_parametros[0]);
 
         // $evaluacion_parametros
-        $evaluacion_tecnica = EvaluacionTecnica::where('consulta_fk', $consulta_id)->first();
+        $evaluacion_tecnica = EvaluacionTecnica::where('consulta_fk', $request->consulta_id)
+                                ->where('tipo_documento', $request->tipo_documento)
+                                ->first();
 
         $response = [
             'parametros' => $evaluacion_parametros,
@@ -421,8 +453,6 @@ class AdministracionController extends Controller
                     ->where('folio','=',$folio)
                     ->get();
 
-        // $instrumento_observar = self::obtenerInstrumentosAObservar( $cedula->instrumento_observar );
-        
         return view('ipdp.admin_detalle_formato_interno', [
             'cedula' => $cedula,
             // 'instrumento_observar' => $instrumento_observar,
@@ -449,12 +479,20 @@ class AdministracionController extends Controller
     }
 
     function guardarEvaluacionAnalisis(Request $request){
-        $consulta = Cedula::find($request->consulta_id);
-        $consulta->status = 2;
-        $consulta->save();
         
-        $rechazo_analisis = EvaluacionAnalisis::create([
+        if( isset($request->tipo_documento) && $request->tipo_documento == 'cedula'){
+            $consulta = Cedula::find($request->consulta_id);
+            $consulta->status = 2;
+            $consulta->save();
+        } elseif( isset($request->tipo_documento) && $request->tipo_documento == 'formato_interno'){
+            $consulta = FormatoInterno::find($request->consulta_id);
+            $consulta->status = 2;
+            $consulta->save(); 
+        }
+        
+        EvaluacionAnalisis::create([
             'consulta_fk' => $request->consulta_id,
+            'tipo_documento' => $request->tipo_documento,
             'tema_fk' => $request->tema_evaluacion,
             'subtema_fk' => $request->subtema_evaluacion
         ]);
@@ -471,6 +509,7 @@ class AdministracionController extends Controller
         
         $evaluacion_tecnica = EvaluacionTecnica::create([
             'consulta_fk' => $request->folio_id,
+            'tipo_documento' => $request->tipo_documento,
             'instrumento_fk' => $request->instrumento,
             'observacion' => $request->observaciones
         ]);
@@ -486,11 +525,17 @@ class AdministracionController extends Controller
             ]);
         }
         
-        $consulta = Cedula::find($request->folio_id);
-        $consulta->status = 3; // Aprobado tecnicamente
-        $consulta->save();
+        if( isset($request->tipo_documento) && $request->tipo_documento == 'cedula'){
+            $consulta = Cedula::find($request->folio_id);
+            $consulta->status = 3;
+            $consulta->save();
+        } elseif( isset($request->tipo_documento) && $request->tipo_documento == 'formato_interno'){
+            $consulta = FormatoInterno::find($request->folio_id);
+            $consulta->status = 3;
+            $consulta->save(); 
+        }
 
-        return response()->json("exito");
+        return response()->json(["exito"]);
     }
     
     function guardarRechazoAnalisisSolicitud(Request $request){
@@ -536,9 +581,17 @@ class AdministracionController extends Controller
     }
     
     function guardarEvaluacionJuridica( Request $request ){
-        $consulta = Cedula::find($request->consulta_id);
-        $consulta->status = 4;
-        $consulta->save();
+        if($request->tipo_documento == 'formato_interno'){
+            $consulta = FormatoInterno::find($request->consulta_id);
+            $consulta->status = 4;
+            $consulta->save();
+        } elseif($request->tipo_documento == 'cedula'){
+            $consulta = Cedula::find($request->consulta_id);
+            $consulta->status = 4;
+            $consulta->save();
+        }
+
+
         return response()->json(["exito"]);
     }
     

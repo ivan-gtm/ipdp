@@ -9,7 +9,7 @@ class EvaluacionTecnica extends Model
 {
     protected $table = 'evualuacion_tecnica';
     
-    protected $fillable = ['consulta_fk','instrumento_fk','observacion'];
+    protected $fillable = ['consulta_fk','tipo_documento','instrumento_fk','observacion'];
 
     use HasFactory;
 }

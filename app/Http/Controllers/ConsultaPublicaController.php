@@ -165,18 +165,23 @@ class ConsultaPublicaController extends Controller
         
         $cedula = DB::table('cedulas')->where('folio', '=', $numero_folio)->first();
         
-        $instrumento_observar = self::obtenerInstrumentosAObservar( $cedula->instrumento_observar );
+        if( isset($cedula->instrumento_observar) ) {
+            $instrumento_observar = self::obtenerInstrumentosAObservar( $cedula->instrumento_observar );
+        }
 
         $instrumentos_observar_html = '';
-        foreach ($instrumento_observar  as $instrumento) {
-            $instrumentos_observar_html .= '<tr>
-                <td style="text-align: center;">
-                     '.$instrumento['periodo'].'
-                </td>
-                <td>
-                    '.$instrumento['descripcion'].'
-                </td>
-            </tr>';
+
+        if( isset($instrumento_observar) ){
+            foreach ($instrumento_observar  as $instrumento) {
+                $instrumentos_observar_html .= '<tr>
+                    <td style="text-align: center;">
+                         '.$instrumento['periodo'].'
+                    </td>
+                    <td>
+                        '.$instrumento['descripcion'].'
+                    </td>
+                </tr>';
+            }
         }
 
         $pdf_html = '

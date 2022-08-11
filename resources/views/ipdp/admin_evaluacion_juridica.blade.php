@@ -30,8 +30,8 @@
                                 <th>No.</th>
                                 <th>Folio<br>Solicitud</th>
                                 <th>Origen<br>Solicitud</th>
-                                <th>Fecha</th>
-                                <th>Tipo</th>
+                                <th class="text-center">Fecha</th>
+                                <th class="text-center">Tipo</th>
                                 <th>Registrado por</th>
                                 <th>Situación</th>
                                 <th>Acciones</th>
@@ -50,14 +50,20 @@
                                     @if( $cedula->origen == 'publica' )
                                         <span class="badge bg-info text-uppercase">Pública</span>
                                     @else
-                                        <span class="badge bg-dark text-uppercase">Privada</span>
+                                        <span class="badge bg-dark text-uppercase">Interna</span>
                                     @endif
                                 </td>
                                 <td>
                                     {{ $cedula->created_at }}
                                 </td>
-                                <td>
-                                    <span class="badge bg-success text-uppercase">CEDULA</span>
+                                <td class="text-center">
+                                    @if( $cedula->tipo == 'formato_interno' )
+                                        <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
+                                    @elseif( $cedula->tipo == 'cedula' )
+                                        <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
+                                            CEDULA
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>
                                     {{ $cedula->nombre.' '.$cedula->primer_apellido }}
@@ -77,24 +83,39 @@
                                 <td class="create_date">
                                     <ul class="panel-acciones">
                                         <li>
-                                            <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
-                                                                        'folio' => $cedula->folio
-                                                                    ]) }}">
-                                                <i class="fa-solid fa-folder-plus"></i>
-                                                <!-- Detalles -->
-                                            </a>
+                                            @if( $cedula->tipo == 'formato_interno' )
+                                                <a class="edit-item-btn" href="{{ route('administracion.detalleFormatoInterno',[
+                                                                            'folio' => $cedula->folio
+                                                                        ]) }}">
+                                                    <i class="fa-solid fa-folder-plus"></i>
+                                                    <!-- Detalles -->
+                                                </a>
+                                            @elseif( $cedula->tipo == 'cedula' )
+                                                <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
+                                                                            'folio' => $cedula->folio
+                                                                        ]) }}">
+                                                    <i class="fa-solid fa-folder-plus"></i>
+                                                    <!-- Detalles -->
+                                                </a>
+                                            @endif
+                                            
                                         </li>
                                         <li>
-                                            <a href="{{ route('cedula.pdf',[
-                                                                            'numero_folio' => $cedula->folio
-                                                                        ]) }}" class="edit-item-btn" download>
-                                                <i class="fa-solid fa-file-pdf"></i>
-                                                <!-- Descargar como PDF -->
-                                            </a>
+                                            @if( $cedula->tipo == 'formato_interno' )
+                                                <a href="{{ route('consulta_indigena.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
+                                                    <i class="fa-solid fa-file-pdf"></i>
+                                                    <!-- Descargar como PDF -->
+                                                </a>
+                                            @elseif( $cedula->tipo == 'cedula' )
+                                                <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
+                                                    <i class="fa-solid fa-file-pdf"></i>
+                                                    <!-- Descargar como PDF -->
+                                                </a>
+                                            @endif
                                         </li>
                                         @if( $cedula->status == 3)
                                         <li>
-                                            <button type="button" class="edit-item-btn" onclick="obtenerEvaluacion({{ $cedula->id }})">
+                                            <button type="button" class="edit-item-btn" data-tipo-documento="{{ $cedula->tipo }}" data-documento-id="{{ $cedula->id }}"  onclick="obtenerEvaluacion(this)">
                                                 <i class="fa-solid fa-circle-check"></i>
                                                 <!-- Aprobar -->
                                             </button>
@@ -194,6 +215,7 @@
             <div class="modal-body">
                 <div class="row">
                     <input type="hidden" name="folio_id" id="folio_id" value="">
+                    <input type="hidden" name="tipo_documento" id="tipo_documento" value="">
                     <div class="col-md-12">
                         <table class="table" id="evaluacion-juridica">
                             <tbody>
@@ -240,25 +262,33 @@
         $("table#evaluacion-juridica>tbody").append('<tr><td colspan="2">&nbsp;</td></tr>');
     }
 
-    function obtenerEvaluacion(consulta_id) {
+    function obtenerEvaluacion(element) {
+        requestBody = {
+            "tipo_documento": $(element).attr("data-tipo-documento"),
+            "consulta_id": $(element).attr("data-documento-id")
+        };
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
         $.ajax({
-                url: "{{ route('administracion.obtenerEvaluacionJuridica',['consulta_id' => null]) }}/" + consulta_id,
-                method: "GET",
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json'
+                url: "{{ route('administracion.obtenerEvaluacionJuridica') }}",
+                method: "POST",
+                data: JSON.stringify(requestBody),
+                contentType: 'application/json; charset=utf-8'
             })
             .done(function(result, textStatus, jqXHR) {
                 console.log("consulta_id");
-                console.log(consulta_id);
-                $("#folio_id").val(consulta_id);
+                console.log( $(element).attr("data-documento-id") );
+                $("#folio_id").val( $(element).attr("data-documento-id") );
+                $("#tipo_documento").val( $(element).attr("data-tipo-documento") );
+
                 $("#observaciones_tecnica").text("");
                 $("#observaciones_juridica").text("");
                 $("table#evaluacion-juridica>tbody").html("");
+
                 evaluacion = result;
 
                 // console.log(evaluacion);
@@ -289,8 +319,11 @@
 
     function aprobarSolicitudJuridica() {
         var consulta_id = $("#folio_id").val();
+        var tipo_documento = $("#tipo_documento").val();
+        
         var requestBody = {
-            "consulta_id": consulta_id
+            "consulta_id": consulta_id,
+            "tipo_documento": tipo_documento
         };
 
         $.ajaxSetup({

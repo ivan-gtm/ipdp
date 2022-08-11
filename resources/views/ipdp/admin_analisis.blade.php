@@ -106,18 +106,18 @@
                                             @endif
                                         </li>
                                         @if( $cedula->status == 1)
-                                        <li>
-                                            <button type="button" class="edit-item-btn" onclick="aprobarSolicitud( {{ $cedula->id }} )">
-                                                <i class="fa-solid fa-circle-check"></i>
-                                                <!-- Aprobar -->
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button type="button" class="remove-item-btn" data-bs-toggle="modal" onclick="actualizarFolioIdRechazo({{ $cedula->id }})" data-bs-target="#rechazoModal">
-                                                <i class="fa-solid fa-circle-xmark"></i>
-                                                <!-- Rechazar -->
-                                            </button>
-                                        </li>
+                                            <li>
+                                                <button type="button" class="edit-item-btn" data-tipo-documento="{{ $cedula->tipo }}" data-documento-id="{{ $cedula->id }}" onclick="aprobarSolicitud( this )">
+                                                    <i class="fa-solid fa-circle-check"></i>
+                                                    <!-- Aprobar -->
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="remove-item-btn" data-bs-toggle="modal" onclick="actualizarFolioIdRechazo({{ $cedula->id }})" data-bs-target="#rechazoModal">
+                                                    <i class="fa-solid fa-circle-xmark"></i>
+                                                    <!-- Rechazar -->
+                                                </button>
+                                            </li>
                                         @endif
                                     </ul>
                                 </td>
@@ -206,7 +206,8 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <input type="hidden" name="aprobarSolicitudId" id="aprobarSolicitudId" value="2">
+                    <input type="hidden" name="aprobarSolicitudId" id="aprobarSolicitudId" value="0">
+                    <input type="hidden" name="tipoDocumento" id="tipoDocumento">
                     <label for="temasEvaluacion" class="form-label">Seleccione el tema:</label>
                     <select class="form-select" 
                         name="temasEvaluacion" id="temasEvaluacion"
@@ -235,16 +236,18 @@
     const aprobarSolicitudModal = new bootstrap.Modal(document.getElementById('aprobarSolicitudModal'));
     const rechazoModal = new bootstrap.Modal(document.getElementById('rechazoModal'));
 
-    function aprobarSolicitud( consulta_id ){
+    function aprobarSolicitud( elemento ){
         aprobarSolicitudModal.show();
-        $('#aprobarSolicitudId').val( consulta_id );
+        $('#aprobarSolicitudId').val( $(elemento).attr("data-documento-id") );
+        $('#tipoDocumento').val( $(elemento).attr("data-tipo-documento") );
     }
 
     function guardarAprobacion() {
         requestBody = {
             "consulta_id": $('#aprobarSolicitudId').val(),
             "tema_evaluacion": $('#temasEvaluacion').val(),
-            "subtema_evaluacion": $('#subtemasEvaluacion').val()
+            "subtema_evaluacion": $('#subtemasEvaluacion').val(),
+            "tipo_documento": $('#tipoDocumento').val()
         };
 
         $.ajaxSetup({

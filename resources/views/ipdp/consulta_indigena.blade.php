@@ -7,9 +7,9 @@
 <link type="text/css" rel="stylesheet" href="{{asset('css/uppy.min.css')}}" rel="stylesheet" />
 <script src="{{asset('css/uppy.min.js')}}"></script>
 <style>
-.label-red{
-    color: red;
-}
+    .label-red {
+        color: red;
+    }
 </style>
 @endsection
 
@@ -37,20 +37,41 @@
                 <div class="tab-pane fade active show" id="nav-tipo-consulta" role="tabpanel" aria-labelledby="nav-tipo-consulta-tab" tabindex="0">
                     <form class="row g-3 needs-validation" id="formTipoConsulta" novalidate>
                         <div class="col-md-8">
-                            <input class="form-check-input" type="radio" name="opcionTipoConsulta" id="opcionTipoConsultaIndigena" value="CONSULTA INDÍGENA" required>
-                            <label class="form-check-label" for="opcionTipoConsultaIndigena">CONSULTA
-                                INDÍGENA<label class="label-red">*</label></label>
-                            &nbsp;&nbsp;
-                            <input class="form-check-input" type="radio" name="opcionTipoConsulta" id="opcionTipoConsultaPublica" value="CONSULTA PUBLICA" required>
-                            <label class="form-check-label" for="opcionTipoConsultaPublica">
-                                CONSULTA PUBLICA<label class="label-red">*</label>
-                            </label>
-                            &nbsp;&nbsp;
-                            <input class="form-check-input" type="radio" name="opcionTipoConsulta" id="opcionTipoConsultaIndividual" value="INDIVIDUAL" required>
-                            <label class="form-check-label" for="opcionTipoConsultaIndividual">INDIVIDUAL<label class="label-red">*</label></label>
-                            &nbsp;&nbsp;
-                            <input class="form-check-input" type="radio" name="opcionTipoConsulta" id="opcionTipoConsultaEnlace" value="ENLACE" required>
-                            <label class="form-check-label" for="opcionTipoConsultaEnlace">ENLACE<label class="label-red">*</label></label>
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <input class="form-check-input" type="radio" name="opcionTipoConsulta" id="opcionTipoConsultaIndigena" value="CONSULTA INDÍGENA" required>
+                                        <label class="form-check-label" for="opcionTipoConsultaIndigena">
+                                            CONSULTA INDÍGENA<label class="label-red">*</label>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input" type="radio" name="opcionTipoConsulta" id="opcionTipoConsultaPublica" value="CONSULTA PUBLICA" required>
+                                        <label class="form-check-label" for="opcionTipoConsultaPublica">
+                                            CONSULTA PUBLICA<label class="label-red">*</label>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input class="form-check-input" type="radio" name="opcionTipoConsulta" id="opcionTipoConsultaIndividual" value="INDIVIDUAL" required>
+                                        <label class="form-check-label" for="opcionTipoConsultaIndividual">INDIVIDUAL<label class="label-red">*</label></label>
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input" type="radio" name="opcionTipoConsulta" id="opcionTipoConsultaEnlace" value="ENLACE" required>
+                                        <label class="form-check-label" for="opcionTipoConsultaEnlace">ENLACE<label class="label-red">*</label></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <input class="form-check-input" type="radio" name="opcionTipoConsulta" id="opcionTipoConsultaOtro" value="OTRO" required>
+                                        <label class="form-check-label" for="opcionTipoConsultaOtro">
+                                            OTRO<label class="label-red">*</label>
+                                        </label>
+                                        <input class="form-control" type="text" name="tipoConsultaOtroTxt" id="tipoConsultaOtroTxt" placeholder="Indique el tipo de consulta" disabled>
+                                    </td>
+                                </tr>
+                            </table>
 
                             <div class="invalid-feedback">Seleccione el tipo de consulta</div>
                         </div>
@@ -92,7 +113,7 @@
                                 <div class="col-6">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">Telefono<label class="label-red">*</label></span>
-                                        <input type="number" class="form-control" id="inputTelefono" name="inputTelefono" pattern="[0-9]{10}" required>
+                                        <input type="number" class="form-control" id="inputTelefono" name="inputTelefono" pattern="[0-9]{10}" placeholder="Numero a 10 digitos" required>
 
                                         <div class="invalid-feedback">Indique su numero telefonico (10 digitos)
                                         </div>
@@ -149,6 +170,17 @@
                                     <table class="table" style="border:1px solid black;">
                                         <tr>
                                             <td>
+                                                <label class="form-check-label" for="ningunaAutoridad">Ninguna</label>
+                                            </td>
+                                            <td>
+                                                <input class="form-check-input" type="radio" name="tipoAutoridad" id="ningunaAutoridad" value="ninguna" checked required>
+                                                <div class="invalid-feedback">Por favor indique el tipo de
+                                                    autoridad.</div>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
                                                 <label class="form-check-label" for="puebloOriginario">Pueblo
                                                     Originario</label>
                                             </td>
@@ -166,19 +198,22 @@
                                             </td>
                                             <td>
                                                 <input class="form-check-input" type="radio" name="tipoAutoridad" id="barrioOriginario" value="Barrio Originario" required>
-                                                <div class="invalid-feedback">Por favor indique el tipo de
-                                                    autoridad.</div>
+                                                <div class="invalid-feedback">
+                                                    Por favor indique el tipo de autoridad.
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <label class="form-check-label" for="comunidadIndigenaResidente">Comunidad
-                                                    Indígena Residente</label>
+                                                <label class="form-check-label" for="comunidadIndigenaResidente">
+                                                    Comunidad Indígena Residente
+                                                </label>
                                             </td>
                                             <td>
                                                 <input class="form-check-input" type="radio" name="tipoAutoridad" id="comunidadIndigenaResidente" value="Comunidad Indígena Residente" required>
-                                                <div class="invalid-feedback">Por favor indique el tipo de
-                                                    autoridad.</div>
+                                                <div class="invalid-feedback">
+                                                    Por favor indique el tipo de autoridad.
+                                                </div>
                                             </td>
                                         </tr>
                                     </table>
@@ -194,7 +229,7 @@
                                                 Nombre del pueblo / barrio originario / Comunidad Indígena:
                                                 <label class="label-red">*</label>
                                             </label>
-                                            <input type="text" class="form-control" id="nombrePuebloComunidad" name="nombrePuebloComunidad" required>
+                                            <input type="text" class="form-control" id="nombrePuebloComunidad" name="nombrePuebloComunidad" placeholder="Indique el nombre de su pueblo, barrio o comunidad" disabled>
 
                                             <div class="invalid-feedback">Por favor indique Nombre del pueblo /
                                                 barrio originario / Comunidad Indígena:.</div>
@@ -214,6 +249,17 @@
                             </div>
                             <div class="col-6 offset-md-3">
                                 <table class="table" style="border:1px solid black;">
+                                    <tr>
+                                        <td>
+                                            <label class="form-check-label" for="ningunaOrganizacion">Ninguna</label>
+                                        </td>
+                                        <td>
+                                            <input class="form-check-input" type="radio" name="opcionTipoOrganizacion" id="ningunaOrganizacion" value="ninguna" checked required>
+                                            <div class="invalid-feedback">Por favor indique el tipo de
+                                                autoridad.</div>
+
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td>
                                             <label class="form-check-label" for="organizacionSocial">
@@ -285,13 +331,14 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text" id="nombreOrganizacion">
+                                            <span class="input-group-text" for="nombreOrganizacion">
                                                 Nombre de la organización:
                                                 <label class="label-red">*</label>
                                             </span>
-                                            <input type="text" class="form-control" id="nombreOrganizacion" name="nombreOrganizacion" required>
-                                            <div class="invalid-feedback">Por favor indique nombre de la
-                                                organizacion</div>
+                                            <input type="text" class="form-control" id="nombreOrganizacion" name="nombreOrganizacion" disabled>
+                                            <div class="invalid-feedback">
+                                                Por favor indique nombre de la organizacion
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -345,7 +392,7 @@
                             <div class="col-md-4">
                                 <label for="inputEdad" class="form-label">Edad</label>
                                 <div class="input-group has-validation">
-                                    <input type="number" class="form-control" id="inputEdad" name="inputEdad" max="99" min="1" required>
+                                    <input type="number" class="form-control" id="inputEdad" name="inputEdad" max="99" min="1">
                                     <div class="invalid-feedback">
                                         Por favor especifique su edad.
                                     </div>
@@ -382,13 +429,13 @@
                             <div class="col-md-4">
                                 <label for="optionGenero" class="form-label">Género</label>
                                 <br>
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoMasculino" value="Masculino" required>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoMasculino" value="Masculino">
                                 <label class="form-check-label" for="generoMasculino">Masculino</label>
 
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoFemenino" value="Femenino" required>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoFemenino" value="Femenino">
                                 <label class="form-check-label" for="generoFemenino">Femenino</label>
 
-                                <input class="form-check-input" type="radio" name="optionGenero" id="generoOtro" value="Otro" required>
+                                <input class="form-check-input" type="radio" name="optionGenero" id="generoOtro" value="Otro">
                                 <label class="form-check-label" for="generoOtro">Otro</label>
 
                                 <div class="invalid-feedback">Seleccione su genero</div>
@@ -406,7 +453,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="inputCelular" class="form-label">Teléfono celular</label>
-                                <input type="number" class="form-control" id="inputCelular" name="inputCelular" pattern="[0-9]{10}" required>
+                                <input type="number" class="form-control" id="inputCelular" name="inputCelular" pattern="[0-9]{10}">
                             </div>
                         </div>
 
@@ -561,7 +608,7 @@
                                             </tr>
                                         </table>
                                     </div>
-                                    <div class="col-md-12">
+                                    <!-- <div class="col-md-12">
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="input-group mb-3">
@@ -574,23 +621,40 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="tipoParticipacion" id="opcionParticipacion" value="PARTICIPACION" required>
-                                            <label class="form-check-label" for="opcionParticipacion">PARTICIPACIÓN</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="tipoParticipacion" id="opcionSistematizacion" value="SISTEMATIZACIÓN" required>
-                                            <label class="form-check-label" for="opcionSistematizacion">SISTEMATIZACIÓN</label>
-
-                                            <div class="invalid-feedback">Por favor indique el tipo de solicitud.</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
+                                    </div> -->
+                                    <div class="col-10 offset-md-1">
                                         <div class="row">
+                                            <div class="col-md-12">
+                                                <strong>TIPO DE DOCUMENTOS:</strong>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="tipoParticipacion" id="opcionParticipacion" value="PARTICIPACION" required>
+                                                    <label class="form-check-label" for="opcionParticipacion">PARTICIPACIÓN</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="tipoParticipacion" id="opcionSistematizacion" value="SISTEMATIZACIÓN" required>
+                                                    <label class="form-check-label" for="opcionSistematizacion">SISTEMATIZACIÓN</label>
+
+                                                    <div class="invalid-feedback">Por favor indique el tipo de solicitud.</div>
+                                                </div>
+                                                <br><br><br>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <strong><label for="opcionIncluyeDocumentos" class="form-label">SE ANEXAN DOCUMENTOS CON ESTA CEDULA:</label></strong>
+                                                <br>
+                                                SÍ <input class="form-check-input" type="radio" name="opcionIncluyeDocumentos" id="conDocumentos" value="1" required>
+                                                &nbsp;&nbsp;
+                                                NO <input class="form-check-input" type="radio" name="opcionIncluyeDocumentos" id="sinDocumentos" value="0" required>
+
+                                                <div class="invalid-feedback">Especifique si se anexan documentos</div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <strong>NÚMERO DE DOCUMENTOS</strong>
+                                                <br>
+                                                <div class="input-group has-validation">
+                                                    <input class="form-control" type="number" id="numeroDocumentos" name="numeroDocumentos" value="0" disabled>
+                                                </div>
+                                            </div>
                                             <div class="col-12">
-                                                <hr>
                                                 <div id="notification-center"></div>
                                                 <div class="uploaded-files">
                                                     <h5>Archivos cargados con exito a tu cedula:</h5>
@@ -757,19 +821,52 @@
             });
     });
 
+    $('input:radio[name="opcionTipoConsulta"]').change(function() {
+        if ($(this).is(':checked') && $(this).val() == 'OTRO') {
+            $("#tipoConsultaOtroTxt").removeAttr("disabled").attr("required", "required").focus();
+        } else {
+            $("#tipoConsultaOtroTxt").attr("disabled", "disabled").val("");
+        }
+    });
+
+    $('input:radio[name="tipoAutoridad"]').change(function() {
+        if ($(this).is(':checked') && $(this).val() == 'ninguna') {
+            $("#nombrePuebloComunidad").removeAttr("required").attr("disabled", "disabled").val("");
+        } else {
+            $("#nombrePuebloComunidad").removeAttr("disabled").attr("required", "required").focus();
+        }
+    });
+
+    $('input:radio[name="opcionTipoOrganizacion"]').change(function() {
+        if ($(this).is(':checked') && $(this).val() == 'ninguna') {
+            console.log($(this).val());
+            $("#nombreOrganizacion").removeAttr("required").attr("disabled", "disabled").val("");
+        } else {
+            $("#nombreOrganizacion").removeAttr("disabled").attr("required", "required").focus();
+        }
+    });
+
     function registrarConsulta() {
 
         var folio = $('meta[name="folio"]').attr("content");
-        var opcionTipoConsulta = $('[name="opcionTipoConsulta"]').val();
+
+        console.warn( $('[name="opcionTipoConsulta"]').val() );
+        console.warn( $('[name="opcionTipoConsulta"]').val() );
+        console.warn( $('[name="opcionTipoConsulta"]').val() );
+        if ($('[name="opcionTipoConsulta"]').is(':checked') && $('[name="opcionTipoConsulta"]:checked').val() == "OTRO") {
+            var opcionTipoConsulta = $("#tipoConsultaOtroTxt").val();
+        } else {
+            var opcionTipoConsulta = $('[name="opcionTipoConsulta"]:checked').val();
+        }
         var fechaSolicitud = $('[name="fechaSolicitud"]').val();
         var inputNombreCompleto = $('[name="inputNombreCompleto"]').val();
         var inputCorreo = $('[name="inputCorreo"]').val();
         var inputTelefono = $('[name="inputTelefono"]').val();
-        var tieneDatosParticipante = $('[name="tieneDatosParticipante"]').val();
-        var esRepresentante = $('[name="esRepresentante"]').val();
-        var tipoAutoridad = $('[name="tipoAutoridad"]').val();
+        var tieneDatosParticipante = $('[name="tieneDatosParticipante"]:checked').val();
+        var esRepresentante = $('[name="esRepresentante"]:checked').val();
+        var tipoAutoridad = $('[name="tipoAutoridad"]:checked').val();
         var nombrePuebloComunidad = $('[name="nombrePuebloComunidad"]').val();
-        var opcionTipoOrganizacion = $('[name="opcionTipoOrganizacion"]').val();
+        var opcionTipoOrganizacion = $('[name="opcionTipoOrganizacion"]:checked').val();
         var nombreOrganizacion = $('[name="nombreOrganizacion"]').val();
         var inputNombre = $('[name="inputNombre"]').val();
         var inputPrimerApellido = $('[name="inputPrimerApellido"]').val();
@@ -790,6 +887,8 @@
         var nombreActividad = $('[name="nombreActividad"]').val();
         var fechaActividad = $('[name="fechaActividad"]').val();
         var lugarActividad = $('[name="lugarActividad"]').val();
+        
+        var opcionIncluyeDocumentos = $('[name="opcionIncluyeDocumentos"]').val();
         var numeroDocumentos = $('[name="numeroDocumentos"]').val();
 
         var requestBody = {
@@ -914,7 +1013,10 @@
         }
     };
     const onUploadSuccess = (elForUploadedFiles) => (file, response) => {
-        console.log(response);
+        
+        // console.log("file");
+        // console.log(file);
+        // console.log(response);
 
         const url = response.uploadURL
         const fileName = file.name
@@ -1030,6 +1132,25 @@
             $("#notification-center").append(element);
         });
 
+    });
+
+    // uppy.close({ reason = 'user' })
+    // ('[name="opcionIncluyeDocumentos"]:checked')
+    $('[name="opcionIncluyeDocumentos"]').change(function(){
+        if ($(this).is(':checked') && $(this).val() == '0') {
+            // uppy.close();
+            $('.UppyDragDrop').fadeOut();
+            $('.for-ProgressBar').fadeOut();
+            $('#numeroDocumentos').fadeOut();
+            $('.uploaded-files > h5').fadeOut();
+            $('.uploaded-files').fadeOut();
+        } else if ($(this).is(':checked') && $(this).val() == '1') {
+            $('.UppyDragDrop').fadeIn();
+            $('.for-ProgressBar').fadeIn();
+            $('#numeroDocumentos').fadeIn();
+            $('.uploaded-files > h5').fadeIn();
+            $('.uploaded-files').fadeIn();
+        }
     });
 </script>
 @endsection

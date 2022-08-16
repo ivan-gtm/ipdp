@@ -173,27 +173,38 @@ class AdministracionController extends Controller
         $perPage = 10;
         
             
-        $cedulas = DB::table('cedulas')
-            ->leftJoin('evualuacion_integracion', 'cedulas.id', '=', 'evualuacion_integracion.consulta_fk')
-            ->join('evualuacion_tecnica', 'cedulas.id', '=', 'evualuacion_tecnica.consulta_fk')
+        $formato_interno = FormatoInterno::leftJoin('evualuacion_integracion', 'consulta_indigena.id', '=', 'evualuacion_integracion.consulta_fk')
+            ->join('evualuacion_tecnica', function ($join) {
+                $join->on('consulta_indigena.id', '=', 'evualuacion_tecnica.consulta_fk');
+                $join->on('evualuacion_tecnica.tipo_documento', '=' ,DB::raw("'formato_interno'"));
+            })
             ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
-            ->select('cedulas.id','cedulas.origen','cedulas.folio', 'cedulas.created_at','cedulas.status', 'cedulas.nombre','cedulas.primer_apellido','cedulas.segundo_apellido','c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk')
+            ->select('consulta_indigena.id','consulta_indigena.folio', 'consulta_indigena.created_at','consulta_indigena.status', 'consulta_indigena.nombre','consulta_indigena.primerApellido as primer_apellido','consulta_indigena.segundoApellido as segundo_apellido','c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk','evualuacion_tecnica.tipo_documento as tipo')
+            ->selectRaw("'interno' as origen")
+            ->whereIn('consulta_indigena.status', [4, 104])
+            ->whereIn('c_instrumento.descripcion', $tipos_de_instrumentos_visibles)
+            ->whereRaw( $where_raw );
+        
+        $cedulas = Cedula::leftJoin('evualuacion_integracion', 'cedulas.id', '=', 'evualuacion_integracion.consulta_fk')
+            ->join('evualuacion_tecnica', function ($join) {
+                $join->on('cedulas.id', '=', 'evualuacion_tecnica.consulta_fk');
+                $join->on('evualuacion_tecnica.tipo_documento', '=' ,DB::raw("'cedula'"));
+            })
+            ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
+            ->select('cedulas.id','cedulas.folio', 'cedulas.created_at','cedulas.status', 'cedulas.nombre','cedulas.primer_apellido','cedulas.segundo_apellido','c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk','evualuacion_tecnica.tipo_documento as tipo')
+            ->selectRaw('cedulas.origen')
             ->whereIn('cedulas.status', [4, 104])
             ->whereIn('c_instrumento.descripcion', $tipos_de_instrumentos_visibles)
             ->whereRaw( $where_raw )
-            ->orderByDesc('cedulas.id')
+            ->union($formato_interno)
+            ->orderByDesc('id')
             ->paginate($perPage);
             
         $total = $cedulas->total();
-
-        $page_number = round($total / $perPage);
-
-        // echo "<pre>";
-        // print_r( Auth::user()->rol );
-        // print_r( $cedulas[0] );
-        // exit;
-
+        $page_number = round( $total / $perPage );
+        
         return view('ipdp.admin_evaluacion_integracion', [
+            'rol_usuario' => $rol_usuario,
             'page_number' => $page_number,
             'cedulas' => $cedulas
         ]);
@@ -204,20 +215,46 @@ class AdministracionController extends Controller
         // if( Auth::check() && ( ( Auth::user()->rol != 'integracion_pgot' || Auth::user()->rol != 'integracion_pgd' ) && Auth::user()->rol != 'administracion') ) {
         //     return redirect()->route('administracion.home')->with('status', 'No tiene permisos para visualizar este modulo!');
         // }
-
-        $info_cedula = DB::table('cedulas')
-            ->leftJoin('evualuacion_integracion', 'cedulas.id', '=', 'evualuacion_integracion.consulta_fk')
-            ->join('evualuacion_tecnica', 'cedulas.id', '=', 'evualuacion_tecnica.consulta_fk')
-            ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
-            ->select('cedulas.id','cedulas.origen','cedulas.folio', 'cedulas.status', 'c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk')
-            ->where('cedulas.id', $request->consulta_fk)
-            ->orderByDesc('cedulas.id')
-            ->first();
         
         $evaluador_pgd_fk = null;
         $evaluador_pgot_fk = null;
+
+        if( $request->tipo_documento == 'cedula' ) {
+            $info_cedula = Cedula::leftJoin('evualuacion_integracion', function ($join) {
+                    $join->on('cedulas.id', '=', 'evualuacion_integracion.consulta_fk');
+                    $join->on('evualuacion_integracion.tipo_documento', '=' ,DB::raw("'cedula'"));
+                })
+                ->join('evualuacion_tecnica', function ($join) {
+                    $join->on('cedulas.id', '=', 'evualuacion_tecnica.consulta_fk');
+                    $join->on('evualuacion_tecnica.tipo_documento', '=' ,DB::raw("'cedula'"));
+                })
+                ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
+                ->select('cedulas.id','cedulas.folio', 'cedulas.status', 'c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk')
+                ->where('cedulas.id', $request->consulta_fk)
+                // ->orderByDesc('cedulas.id')
+                ->first();
+            
+            $cedula = Cedula::find($request->consulta_fk);
         
-        $cedula = Cedula::find($request->consulta_fk);
+        } elseif( $request->tipo_documento == 'formato_interno' ) {
+            
+            $info_cedula = FormatoInterno::leftJoin('evualuacion_integracion', function ($join) {
+                    $join->on('consulta_indigena.id', '=', 'evualuacion_integracion.consulta_fk');
+                    $join->on('evualuacion_integracion.tipo_documento', '=' ,DB::raw("'formato_interno'"));
+                })
+                ->join('evualuacion_tecnica', function ($join) {
+                    $join->on('consulta_indigena.id', '=', 'evualuacion_tecnica.consulta_fk');
+                    $join->on('evualuacion_tecnica.tipo_documento', '=' ,DB::raw("'formato_interno'"));
+                })
+                ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
+                ->select('consulta_indigena.id','consulta_indigena.folio', 'consulta_indigena.status', 'c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk')
+                ->where('consulta_indigena.id', $request->consulta_fk)
+                ->orderByDesc('id')
+                ->first();
+            
+            $cedula = FormatoInterno::find($request->consulta_fk);
+        }
+
 
         if( Auth::check() && Auth::user()->rol == 'integracion_pgd' ) {
             $evaluador_pgd_fk = Auth::user()->id;
@@ -257,34 +294,60 @@ class AdministracionController extends Controller
             $cedula->status = 5;
         }
 
-        if( $info_cedula->instrumento ==  'PGD+PGOT' && intval( $info_cedula->evaluador_pgot_fk ) > 0 ){
-            $evaluador_pgot_fk = $info_cedula->evaluador_pgot_fk;
-        }
+        // if( $info_cedula->instrumento ==  'PGD+PGOT' && intval( $info_cedula->evaluador_pgot_fk ) > 0 ){
+        //     $evaluador_pgot_fk = $info_cedula->evaluador_pgot_fk;
+        // }
 
-        if( $info_cedula->instrumento ==  'PGD+PGOT' && intval($info_cedula->evaluador_pgd_fk) > 0 ){
-            $evaluador_pgd_fk = $info_cedula->evaluador_pgd_fk;
-        }
+        // if( $info_cedula->instrumento ==  'PGD+PGOT' && intval($info_cedula->evaluador_pgd_fk) > 0 ){
+        //     $evaluador_pgd_fk = $info_cedula->evaluador_pgd_fk;
+        // }
         
         $cedula->save();
         
         $count = EvaluacionIntegracion::where('consulta_fk', $request->consulta_fk)->count();
         
-        if( $count == 0){
-            $integracion = EvaluacionIntegracion::create([
-                'consulta_fk' => $request->consulta_fk,
-                'evaluador_pgot_fk' => $evaluador_pgot_fk,
-                'evaluador_pgd_fk' => $evaluador_pgd_fk,
-                'eje_estrategia' => $request->eje_estrategia,
-                'accion_objetivo' => $request->accion_objetivo
-            ]);
+        if( $count == 0) {
+            if( Auth::check() && Auth::user()->rol == 'integracion_pgd' ) {
+                
+                $integracion = EvaluacionIntegracion::create([
+                    'consulta_fk' => $request->consulta_fk,
+                    'tipo_documento' => $request->tipo_documento,
+                    'evaluador_pgd_fk' => $evaluador_pgd_fk,
+                    'pgd_eje_estrategia' => $request->eje_estrategia,
+                    'pgd_accion_objetivo' => $request->accion_objetivo
+                ]);
+                
+            } elseif( Auth::check() && Auth::user()->rol == 'integracion_pgot' ) {
+                $integracion = EvaluacionIntegracion::create([
+                    'consulta_fk' => $request->consulta_fk,
+                    'tipo_documento' => $request->tipo_documento,
+                    'evaluador_pgot_fk' => $evaluador_pgot_fk,
+                    'pgot_eje_estrategia' => $request->eje_estrategia,
+                    'pgot_accion_objetivo' => $request->accion_objetivo
+                ]);
+            }
+            
         } else {
-            EvaluacionIntegracion::where('consulta_fk' , $request->consulta_fk)
-            ->update([
-                'evaluador_pgot_fk' => $evaluador_pgot_fk,
-                'evaluador_pgd_fk' => $evaluador_pgd_fk,
-                'eje_estrategia' => $request->eje_estrategia,
-                'accion_objetivo' => $request->accion_objetivo
-            ]);
+            if( Auth::check() && Auth::user()->rol == 'integracion_pgd' ) {
+                
+                EvaluacionIntegracion::where('consulta_fk' , $request->consulta_fk)
+                ->update([
+                    'tipo_documento' => $request->tipo_documento,
+                    'evaluador_pgd_fk' => $evaluador_pgd_fk,
+                    'pgd_eje_estrategia' => $request->eje_estrategia,
+                    'pgd_accion_objetivo' => $request->accion_objetivo
+                ]);
+                
+            } elseif( Auth::check() && Auth::user()->rol == 'integracion_pgot' ) {
+                EvaluacionIntegracion::where('consulta_fk' , $request->consulta_fk)
+                ->update([
+                    'tipo_documento' => $request->tipo_documento,
+                    'evaluador_pgot_fk' => $evaluador_pgot_fk,
+                    'pgot_eje_estrategia' => $request->eje_estrategia,
+                    'pgot_accion_objetivo' => $request->accion_objetivo
+                ]);
+            }
+            
         }
 
         return response()->json(["exito"]);

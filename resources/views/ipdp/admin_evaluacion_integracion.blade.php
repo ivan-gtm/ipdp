@@ -30,8 +30,8 @@
                                 <th>No.</th>
                                 <th>Folio<br>Solicitud</th>
                                 <th>Origen<br>Solicitud</th>
-                                <th>Fecha</th>
-                                <th>Tipo</th>
+                                <th class="text-center">Fecha</th>
+                                <th class="text-center">Tipo</th>
                                 <th>Registrado por</th>
                                 <th>Situación</th>
                                 <th>Dirigido al instrumento</th>
@@ -49,34 +49,42 @@
                                 </td>
                                 <td>
                                     @if( $cedula->origen == 'publica' )
-                                    <span class="badge bg-info text-uppercase">Pública</span>
+                                        <span class="badge bg-info text-uppercase">Pública</span>
                                     @else
-                                    <span class="badge bg-dark text-uppercase">Privada</span>
+                                        <span class="badge bg-dark text-uppercase">Indigena</span>
                                     @endif
                                 </td>
                                 <td>
                                     {{ $cedula->created_at }}
                                 </td>
-                                <td>
-                                    <span class="badge bg-success text-uppercase">CEDULA</span>
+                                <td class="text-center">
+                                    @if( $cedula->tipo == 'formato_interno' )
+                                        <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
+                                    @elseif( $cedula->tipo == 'cedula' )
+                                        <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
+                                            CEDULA
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>
                                     {{ $cedula->nombre.' '.$cedula->primer_apellido }}
                                 </td>
                                 <td>
-                                    @if( $cedula->status == 4 && $cedula->instrumento == 'PGD')
                                     <!-- {{ $cedula->status }} -->
-                                    <span class="badge badge-soft-warning text-uppercase">
-                                        Pendiente de evaluación PDG
-                                    </span>
-                                    @elseif( ( $cedula->status == 4 || $cedula->status == 5  ) && $cedula->instrumento == 'PGOT' && isset($cedula->evaluador_pgot_fk) && $cedula->evaluador_pgot_fk == null)
-                                    <span class="badge badge-soft-warning text-uppercase">
-                                        Pendiente de evaluación PGOT
-                                    </span>
+                                    <!-- {{ $cedula->evaluador_pgot_fk }} -->
+                                    <!-- {{ $cedula->instrumento }} -->
+                                    @if( $rol_usuario == 'integracion_pgd' && ($cedula->instrumento == 'PGD' || $cedula->instrumento == 'PGD+PGOT') && $cedula->evaluador_pgd_fk == "")
+                                        <span class="badge badge-soft-warning text-uppercase">
+                                            Pendiente de evaluación PDG
+                                        </span>
+                                    @elseif( $rol_usuario == 'integracion_pgot' && ($cedula->instrumento == 'PGOT' || $cedula->instrumento == 'PGD+PGOT') && $cedula->evaluador_pgot_fk == "")
+                                        <span class="badge badge-soft-warning text-uppercase">
+                                            Pendiente de evaluación PGOT
+                                        </span>
                                     @elseif( $cedula->status == 104)
-                                    <span class="badge bg-danger text-uppercase">
-                                        Solicitud Rechazada
-                                    </span>
+                                        <span class="badge bg-danger text-uppercase">
+                                            Solicitud Rechazada por integrador
+                                        </span>
                                     @endif
                                 </td>
                                 <td>
@@ -85,25 +93,35 @@
                                 <td class="create_date">
                                     <ul class="panel-acciones">
                                         <li>
-                                            <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
-                                                                        'folio' => $cedula->folio
-                                                                    ]) }}">
-                                                <i class="fa-solid fa-folder-plus"></i>
-                                                <!-- Detalles -->
-                                            </a>
+                                            @if( $cedula->tipo == 'formato_interno' )
+                                                <a class="edit-item-btn" href="{{ route('administracion.detalleFormatoInterno',[
+                                                                            'folio' => $cedula->folio
+                                                                        ]) }}">
+                                                    <i class="fa-solid fa-folder-plus"></i>
+                                                    <!-- Detalles -->
+                                                </a>
+                                            @elseif( $cedula->tipo == 'cedula' )
+                                                <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
+                                                                            'folio' => $cedula->folio
+                                                                        ]) }}">
+                                                    <i class="fa-solid fa-folder-plus"></i>
+                                                    <!-- Detalles -->
+                                                </a>
+                                            @endif
+                                            
                                         </li>
                                         <li>
-                                            <a href="{{ route('cedula.pdf',[
-                                                                            'numero_folio' => $cedula->folio
-                                                                        ]) }}" class="edit-item-btn" download>
-                                                <i class="fa-solid fa-file-pdf"></i>
-                                                <!-- Descargar como PDF -->
-                                            </a>
-                                        </li>
-                                        <li>
-                                            {{ Auth::user()->rol }}
-                                            <br>
-                                            {{ intval($cedula->evaluador_pgot_fk) }}
+                                            @if( $cedula->tipo == 'formato_interno' )
+                                                <a href="{{ route('consulta_indigena.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
+                                                    <i class="fa-solid fa-file-pdf"></i>
+                                                    <!-- Descargar como PDF -->
+                                                </a>
+                                            @elseif( $cedula->tipo == 'cedula' )
+                                                <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
+                                                    <i class="fa-solid fa-file-pdf"></i>
+                                                    <!-- Descargar como PDF -->
+                                                </a>
+                                            @endif
                                         </li>
                                         {{-- // 4:: PGOT --}}
                                         {{-- // 5:: PGD  --}}
@@ -115,6 +133,7 @@
                                                 <button type="button" class="edit-item-btn" 
                                                     data-cedula-id="{{ $cedula->id }}" 
                                                     data-cedula-folio="{{ $cedula->folio }}" 
+						                            data-tipo-documento="{{ $cedula->tipo }}" 
                                                     onclick="abrirModalEvaluacionIntegracion(this)">
 
                                                         <i class="fa-solid fa-circle-check"></i>
@@ -235,6 +254,7 @@
                             </tr>
                         </table>
                         <input type="hidden" id="modal_cedula_id" name="modal_cedula_id">
+                        <input type="hidden" id="modal_tipo_documento" name="modal_tipo_documento">
                         <textarea class="form-control" name="eje_estrategia" id="eje_estrategia" rows="6" placeholder="Escriba aqui la propuesta de eje/estrategia al que va dirigido esta cedula" required></textarea>
                     </div>
                     <div class="col-12">
@@ -289,9 +309,11 @@
 
         var cedula_id = $(element).attr("data-cedula-id");
         var cedula_folio = $(element).attr("data-cedula-folio");
+        var tipo_documento = $(element).attr("data-tipo-documento");
 
         $("span#titulo_modal_aprobacion").text("Folio " + cedula_folio);
         $("#modal_cedula_id").val(cedula_id);
+        $("#modal_tipo_documento").val(tipo_documento);
     }
 
     function aprobarFaseIntegracion() {
@@ -299,9 +321,11 @@
         var consulta_id = $("#modal_cedula_id").val();
         var eje_estrategia = $("#eje_estrategia").val();
         var accion_objetivo = $("#accion_objetivo").val();
+        var tipo_documento = $("#modal_tipo_documento").val();
 
         var requestBody = {
             "consulta_fk": consulta_id,
+            "tipo_documento": tipo_documento,
             "eje_estrategia": eje_estrategia,
             "accion_objetivo": accion_objetivo
         };

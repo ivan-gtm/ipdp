@@ -886,8 +886,7 @@
 
     // uppy.close({ reason = 'user' })
     // ('[name="opcionIncluyeDocumentos"]:checked')
-    $('[name="opcionIncluyeDocumentos"]').change(
-    function(){
+    $('[name="opcionIncluyeDocumentos"]').change(function(){
         if ($(this).is(':checked') && $(this).val() == '0') {
             // uppy.close();
             $('.UppyDragDrop').fadeOut();

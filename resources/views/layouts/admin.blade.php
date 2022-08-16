@@ -248,7 +248,7 @@
                                                                             <ul class="nav nav-sm flex-column">
                                                                                 <li class="nav-item">
                                                                                     <a href="{{ route('consultaIndigena.store') }}" class="nav-link" data-key="t-calendar">
-                                                                                        Registrar Formato Interno
+                                                                                        Registrar Consulta Indigena
                                                                                     </a>
                                                                                 </li>
                                                                                 <li class="nav-item">

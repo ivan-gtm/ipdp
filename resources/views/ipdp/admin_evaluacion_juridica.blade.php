@@ -50,7 +50,7 @@
                                     @if( $cedula->origen == 'publica' )
                                         <span class="badge bg-info text-uppercase">Pública</span>
                                     @else
-                                        <span class="badge bg-dark text-uppercase">Interna</span>
+                                        <span class="badge bg-dark text-uppercase">Indigena</span>
                                     @endif
                                 </td>
                                 <td>

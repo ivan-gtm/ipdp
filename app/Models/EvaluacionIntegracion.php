@@ -11,10 +11,13 @@ class EvaluacionIntegracion extends Model
     
     protected $fillable = [
         'consulta_fk',
+        'tipo_documento',
         'evaluador_pgot_fk',
         'evaluador_pgd_fk',
-        'eje_estrategia',
-        'accion_objetivo'
+        'pgd_eje_estrategia',
+        'pgd_accion_objetivo',
+        'pgot_eje_estrategia',
+        'pgot_accion_objetivo'
     ];
     
     use HasFactory;

@@ -178,19 +178,11 @@
                                                         <div class="simplebar-content-wrapper" style="height: auto; overflow: hidden;">
                                                             <div class="simplebar-content" style="padding: 0px;">
                                                                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                                                                @if( Auth::check() && ( 
-                                                                    Auth::user()->rol == 'recepcion'
-                                                                    || Auth::user()->rol == 'analisis' 
-                                                                    || Auth::user()->rol == 'tecnica' 
-                                                                    || Auth::user()->rol == 'juridica' 
-                                                                    || Auth::user()->rol == 'administracion'
-                                                                    || Auth::user()->rol == 'integracion_pgd' 
-                                                                    || Auth::user()->rol == 'integracion_pgot'
-                                                                    ) )
+                                                                
                                                                 <li class="nav-item">
                                                                     <a class="nav-link menu-link collapsed active" href="#sidebarApps">
                                                                         <i class="fa-solid fa-bars"></i>
-                                                                        <span data-key="t-apps">Consultas Publicas</span>
+                                                                        <span data-key="t-apps">Valoración de Cedulas</span>
                                                                     </a>
                                                                     <div class="collapse menu-dropdown show" id="sidebarApps">
                                                                         <ul class="nav nav-sm flex-column">
@@ -213,7 +205,7 @@
                                                                             @if( Auth::check() && ( Auth::user()->rol == 'tecnica' || Auth::user()->rol == 'administracion') )
                                                                             <li class="nav-item">
                                                                                 <a href="{{ route('administracion.evaluacionTecnica') }}" class="nav-link" data-key="t-calendar">
-                                                                                    Evaluación Tecnica
+                                                                                    Valoración Técnica
                                                                                 </a>
                                                                             </li>
                                                                             @endif
@@ -221,7 +213,7 @@
                                                                             @if( Auth::check() && ( Auth::user()->rol == 'juridica' || Auth::user()->rol == 'administracion') )
                                                                             <li class="nav-item">
                                                                                 <a href="{{ route('administracion.evaluacionJuridica') }}" class="nav-link" data-key="t-calendar">
-                                                                                    Evaluación Juridica
+                                                                                    Valoración Jurídica
                                                                                 </a>
                                                                             </li>
                                                                             @endif
@@ -233,11 +225,18 @@
                                                                                 </a>
                                                                             </li>
                                                                             @endif
+
+                                                                            @if( Auth::check() )
+                                                                            <li class="nav-item">
+                                                                                <a href="{{ route('administracion.anexosParticipacion') }}" class="nav-link" data-key="t-calendar">
+                                                                                    Anexos Participación
+                                                                                </a>
+                                                                            </li>
+                                                                            @endif
                                                                         </ul>
                                                                     </div>
                                                                 </li>
-                                                                @endif
-
+                                                                
                                                                 @if( Auth::check() && Auth::user()->rol == 'recepcion' || Auth::user()->rol == 'administracion')
                                                                     <li class="nav-item">
                                                                         <a class="nav-link menu-link collapsed active" href="#">
@@ -248,7 +247,7 @@
                                                                             <ul class="nav nav-sm flex-column">
                                                                                 <li class="nav-item">
                                                                                     <a href="{{ route('consultaIndigena.store') }}" class="nav-link" data-key="t-calendar">
-                                                                                        Registrar Consulta Indigena
+                                                                                        Registrar Formato Interno de Registro
                                                                                     </a>
                                                                                 </li>
                                                                                 <li class="nav-item">

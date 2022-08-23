@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('title', 'Gestión de CEDULAS | Análisis')
-@section('modulo_titulo', 'Gestión de CEDULAS | Análisis')
+@section('modulo_titulo', 'VALORACIÓN JURÍDICA')
 
 @section('head')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -74,6 +74,11 @@
                                         <span class="badge badge-soft-warning text-uppercase">
                                             Pendiente Valoración Júridica
                                         </span>
+                                    @elseif( $cedula->status == 102)
+                                        <span class="badge bg-danger text-uppercase">
+                                            Solicitud Rechazada en<br>
+                                            Valoración Técnica
+                                        </span>
                                     @elseif( $cedula->status == 103)
                                         <span class="badge bg-danger text-uppercase">
                                             Solicitud Rechazada
@@ -113,7 +118,7 @@
                                                 </a>
                                             @endif
                                         </li>
-                                        @if( $cedula->status == 3)
+                                        @if( $cedula->status == 3 || $cedula->status == 102)
                                         <li>
                                             <button type="button" class="edit-item-btn" data-tipo-documento="{{ $cedula->tipo }}" data-documento-id="{{ $cedula->id }}"  onclick="obtenerEvaluacion(this)">
                                                 <i class="fa-solid fa-circle-check"></i>
@@ -209,7 +214,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Aprobación Jurídica</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -217,14 +222,20 @@
                     <input type="hidden" name="folio_id" id="folio_id" value="">
                     <input type="hidden" name="tipo_documento" id="tipo_documento" value="">
                     <div class="col-md-12">
+                        <h4 class="text-center">Valoración Técnica:</h4>
                         <table class="table" id="evaluacion-juridica">
                             <tbody>
                             </tbody>
                         </table>
                     </div>
                     <div class="col-md-12">
-                        <strong>OBSERVACIONES DE VALORACIÓN TÉCNICA:</strong>
+                        <strong>Observaciones:</strong>
                         <p id="observaciones_tecnica"></p>
+                    </div>
+                    <div class="col-md-12">
+                        <hr>
+                        <h4 class="text-center">Observaciones de Valoración Jurídica:</h4>
+                        <textarea class="form-control" name="txtObservaciones" id="txtObservaciones" cols="30" rows="10"></textarea>
                     </div>
                 </div>
             </div>
@@ -320,10 +331,12 @@
     function aprobarSolicitudJuridica() {
         var consulta_id = $("#folio_id").val();
         var tipo_documento = $("#tipo_documento").val();
+        var txtObservaciones = $("#txtObservaciones").val();
         
         var requestBody = {
             "consulta_id": consulta_id,
-            "tipo_documento": tipo_documento
+            "tipo_documento": tipo_documento,
+            "observaciones": txtObservaciones
         };
 
         $.ajaxSetup({

@@ -38,6 +38,7 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
     // CONSULTA PUBLICA
     Route::get('/administracion/consulta-publica', [AdministracionController::class, 'registrarConsultaPublica'])->name('administracion.registrarConsultaPublica')->middleware('auth');
     Route::post('/administracion/consulta-publica', [AdministracionController::class, 'guardarConsultaPublica'])->name('administracion.guardarConsultaPublica')->middleware('auth');
+    Route::get('/administracion/consulta-publica/confirmacion/{numero_folio}', [AdministracionController::class, 'confirmacionConsultaPublica'])->name('administracion.confirmacionConsultaPublica')->middleware('auth');
 
     // EVALUACION RECEPCION
     Route::get('/administracion/recepcion', [AdministracionController::class, 'evaluacionRecepcion'])->name('administracion.evaluacionRecepcion')->middleware('auth');
@@ -65,6 +66,9 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
     Route::post('/administracion/evaluacion-integracion/guardar', [AdministracionController::class, 'guardarEvaluacionIntegracion'])->name('administracion.guardarEvaluacionIntegracion')->middleware('auth');
     // Route::post('/administracion/evaluacion-juridica/rechazo', [AdministracionController::class, 'guardarRechazoEvaluacionJuridica'])->name('administracion.guardarRechazoEvaluacionJuridica')->middleware('auth');
 
+    // ANEXOS PARTICIPACION
+    Route::get('/administracion/anexos-participacion', [AdministracionController::class, 'anexosParticipacion'])->name('administracion.anexosParticipacion')->middleware('auth');
+
 // USUARIOS SISTEMA
     Route::get('/administracion/usuarios', [AdministracionController::class, 'usuariosSistema'])->name('usuariosSistema')->middleware('auth');
     Route::get('/administracion/usuarios/registrar', [CustomAuthController::class, 'registration'])->name('administracion.registrarUsuario')->middleware('auth');
@@ -81,7 +85,3 @@ Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena']
     Route::get('/login', [CustomAuthController::class, 'index'])->name('login');
     Route::get('/signout', [CustomAuthController::class, 'signOut'])->name('signout');
     Route::post('/custom-login', [CustomAuthController::class, 'customLogin'])->name('login.custom'); 
-
-
-
-// Route::get('dashboard', [CustomAuthController::class, 'dashboard']); 

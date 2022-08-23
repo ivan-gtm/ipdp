@@ -16,8 +16,10 @@ class EvaluacionIntegracion extends Model
         'evaluador_pgd_fk',
         'pgd_eje_estrategia',
         'pgd_accion_objetivo',
+        'pgd_observaciones',
         'pgot_eje_estrategia',
-        'pgot_accion_objetivo'
+        'pgot_accion_objetivo',
+        'pgot_observaciones'
     ];
     
     use HasFactory;

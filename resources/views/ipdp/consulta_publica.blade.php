@@ -690,6 +690,14 @@
                 
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
+                
+                console.log( "jqXHR" );
+                console.log( jqXHR );
+                console.log( "textStatus" );
+                console.log( textStatus );
+                console.log( "errorThrown" );
+                console.log( errorThrown );
+
                 if( errorThrown == "Unprocessable Content" && textStatus == "error"){
                     
                     $('.notification.alert').show();

@@ -70,7 +70,7 @@ class AdministracionController extends Controller
         }
 
         $perPage = 10;
-        $estados_validos = [3, 103];
+        $estados_validos = [3,102,103];
 
         $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
             ->select('id','folio','created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
@@ -209,6 +209,66 @@ class AdministracionController extends Controller
             'cedulas' => $cedulas
         ]);
     }
+    
+    function anexosParticipacion(){
+        
+        if( !Auth::check() ) {
+            return redirect()->route('administracion.home')->with('status', 'No tiene permisos para visualizar este modulo!');
+        }
+
+        $rol_usuario = Auth::user()->rol;
+        
+        // $tipos_de_instrumentos_visibles = ['PGD+PGOT'];
+        // // $where_raw = "( OR evaluador_pgd_fk IS NULL)";
+        // $where_raw = "(";
+        
+        // if( $rol_usuario == 'administracion'){
+        //     array_push($tipos_de_instrumentos_visibles, 'PGD');
+        //     array_push($tipos_de_instrumentos_visibles, 'PGOT');
+        //     $where_raw .= "evaluador_pgot_fk IS NULL || evaluador_pgd_fk IS NULL";
+        // } elseif( $rol_usuario == 'integracion_pgd'){
+        //     array_push($tipos_de_instrumentos_visibles, 'PGD');
+        //     $where_raw .= "evaluador_pgd_fk IS NULL";
+        // } elseif( $rol_usuario == 'integracion_pgot'){
+        //     array_push($tipos_de_instrumentos_visibles, 'PGOT');
+        //     $where_raw .= "evaluador_pgot_fk IS NULL";
+        // }
+        // $where_raw .= ")";
+
+        $perPage = 10;
+        
+        $formato_interno = FormatoInterno::leftJoin('evualuacion_integracion', 'consulta_indigena.id', '=', 'evualuacion_integracion.consulta_fk')
+            ->join('evualuacion_tecnica', function ($join) {
+                $join->on('consulta_indigena.id', '=', 'evualuacion_tecnica.consulta_fk');
+                $join->on('evualuacion_tecnica.tipo_documento', '=' ,DB::raw("'formato_interno'"));
+            })
+            ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
+            ->select('consulta_indigena.id','consulta_indigena.folio', 'consulta_indigena.created_at','consulta_indigena.status', 'consulta_indigena.nombre','consulta_indigena.primerApellido as primer_apellido','consulta_indigena.segundoApellido as segundo_apellido','c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk','evualuacion_tecnica.tipo_documento as tipo')
+            ->selectRaw("'interno' as origen")
+            ->whereIn('consulta_indigena.status', [5, 104]);
+        
+        $cedulas = Cedula::leftJoin('evualuacion_integracion', 'cedulas.id', '=', 'evualuacion_integracion.consulta_fk')
+            ->join('evualuacion_tecnica', function ($join) {
+                $join->on('cedulas.id', '=', 'evualuacion_tecnica.consulta_fk');
+                $join->on('evualuacion_tecnica.tipo_documento', '=' ,DB::raw("'cedula'"));
+            })
+            ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
+            ->select('cedulas.id','cedulas.folio', 'cedulas.created_at','cedulas.status', 'cedulas.nombre','cedulas.primer_apellido','cedulas.segundo_apellido','c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk','evualuacion_tecnica.tipo_documento as tipo')
+            ->selectRaw('cedulas.origen')
+            ->whereIn('cedulas.status', [5, 104])
+            ->union($formato_interno)
+            ->orderByDesc('id')
+            ->paginate($perPage);
+            
+        $total = $cedulas->total();
+        $page_number = round( $total / $perPage );
+        
+        return view('ipdp.admin_anexo_participacion', [
+            'rol_usuario' => $rol_usuario,
+            'page_number' => $page_number,
+            'cedulas' => $cedulas
+        ]);
+    }
 
     function guardarEvaluacionIntegracion(Request $request){
         
@@ -314,7 +374,8 @@ class AdministracionController extends Controller
                     'tipo_documento' => $request->tipo_documento,
                     'evaluador_pgd_fk' => $evaluador_pgd_fk,
                     'pgd_eje_estrategia' => $request->eje_estrategia,
-                    'pgd_accion_objetivo' => $request->accion_objetivo
+                    'pgd_accion_objetivo' => $request->accion_objetivo,
+                    'pgd_observaciones' => $request->observaciones
                 ]);
                 
             } elseif( Auth::check() && Auth::user()->rol == 'integracion_pgot' ) {
@@ -323,7 +384,8 @@ class AdministracionController extends Controller
                     'tipo_documento' => $request->tipo_documento,
                     'evaluador_pgot_fk' => $evaluador_pgot_fk,
                     'pgot_eje_estrategia' => $request->eje_estrategia,
-                    'pgot_accion_objetivo' => $request->accion_objetivo
+                    'pgot_accion_objetivo' => $request->accion_objetivo,
+                    'pgot_observaciones' => $request->observaciones
                 ]);
             }
             
@@ -335,7 +397,8 @@ class AdministracionController extends Controller
                     'tipo_documento' => $request->tipo_documento,
                     'evaluador_pgd_fk' => $evaluador_pgd_fk,
                     'pgd_eje_estrategia' => $request->eje_estrategia,
-                    'pgd_accion_objetivo' => $request->accion_objetivo
+                    'pgd_accion_objetivo' => $request->accion_objetivo,
+                    'pgd_observaciones' => $request->observaciones
                 ]);
                 
             } elseif( Auth::check() && Auth::user()->rol == 'integracion_pgot' ) {
@@ -344,7 +407,8 @@ class AdministracionController extends Controller
                     'tipo_documento' => $request->tipo_documento,
                     'evaluador_pgot_fk' => $evaluador_pgot_fk,
                     'pgot_eje_estrategia' => $request->eje_estrategia,
-                    'pgot_accion_objetivo' => $request->accion_objetivo
+                    'pgot_accion_objetivo' => $request->accion_objetivo,
+                    'pgot_observaciones' => $request->observaciones
                 ]);
             }
             
@@ -557,7 +621,8 @@ class AdministracionController extends Controller
             'consulta_fk' => $request->consulta_id,
             'tipo_documento' => $request->tipo_documento,
             'tema_fk' => $request->tema_evaluacion,
-            'subtema_fk' => $request->subtema_evaluacion
+            'subtema_fk' => $request->subtema_evaluacion,
+            'observaciones' => $request->observaciones
         ]);
 
         return response()->json(["exito"]);
@@ -644,6 +709,7 @@ class AdministracionController extends Controller
     }
     
     function guardarEvaluacionJuridica( Request $request ){
+        
         if($request->tipo_documento == 'formato_interno'){
             $consulta = FormatoInterno::find($request->consulta_id);
             $consulta->status = 4;
@@ -654,7 +720,12 @@ class AdministracionController extends Controller
             $consulta->save();
         }
 
-
+        EvaluacionJuridica::create([
+            'consulta_fk' => $request->consulta_id,
+            'tipo_documento' => $request->tipo_documento,
+            'observaciones' => $request->observaciones
+        ]);
+        
         return response()->json(["exito"]);
     }
     
@@ -742,6 +813,23 @@ class AdministracionController extends Controller
 
     function obtenerCatalogoInstrumentos(){
         return Instrumento::get()->toArray();
+    }
+
+    function confirmacionConsultaPublica($numero_folio){
+        // Valida que folio se componga de 6 digitos
+        if( preg_match("/^[\w\d]{6}$/",$numero_folio) == false){
+            abort(404);
+        }
+
+        $numero_folios_existentes = DB::table('cedulas')->where('folio',$numero_folio)->count();
+
+        if( $numero_folios_existentes == 0 ){
+            abort(404);
+        }
+        
+        return view('ipdp.admin_consulta_publica_confirmacion', [
+            'numero_folio' => $numero_folio
+        ]);
     }
 
 }

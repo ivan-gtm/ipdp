@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('title', 'Gestión de CEDULAS | Análisis')
-@section('modulo_titulo', 'Gestión de CEDULAS | Análisis')
+@section('modulo_titulo', 'INTEGRACIÓN')
 
 @section('head')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -268,6 +268,17 @@
                         </table>
                         <textarea class="form-control" name="accion_objetivo" id="accion_objetivo" rows="6" placeholder="Escriba aqui la propuesta de linea de acción/objetivo al que va dirigido" required></textarea>
                     </div>
+                    <div class="col-12">
+                        <br>
+                        <table class="table">
+                            <tr>
+                                <td colspan="2" style="background-color: #9f2442; color: white;">
+                                    <strong>OBSERVACIONES:</strong>
+                                </td>
+                            </tr>
+                        </table>
+                        <textarea class="form-control" name="observacionesValoracion" id="observacionesValoracion" rows="6" required></textarea>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -322,12 +333,14 @@
         var eje_estrategia = $("#eje_estrategia").val();
         var accion_objetivo = $("#accion_objetivo").val();
         var tipo_documento = $("#modal_tipo_documento").val();
+        var observaciones = $("#observacionesValoracion").val();
 
         var requestBody = {
             "consulta_fk": consulta_id,
             "tipo_documento": tipo_documento,
             "eje_estrategia": eje_estrategia,
-            "accion_objetivo": accion_objetivo
+            "accion_objetivo": accion_objetivo,
+            "observaciones": observaciones
         };
 
         console.log(requestBody);

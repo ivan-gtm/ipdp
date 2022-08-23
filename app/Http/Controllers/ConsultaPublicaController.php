@@ -15,13 +15,12 @@ use Illuminate\Support\Facades\Storage;
 class ConsultaPublicaController extends Controller
 {
     
-    function registrar(){
+    function registrar() {
         // Genera Numero de Folio
         $numero_folio = mt_rand(100000, 999999);
         return view('ipdp.consulta_publica', [
             'numero_folio' => $numero_folio
         ]);
-
     }
 
     function confirmacion($numero_folio){

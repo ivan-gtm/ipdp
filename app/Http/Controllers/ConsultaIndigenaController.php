@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use Illuminate\Http\Request;
 use App\Models\ConsultaIndigena;
 // use App\Models\Consulta;
@@ -43,7 +44,7 @@ class ConsultaIndigenaController extends Controller
         // print_r( $consulta_indigena );
         // exit;
 
-        return view('ipdp.confirmacion', [
+        return view('ipdp.admin_consulta_indigena_confirmacion', [
             'numero_folio' => $numero_folio,
             'consulta_indigena' => $consulta_indigena
         ]);
@@ -52,36 +53,40 @@ class ConsultaIndigenaController extends Controller
     public function store(Request $request)
     {
 
+        App::setLocale('es');
+
         $validatedData = $request->validate([
             'folio' => 'required',
-            'tipoConsulta' => 'required',
-            'fechaSolicitud' => 'date_format:"Y-m-d"|required',
-            'nombreCompleto' => 'required',
+            'tipoConsulta' => 'nullable',
+            'tipoFormato' => 'nullable',
+            'fechaSolicitud' => 'date_format:"Y-m-d"|nullable',
+            'nombreCompleto' => 'nullable',
             'correo' => 'required|email|unique:consulta_indigena',
-            'telefono' => 'required|digits:10',
-            'tieneDatosParticipante' => ['required',Rule::in(['si','no'])],
-            'esRepresentante' => ['required',Rule::in(['si','no'])],
+            'telefono' => 'nullable|digits:10',
+            'tieneDatosParticipante' => ['nullable',Rule::in(['si','no'])],
+            'esRepresentante' => ['nullable',Rule::in(['si','no'])],
 
             'tipoAutoridad' => 'nullable',
             'nombrePuebloComunidad' => 'nullable',
             'tipoOrganizacion' => 'nullable',
             'nombreOrganizacion' => 'nullable',
 
-            'nombre' => 'required',
-            'primerApellido' => 'required',
-            'segundoApellido' => 'required',
+            'nombre' => 'nullable',
+            'primerApellido' => 'nullable',
+            'segundoApellido' => 'nullable',
             'edad' => 'nullable',
-            'ocupacion' => 'required',
+            'ocupacion' => 'nullable',
             'genero' => 'nullable',
+            'participanteCorreo' => 'nullable',
             'celular' => 'nullable',
             'calle' => 'nullable',
             'numExterior' => 'nullable',
             'numInterior' => 'nullable',
             'manzana' => 'nullable',
-            'cp' => 'required',
-            'alcaldia' => 'required',
-            'colonia' => 'required',
-            'tipoParticipacion' => 'required',
+            'cp' => 'nullable',
+            'alcaldia' => 'nullable',
+            'colonia' => 'nullable',
+            'tipoParticipacion' => 'nullable',
             'participacionOtro' => 'nullable',
             'nombreActividad' => 'nullable',
             'fechaActividad' => 'nullable',

@@ -407,7 +407,7 @@
                                     <div class="col-12">
                                         <div id="notification-center"></div>
                                         <div class="uploaded-files">
-                                            <h5>Archivos cargados con exito a tu cedula:</h5>
+                                            <h5>Archivos cargados con exito a tu formato:</h5>
                                             <ol></ol>
                                         </div>
                                         <div class="UppyDragDrop"></div>
@@ -686,11 +686,21 @@
                     console.log("La solicitud se ha completado correctamente.");
                 }
 
-                window.location.href = "{{ route('cedula.confirmacion',['numero_folio' => $numero_folio]) }}";
+                window.location.href = "{{ route('administracion.confirmacionConsultaPublica',['numero_folio' => $numero_folio]) }}";
                 
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
-                if( errorThrown == "Unprocessable Content" && textStatus == "error"){
+                
+                console.log( "jqXHR" );
+                console.log( jqXHR );
+                console.log( "textStatus" );
+                console.log( textStatus );
+                console.log( "errorThrown" );
+                console.log( errorThrown );
+
+                if( ( jqXHR.status == 422 )
+                    || ( jqXHR.statusText == "Unprocessable Content" && jqXHR.status == 422 )
+                    || (errorThrown == "Unprocessable Content" && textStatus == "error") ){
                     
                     $('.notification.alert').show();
                     error_keys = Object.keys(jqXHR.responseJSON.errors);

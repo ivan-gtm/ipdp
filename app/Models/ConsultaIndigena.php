@@ -12,6 +12,7 @@ class ConsultaIndigena extends Model
         'folio',
         'status',
         'tipoConsulta',
+        'tipoFormato',
         'fechaSolicitud',
         'nombreCompleto',
         'correo',

@@ -35,8 +35,8 @@
                                     <option></option>
                                     <option value="recepcion">Equipo de Recepción</option>
                                     <option value="analisis">Equipo de Análisis</option>
-                                    <option value="tecnica">Equipo Evaluación Tecnica</option>
-                                    <option value="juridica">Equipo Evaluación Juridica</option>
+                                    <option value="tecnica">Equipo Evaluación Técnica</option>
+                                    <option value="juridica">Equipo Evaluación Jurídica</option>
                                     <option value="integracion_pgd">Integración (PGD)</option>
                                     <option value="integracion_pgot">Integración (PGOT)</option>
                                     <option value="administracion">Administración</option>

@@ -44,22 +44,22 @@
                                     {{ $cedula->folio }}
                                 </td>
                                 <td>
-                                    @if( $cedula->origen == 'publica' )
-                                    <span class="badge bg-info text-uppercase">Pública</span>
-                                    @else
-                                    <span class="badge bg-dark text-uppercase">Indigena</span>
+                                    @if( $cedula->tipo_documento == 'cedula' || ( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA PUBLICA') )
+                                        <span class="badge bg-info text-uppercase">Consulta Pública</span>
+                                    @elseif( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA INDÍGENA' )
+                                        <span class="badge bg-dark text-uppercase">Consulta Indigena</span>
                                     @endif
                                 </td>
                                 <td>
                                     {{ $cedula->created_at }}
                                 </td>
                                 <td class="text-center">
-                                    @if( $cedula->tipo == 'formato_interno' )
-                                    <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
-                                    @elseif( $cedula->tipo == 'cedula' )
-                                    <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
-                                        CEDULA
-                                    </span>
+                                    @if( $cedula->tipo_documento == 'formato_interno' )
+                                        <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
+                                    @elseif( $cedula->tipo_documento == 'cedula' )
+                                        <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
+                                            CEDULA
+                                        </span>
                                     @endif
                                 </td>
                                 <td>
@@ -75,14 +75,14 @@
                                 <td class="create_date">
                                     <ul class="panel-acciones">
                                         <li>
-                                            @if( $cedula->tipo == 'formato_interno' )
+                                            @if( $cedula->tipo_documento == 'formato_interno' )
                                             <a class="edit-item-btn" href="{{ route('administracion.detalleFormatoInterno',[
                                                                             'folio' => $cedula->folio
                                                                         ]) }}">
                                                 <i class="fa-solid fa-folder-plus"></i>
                                                 <!-- Detalles -->
                                             </a>
-                                            @elseif( $cedula->tipo == 'cedula' )
+                                            @elseif( $cedula->tipo_documento == 'cedula' )
                                             <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
                                                                             'folio' => $cedula->folio
                                                                         ]) }}">
@@ -90,15 +90,14 @@
                                                 <!-- Detalles -->
                                             </a>
                                             @endif
-
                                         </li>
                                         <li>
-                                            @if( $cedula->tipo == 'formato_interno' )
+                                            @if( $cedula->tipo_documento == 'formato_interno' )
                                             <a href="{{ route('consulta_indigena.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
                                                 <i class="fa-solid fa-file-pdf"></i>
                                                 <!-- Descargar como PDF -->
                                             </a>
-                                            @elseif( $cedula->tipo == 'cedula' )
+                                            @elseif( $cedula->tipo_documento == 'cedula' )
                                             <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
                                                 <i class="fa-solid fa-file-pdf"></i>
                                                 <!-- Descargar como PDF -->
@@ -107,13 +106,13 @@
                                         </li>
                                         @if( $cedula->status == 2)
                                         <li>
-                                            <button type="button" class="edit-item-btn" data-tipo-documento="{{ $cedula->tipo }}" data-documento-id="{{ $cedula->id }}" onclick="aprobarSolicitudTecnica( this )">
+                                            <button type="button" class="edit-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="aprobarSolicitudTecnica( this )">
                                                 <i class="fa-solid fa-circle-check"></i>
                                                 <!-- Aprobar -->
                                             </button>
                                         </li>
                                         <li>
-                                            <button type="button" class="remove-item-btn" onclick="actualizarFolioIdRechazo({{ $cedula->id }})" data-bs-toggle="modal" data-bs-target="#rechazoModal">
+                                            <button type="button" class="remove-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="rechazarSolicitudTecnica( this )">
                                                 <i class="fa-solid fa-circle-xmark"></i>
                                                 <!-- Rechazar -->
                                             </button>
@@ -186,12 +185,13 @@
             </div>
             <div class="modal-body">
                 Escriba una breve descripción, con el motivo del rechazo:
-                <input type="hidden" name="folio_id_rechazo" id="folio_id_rechazo">
+                <input type="hidden" name="documentoIdRechazo" id="documentoIdRechazo">
+                <input type="hidden" name="tipoDocumentoRechazo" id="tipoDocumentoRechazo">
                 <textarea class="form-control" name="motivo_rechazo" id="motivo_rechazo" rows="10"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="rechazarSolicitud()">Enviar Rechazo</button>
+                <button type="button" class="btn btn-primary" onclick="enviarRechazoSolicitud()">Enviar Rechazo</button>
             </div>
         </div>
     </div>
@@ -281,8 +281,10 @@
         modalEvaluacionTecnica.show();
     }
 
-    function actualizarFolioIdRechazo(folio_id) {
-        $('#folio_id_rechazo').val(folio_id);
+    function rechazarSolicitudTecnica(elemento) {
+        $('#documentoIdRechazo').val( $(elemento).attr("data-documento-id") );
+        $('#tipoDocumentoRechazo').val( $(elemento).attr("data-tipo-documento") );
+        rechazoModal.show();
     }
 
     function guardarEvaluacionAnalisis() {
@@ -322,7 +324,6 @@
     }
 
     function limpiarFormularioEvaluacion() {
-
         $('#numero_folio').val("");
         $('#observacionesValoracion').val("");
         $('input:radio:checked').each(function(index) {
@@ -341,13 +342,12 @@
         return parametros;
     }
 
-    function rechazarSolicitud() {
+    function enviarRechazoSolicitud() {
         requestBody = {
-            "consulta_id": $('#folio_id_rechazo').val(),
+            "consulta_id": $('#documentoIdRechazo').val(),
+            "tipo_documento": $('#tipoDocumentoRechazo').val(),
             "motivo_rechazo": $('#motivo_rechazo').val()
         };
-
-        // rechazoModal.show();
 
         $.ajaxSetup({
             headers: {

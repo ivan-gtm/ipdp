@@ -47,19 +47,19 @@
                                     {{ $cedula->folio }}
                                 </td>
                                 <td>
-                                    @if( $cedula->origen == 'publica' )
-                                        <span class="badge bg-info text-uppercase">Pública</span>
-                                    @else
-                                        <span class="badge bg-dark text-uppercase">Indigena</span>
+                                    @if( $cedula->tipo_documento == 'cedula' || ( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA PUBLICA') )
+                                        <span class="badge bg-info text-uppercase">Consulta Pública</span>
+                                    @elseif( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA INDÍGENA' )
+                                        <span class="badge bg-dark text-uppercase">Consulta Indigena</span>
                                     @endif
                                 </td>
                                 <td>
                                     {{ $cedula->created_at }}
                                 </td>
                                 <td class="text-center">
-                                    @if( $cedula->tipo == 'formato_interno' )
+                                    @if( $cedula->tipo_documento == 'formato_interno' )
                                         <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
-                                    @elseif( $cedula->tipo == 'cedula' )
+                                    @elseif( $cedula->tipo_documento == 'cedula' )
                                         <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
                                             CEDULA
                                         </span>
@@ -78,14 +78,14 @@
                                 <td class="create_date">
                                     <ul class="panel-acciones">
                                         <li>
-                                            @if( $cedula->tipo == 'formato_interno' )
+                                            @if( $cedula->tipo_documento == 'formato_interno' )
                                                 <a class="edit-item-btn" href="{{ route('administracion.detalleFormatoInterno',[
                                                                             'folio' => $cedula->folio
                                                                         ]) }}">
                                                     <i class="fa-solid fa-folder-plus"></i>
                                                     <!-- Detalles -->
                                                 </a>
-                                            @elseif( $cedula->tipo == 'cedula' )
+                                            @elseif( $cedula->tipo_documento == 'cedula' )
                                                 <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
                                                                             'folio' => $cedula->folio
                                                                         ]) }}">
@@ -96,12 +96,12 @@
                                             
                                         </li>
                                         <li>
-                                            @if( $cedula->tipo == 'formato_interno' )
+                                            @if( $cedula->tipo_documento == 'formato_interno' )
                                                 <a href="{{ route('consulta_indigena.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
                                                     <i class="fa-solid fa-file-pdf"></i>
                                                     <!-- Descargar como PDF -->
                                                 </a>
-                                            @elseif( $cedula->tipo == 'cedula' )
+                                            @elseif( $cedula->tipo_documento == 'cedula' )
                                                 <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
                                                     <i class="fa-solid fa-file-pdf"></i>
                                                     <!-- Descargar como PDF -->

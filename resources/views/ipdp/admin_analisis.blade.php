@@ -44,19 +44,19 @@
                                     {{ $cedula->folio }}
                                 </td>
                                 <td>
-                                    @if( $cedula->origen == 'publica' )
-                                        <span class="badge bg-info text-uppercase">Pública</span>
-                                    @else
-                                        <span class="badge bg-dark text-uppercase">Indigena</span>
+                                    @if( $cedula->tipo_documento == 'cedula' || ( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA PUBLICA') )
+                                        <span class="badge bg-info text-uppercase">Consulta Pública</span>
+                                    @elseif( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA INDÍGENA' )
+                                        <span class="badge bg-dark text-uppercase">Consulta Indigena</span>
                                     @endif
                                 </td>
                                 <td>
                                     {{ $cedula->created_at }}
                                 </td>
                                 <td class="text-center">
-                                    @if( $cedula->tipo == 'formato_interno' )
+                                    @if( $cedula->tipo_documento == 'formato_interno' )
                                         <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
-                                    @elseif( $cedula->tipo == 'cedula' )
+                                    @elseif( $cedula->tipo_documento == 'cedula' )
                                         <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
                                             CEDULA
                                         </span>
@@ -75,14 +75,14 @@
                                 <td class="create_date">
                                     <ul class="panel-acciones">
                                         <li>
-                                            @if( $cedula->tipo == 'formato_interno' )
+                                            @if( $cedula->tipo_documento == 'formato_interno' )
                                                 <a class="edit-item-btn" href="{{ route('administracion.detalleFormatoInterno',[
                                                                             'folio' => $cedula->folio
                                                                         ]) }}">
                                                     <i class="fa-solid fa-folder-plus"></i>
                                                     <!-- Detalles -->
                                                 </a>
-                                            @elseif( $cedula->tipo == 'cedula' )
+                                            @elseif( $cedula->tipo_documento == 'cedula' )
                                                 <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
                                                                             'folio' => $cedula->folio
                                                                         ]) }}">
@@ -93,12 +93,12 @@
                                             
                                         </li>
                                         <li>
-                                            @if( $cedula->tipo == 'formato_interno' )
+                                            @if( $cedula->tipo_documento == 'formato_interno' )
                                                 <a href="{{ route('consulta_indigena.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
                                                     <i class="fa-solid fa-file-pdf"></i>
                                                     <!-- Descargar como PDF -->
                                                 </a>
-                                            @elseif( $cedula->tipo == 'cedula' )
+                                            @elseif( $cedula->tipo_documento == 'cedula' )
                                                 <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
                                                     <i class="fa-solid fa-file-pdf"></i>
                                                     <!-- Descargar como PDF -->
@@ -107,14 +107,23 @@
                                         </li>
                                         @if( $cedula->status == 1)
                                             <li>
-                                                <button type="button" class="edit-item-btn" data-tipo-documento="{{ $cedula->tipo }}" data-documento-id="{{ $cedula->id }}" onclick="aprobarSolicitud( this )">
+                                                <button type="button" class="edit-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="aprobarSolicitud( this )">
                                                     <i class="fa-solid fa-circle-check"></i>
                                                     <!-- Aprobar -->
                                                 </button>
                                             </li>
                                             <li>
-                                                <button type="button" class="remove-item-btn" data-bs-toggle="modal" onclick="actualizarFolioIdRechazo({{ $cedula->id }})" data-bs-target="#rechazoModal">
+                                                <button type="button" class="remove-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="mostrarModalRechazo( this )" >
                                                     <i class="fa-solid fa-circle-xmark"></i>
+                                                    <!-- Rechazar -->
+                                                </button>
+                                            </li>
+                                        @endif
+
+                                        @if( $cedula->status == 101)
+                                            <li>
+                                                <button type="button" class="remove-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="mostrarModalRechazo( this )" >
+                                                    <i class="fa fa-history" aria-hidden="true"></i>
                                                     <!-- Rechazar -->
                                                 </button>
                                             </li>
@@ -184,9 +193,27 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Escriba una breve descripción, con el motivo del rechazo:
-                <input type="hidden" name="folio_id_rechazo" id="folio_id_rechazo">
-                <textarea class="form-control" name="motivo_rechazo" id="motivo_rechazo" rows="10"></textarea>
+                <div class="mb-3">
+                    <input type="hidden" name="documentoIdRechazado" id="documentoIdRechazado" value="0">
+                    <input type="hidden" name="tipoDocumentoRechazado" id="tipoDocumentoRechazado">
+                    
+                    <label for="temaRechazo" class="form-label">Seleccione el tema:</label>
+                    <select class="form-select" 
+                        name="temasEvaluacion" id="temaRechazo"
+                        onchange="obtenerSubTemasEvaluacion( this )">
+                        @foreach ($temas as $tema)
+                            <option value="{{ $tema['id'] }}">{{ $tema['descripcion'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="subtemaRechazo" class="form-label">Seleccione el tema:</label>
+                    <select class="form-select" aria-label="Default select example" name="subtemasEvaluacion" id="subtemaRechazo" disabled></select>
+                </div>
+                <div class="mb-3">
+                    Escriba una breve descripción, con el motivo del rechazo:
+                    <textarea class="form-control" name="motivo_rechazo" id="motivo_rechazo" rows="10"></textarea>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -246,6 +273,12 @@
         $('#tipoDocumento').val( $(elemento).attr("data-tipo-documento") );
     }
 
+    function mostrarModalRechazo( elemento ){
+        $('#documentoIdRechazado').val( $(elemento).attr("data-documento-id") );
+        $('#tipoDocumentoRechazado').val( $(elemento).attr("data-tipo-documento") );
+        rechazoModal.show();
+    }
+
     function guardarAprobacion() {
         requestBody = {
             "consulta_id": $('#aprobarSolicitudId').val(),
@@ -279,13 +312,10 @@
             });
     }
 
-    function actualizarFolioIdRechazo(folio_id) {
-        $('#folio_id_rechazo').val(folio_id);
-    }
-
     function obtenerSubTemasEvaluacion( element ) {
-        $('#subtemasEvaluacion').find('option').remove().end();
-        // console.log("dasdas");
+
+        $('[name="subtemasEvaluacion"]').find('option').remove().end();
+        
         var tema_id = $(element).val();
 
         $.ajaxSetup({
@@ -311,7 +341,8 @@
                     // console.log( subtemaObj.id );
                     agregarOpcion(subtemaObj.id, subtemaObj.descripcion);
                 }
-                $('#subtemasEvaluacion').removeAttr("disabled");
+                
+                $('[name="subtemasEvaluacion"]').removeAttr("disabled");
 
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
@@ -323,20 +354,22 @@
     }
 
     function agregarOpcion(valueParameter, descriptionParameter) {
-        $('#subtemasEvaluacion').append($('<option>', {
+        $('[name="subtemasEvaluacion"]').append($('<option>', {
             value: valueParameter,
             text: descriptionParameter
         }));
     }
 
-    function rechazarSolicitud() {
+    function rechazarSolicitud( elemento ) {
         
         requestBody = {
-            "consulta_id": $('#aprobarSolicitudId').val(),
-            "consulta_id": $('#folio_id_rechazo').val(),
+            "consulta_id": $('#documentoIdRechazado').val(),
+            "tipo_documento": $('#tipoDocumentoRechazado').val(),
+            "tema_evaluacion": $('#temaRechazo').val(),
+            "subtema_evaluacion": $('#subtemaRechazo').val(),
             "motivo_rechazo": $('#motivo_rechazo').val()
         };
-
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

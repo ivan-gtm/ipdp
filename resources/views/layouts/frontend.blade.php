@@ -470,14 +470,15 @@
                                 </div>
                                 <div class="lg:col-2 md:col-6 sm:col-12 xs:col-12">
                                     <div class="grid p-0">
-                                        <div class="col-12"><a href="tel:5555335533" class="ui-link ui-widget titulo-footer" style="padding-bottom: 2% !important;" target="_blank">55 1111 1111</a>
+                                        <div class="col-12">
+                                            <label style="padding-bottom: 5%;" class="footerAlingleft">
+                                                Telefono
+                                            </label>
                                         </div>
-                                        <div class="col-12"><label style="padding-bottom: 5%;" class="footerAlingleft">Consejo
-                                                Ciudadano</label>
-                                        </div>
-
-                                        <div class="col-12"><a href="tel:5556581111" class="ui-link ui-widget titulo-footer" style="color: white; padding-bottom: 2%;" target="_blank">55 1111
-                                                1111</a>
+                                        <div class="col-12">
+                                            <a href="tel:5551302100" class="ui-link ui-widget titulo-footer" style="color: white; padding-bottom: 2%;" target="_blank">
+                                                55 5130 2100 Ext 2339
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

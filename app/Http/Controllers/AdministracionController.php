@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App;
 use App\Models\Cedula;
+use App\Models\ConsultaIndigena;
 use App\Models\User;
 use App\Models\EvaluacionTecnica;
 use App\Models\Instrumento;
@@ -38,13 +39,14 @@ class AdministracionController extends Controller
 
         $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
             ->select('id','folio','created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
-            ->selectRaw("'interno' as origen")
-            ->selectRaw("'formato_interno' as tipo")
+            ->selectRaw("tipoConsulta as tipo_consulta")
+            ->selectRaw("'formato_interno' as tipo_documento")
             ->orderByDesc('id');
         
         $cedulas = Cedula::whereIn('status', $estados_validos)
-                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido','cedulas.origen')
-                    ->selectRaw("'cedula' as tipo")
+                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido')
+                    ->selectRaw("null as tipo_consulta")
+                    ->selectRaw("'cedula' as tipo_documento")
                     ->union($formatos_interno)
                     ->orderByDesc('id')
                     ->paginate($perPage);
@@ -74,13 +76,14 @@ class AdministracionController extends Controller
 
         $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
             ->select('id','folio','created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
-            ->selectRaw("'interno' as origen")
-            ->selectRaw("'formato_interno' as tipo")
+            ->selectRaw("tipoConsulta as tipo_consulta")
+            ->selectRaw("'formato_interno' as tipo_documento")
             ->orderByDesc('id');
         
         $cedulas = Cedula::whereIn('status', $estados_validos)
-                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido','cedulas.origen')
-                    ->selectRaw("'cedula' as tipo")
+                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido')
+                    ->selectRaw("null as tipo_consulta")
+                    ->selectRaw("'cedula' as tipo_documento")
                     ->union($formatos_interno)
                     ->orderByDesc('id')
                     ->paginate($perPage);
@@ -180,7 +183,8 @@ class AdministracionController extends Controller
             })
             ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
             ->select('consulta_indigena.id','consulta_indigena.folio', 'consulta_indigena.created_at','consulta_indigena.status', 'consulta_indigena.nombre','consulta_indigena.primerApellido as primer_apellido','consulta_indigena.segundoApellido as segundo_apellido','c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk','evualuacion_tecnica.tipo_documento as tipo')
-            ->selectRaw("'interno' as origen")
+            ->selectRaw("tipoConsulta as tipo_consulta")
+            ->selectRaw("'formato_interno' as tipo_documento")
             ->whereIn('consulta_indigena.status', [4, 104])
             ->whereIn('c_instrumento.descripcion', $tipos_de_instrumentos_visibles)
             ->whereRaw( $where_raw );
@@ -192,7 +196,8 @@ class AdministracionController extends Controller
             })
             ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
             ->select('cedulas.id','cedulas.folio', 'cedulas.created_at','cedulas.status', 'cedulas.nombre','cedulas.primer_apellido','cedulas.segundo_apellido','c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk','evualuacion_tecnica.tipo_documento as tipo')
-            ->selectRaw('cedulas.origen')
+            ->selectRaw("null as tipo_consulta")
+            ->selectRaw("'cedula' as tipo_documento")
             ->whereIn('cedulas.status', [4, 104])
             ->whereIn('c_instrumento.descripcion', $tipos_de_instrumentos_visibles)
             ->whereRaw( $where_raw )
@@ -458,21 +463,30 @@ class AdministracionController extends Controller
 
         $evaluacion_parametros[] = $tmp;
         unset($evaluacion_parametros[0]);
+        
+        if( $request->tipo_documento == 'cedula' ){
+            $documento = Cedula::where('id', $request->consulta_id)->first();
+        } elseif( $request->tipo_documento == 'formato_interno' ) {
+            $documento = ConsultaIndigena::where('id', $request->consulta_id)->first();
+        }
 
-        // $evaluacion_parametros
-        $evaluacion_tecnica = EvaluacionTecnica::where('consulta_fk', $request->consulta_id)
+        if( $documento->status == 3 ){
+            $evaluacion_tecnica = EvaluacionTecnica::where('consulta_fk', $request->consulta_id)
                                 ->where('tipo_documento', $request->tipo_documento)
                                 ->first();
-
+            $observacion = $evaluacion_tecnica->observacion;
+        } elseif( $documento->status == 102 ){
+            $consulta_indigena = EvaluacionTecnicaRechazo::where('consulta_fk', $request->consulta_id)
+                                ->where('tipo_documento', $request->tipo_documento)
+                                ->first();
+            $observacion = $consulta_indigena->motivo_rechazo;
+        }
+        
         $response = [
             'parametros' => $evaluacion_parametros,
-            'comentario' => $evaluacion_tecnica->observacion
+            'comentario' => $observacion
         ];
         
-        // echo "<pre>";
-        // print_r( $evaluacion_parametros );
-        // exit;
-
         return response()->json($response);
     }
 
@@ -486,14 +500,15 @@ class AdministracionController extends Controller
         $estados_validos = [1, 101];
 
         $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
-            ->select('id','folio','created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
-            ->selectRaw("'interno' as origen")
-            ->selectRaw("'formato_interno' as tipo")
+            ->select('id','folio' ,'created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
+            ->selectRaw("tipoConsulta as tipo_consulta")
+            ->selectRaw("'formato_interno' as tipo_documento")
             ->orderByDesc('id');
         
         $cedulas = Cedula::whereIn('status', $estados_validos)
-                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido','cedulas.origen')
-                    ->selectRaw("'cedula' as tipo")
+                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido')
+                    ->selectRaw("null as tipo_consulta")
+                    ->selectRaw("'cedula' as tipo_documento")
                     ->union($formatos_interno)
                     ->orderByDesc('id')
                     ->paginate($perPage);
@@ -527,14 +542,15 @@ class AdministracionController extends Controller
         $estados_validos = [1, 101];
 
         $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
-            ->select('id','folio','created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
-            ->selectRaw("'interno' as origen")
-            ->selectRaw("'formato_interno' as tipo")
+            ->select('id','folio' ,'created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
+            ->selectRaw("tipoConsulta as tipo_consulta")
+            ->selectRaw("'formato_interno' as tipo_documento")
             ->orderByDesc('id');
         
         $cedulas = Cedula::whereIn('status', $estados_validos)
-                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido','cedulas.origen')
-                    ->selectRaw("'cedula' as tipo")
+                    ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido')
+                    ->selectRaw("null as tipo_consulta")
+                    ->selectRaw("'cedula' as tipo_documento")
                     ->union($formatos_interno)
                     ->orderByDesc('id')
                     ->paginate($perPage);
@@ -670,12 +686,21 @@ class AdministracionController extends Controller
 
         $rechazo_analisis = EvaluacionAnalisis::create([
             'consulta_fk' => $request->consulta_id,
+            'tipo_documento' => $request->tipo_documento,
+            'tema_fk' => $request->tema_evaluacion,
+            'subtema_fk' => $request->subtema_evaluacion,
             'motivo_rechazo' => $request->motivo_rechazo
         ]);
 
-        $consulta = Cedula::find( $request->consulta_id );
-        $consulta->status = 101;
-        $consulta->save();
+        if( isset($request->tipo_documento) && $request->tipo_documento == 'cedula'){
+            $consulta = Cedula::find( $request->consulta_id );
+            $consulta->status = 101;
+            $consulta->save();
+        } elseif( isset($request->tipo_documento) && $request->tipo_documento == 'formato_interno'){
+            $consulta = FormatoInterno::find($request->consulta_id);
+            $consulta->status = 101;
+            $consulta->save(); 
+        }
         
         return response()->json("exito");
     }
@@ -684,12 +709,19 @@ class AdministracionController extends Controller
 
         $rechazo_analisis = EvaluacionTecnicaRechazo::create([
             'consulta_fk' => $request->consulta_id,
+            'tipo_documento' => $request->tipo_documento,
             'motivo_rechazo' => $request->motivo_rechazo
         ]);
 
-        $consulta = Cedula::find( $request->consulta_id );
-        $consulta->status = 102; // Rechazo evaluacion tecnica
-        $consulta->save();
+        if( isset($request->tipo_documento) && $request->tipo_documento == 'cedula'){
+            $consulta = Cedula::find( $request->consulta_id );
+            $consulta->status = 102; // Rechazo evaluacion tecnica
+            $consulta->save();
+        } elseif( isset($request->tipo_documento) && $request->tipo_documento == 'formato_interno'){
+            $consulta = FormatoInterno::find($request->consulta_id);
+            $consulta->status = 102; // Rechazo evaluacion tecnica
+            $consulta->save(); 
+        }
         
         return response()->json("exito");
     }
@@ -701,9 +733,15 @@ class AdministracionController extends Controller
             'motivo_rechazo' => $request->motivo_rechazo
         ]);
 
-        $consulta = Cedula::find( $request->consulta_id );
-        $consulta->status = 103; // Rechazo evaluacion tecnica
-        $consulta->save();
+        if( isset($request->tipo_documento) && $request->tipo_documento == 'cedula'){
+            $consulta = Cedula::find( $request->consulta_id );
+            $consulta->status = 103; // Rechazo evaluacion Juridica
+            $consulta->save();
+        } elseif( isset($request->tipo_documento) && $request->tipo_documento == 'formato_interno'){
+            $consulta = FormatoInterno::find($request->consulta_id);
+            $consulta->status = 103; // Rechazo evaluacion Juridica
+            $consulta->save(); 
+        }
         
         return response()->json("exito");
     }

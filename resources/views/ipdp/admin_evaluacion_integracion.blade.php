@@ -48,10 +48,10 @@
                                     {{ $cedula->folio }}
                                 </td>
                                 <td>
-                                    @if( $cedula->origen == 'publica' )
-                                        <span class="badge bg-info text-uppercase">Pública</span>
-                                    @else
-                                        <span class="badge bg-dark text-uppercase">Indigena</span>
+                                    @if( $cedula->tipo_documento == 'cedula' || ( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA PUBLICA') )
+                                        <span class="badge bg-info text-uppercase">Consulta Pública</span>
+                                    @elseif( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA INDÍGENA' )
+                                        <span class="badge bg-dark text-uppercase">Consulta Indigena</span>
                                     @endif
                                 </td>
                                 <td>
@@ -249,31 +249,46 @@
                         <table class="table">
                             <tr>
                                 <td colspan="2" style="background-color: #9f2442; color: white;">
-                                    <strong>PROPUESTA DE EJE/ESTRATEGIA AL QUE VA DIRIGIDO:</strong>
+                                    @if( Auth::check() && Auth::user()->rol == 'integracion_pgot' )
+                                        <strong>NUEVA ESTRATEGIA:</strong>
+                                    @elseif( Auth::check() && Auth::user()->rol == 'integracion_pgd' )
+                                        <strong>NUEVO EJE:</strong>
+                                    @endif
                                 </td>
                             </tr>
                         </table>
                         <input type="hidden" id="modal_cedula_id" name="modal_cedula_id">
                         <input type="hidden" id="modal_tipo_documento" name="modal_tipo_documento">
-                        <textarea class="form-control" name="eje_estrategia" id="eje_estrategia" rows="6" placeholder="Escriba aqui la propuesta de eje/estrategia al que va dirigido esta cedula" required></textarea>
+                        <textarea class="form-control" name="eje_estrategia" id="eje_estrategia" rows="6" placeholder="Escriba aqui su propuesta" required></textarea>
                     </div>
                     <div class="col-12">
                         <br>
                         <table class="table">
                             <tr>
                                 <td colspan="2" style="background-color: #9f2442; color: white;">
-                                    <strong>PROPUESTA DE LINEA DE ACCIÓN/OBJETIVO AL QUE VA DIRIGIDO:</strong>
+                                    @if( Auth::check() && Auth::user()->rol == 'integracion_pgot' )
+                                        <strong>NUEVA LÍNEA DE ACCIÓN:</strong>
+                                    @elseif( Auth::check() && Auth::user()->rol == 'integracion_pgd' )
+                                        <strong>NUEVO OBJETIVO:</strong>
+                                    @endif
                                 </td>
                             </tr>
                         </table>
-                        <textarea class="form-control" name="accion_objetivo" id="accion_objetivo" rows="6" placeholder="Escriba aqui la propuesta de linea de acción/objetivo al que va dirigido" required></textarea>
+                        <textarea class="form-control" name="accion_objetivo" id="accion_objetivo" rows="6" placeholder="Escriba aqui su propuesta" required></textarea>
                     </div>
                     <div class="col-12">
                         <br>
                         <table class="table">
                             <tr>
                                 <td colspan="2" style="background-color: #9f2442; color: white;">
-                                    <strong>OBSERVACIONES:</strong>
+                                    <strong>
+                                        OBSERVACIONES
+                                        @if( Auth::check() && Auth::user()->rol == 'integracion_pgot' )
+                                            VALORACIÓN PGOT
+                                        @elseif( Auth::check() && Auth::user()->rol == 'integracion_pgd' )
+                                            VALORACIÓN PGD
+                                        @endif
+                                        :</strong>
                                 </td>
                             </tr>
                         </table>

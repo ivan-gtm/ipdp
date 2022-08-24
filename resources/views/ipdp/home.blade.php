@@ -13,25 +13,31 @@
                 </div>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img class="d-block w-100" src="{{ asset('imgs/slider_1.jpeg') }}" alt="First slide" />
-                        <!-- <div class="carousel-caption d-none d-md-block">
-                            <h5>Noticia de Ejemplo 1</h5>
-                            <p>Contenido de ejempo para Slide 1.</p>
-                        </div> -->
+                        <a href="https://www.ipdp.cdmx.gob.mx/">
+                            <img class="d-block w-100" src="{{ asset('imgs/slider_1.jpeg') }}" alt="First slide" />
+                            <!-- <div class="carousel-caption d-none d-md-block">
+                                <h5>Noticia de Ejemplo 1</h5>
+                                <p>Contenido de ejempo para Slide 1.</p>
+                            </div> -->
+                        </a>
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="{{ asset('imgs/slider_2.jpeg') }}" alt="Second slide" />
-                        <!-- <div class="carousel-caption d-none d-md-block">
-                            <h5>Noticia de Ejemplo 2</h5>
-                            <p>Contenido de ejempo para Slide 2.</p>
-                        </div> -->
+                        <a href="https://www.ipdp.cdmx.gob.mx/">
+                            <img class="d-block w-100" src="{{ asset('imgs/slider_2.jpeg') }}" alt="Second slide" />
+                            <!-- <div class="carousel-caption d-none d-md-block">
+                                <h5>Noticia de Ejemplo 2</h5>
+                                <p>Contenido de ejempo para Slide 2.</p>
+                            </div> -->
+                        </a>
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="{{ asset('imgs/slider_3.jpeg') }}" alt="Third slide" />
-                        <!-- <div class="carousel-caption d-none d-md-block">
-                            <h5>Noticia de Ejemplo 3</h5>
-                            <p>Contenido de ejempo para Slide 3.</p>
-                        </div> -->
+                        <a href="https://www.ipdp.cdmx.gob.mx/">
+                            <img class="d-block w-100" src="{{ asset('imgs/slider_3.jpeg') }}" alt="Third slide" />
+                            <!-- <div class="carousel-caption d-none d-md-block">
+                                <h5>Noticia de Ejemplo 3</h5>
+                                <p>Contenido de ejempo para Slide 3.</p>
+                            </div> -->
+                        </a>
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">

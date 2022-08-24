@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <table>
+                            <table class="table">
                                 <tr>
                                     <td>
                                         <input class="form-check-input" type="radio" name="opcionTipoFormato" id="opcionTipoFormatoIndividual" value="INDIVIDUAL">
@@ -249,6 +249,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12">
                                 <table class="table">
                                     <tr>

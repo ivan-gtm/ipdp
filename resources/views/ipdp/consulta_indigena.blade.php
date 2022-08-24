@@ -166,7 +166,7 @@
 
                 <div class="tab-pane" id="nav-contact" role="tabpanel" aria-labelledby="nav-comunidad-org-tab" tabindex="0">
                     <form class="row g-3 needs-validation" id="frmTipoComunidadOrganizacion" novalidate>
-                        <div class="row">
+                        <div class="row" id="autoridadRepresentativaOpciones">
                             <div class="col-md-12">
                                 <table class="table">
                                     <tr>
@@ -250,7 +250,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" id="tipoOrganizacionOpciones">
                             <div class="col-md-12">
                                 <table class="table">
                                     <tr>
@@ -357,6 +357,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-12">
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                     <button class="btn btn-primary" type="button" id="btnAtrasComunidad">Atras</button>
@@ -848,6 +850,16 @@
             $("#nombrePuebloComunidad").removeAttr("required").attr("disabled", "disabled").val("");
         } else {
             $("#nombrePuebloComunidad").removeAttr("disabled").attr("required", "required").focus();
+        }
+    });
+    
+    $('input:radio[name="opcionTipoConsulta"]').change(function() {
+        if( $(this).is(':checked') && $(this).val() == 'CONSULTA PUBLICA' ){
+            $('div#autoridadRepresentativaOpciones').hide();
+            $('div#tipoOrganizacionOpciones').show();
+        } else if ($(this).is(':checked') && $(this).val() == 'CONSULTA INDÍGENA') {
+            $('div#autoridadRepresentativaOpciones').show();
+            $('div#tipoOrganizacionOpciones').hide();
         }
     });
 

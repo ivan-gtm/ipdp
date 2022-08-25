@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Cedula;
 use App\Models\CedulaArchivo;
 use App;
+use App\Mail;
+use App\Mail\ConsultaPublicaRegistrada;
+use App\Mail\PropuestaIntegradaAlAnexo;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -135,6 +138,15 @@ class ConsultaPublicaController extends Controller
 
         $validatedData['origen'] = 'publica';
         $show = Cedula::create($validatedData);
+
+        $details = [
+            'title' => '¡Gracias por tu participación!',
+            'folio' => $request->folio
+        ];
+       
+        \Mail::to( $request->correo )
+        ->send(new ConsultaPublicaRegistrada($details));
+
         return response()->json([]);
 
     }

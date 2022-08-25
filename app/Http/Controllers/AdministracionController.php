@@ -8,6 +8,11 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
 use App;
+
+use App\Mail;
+use App\Mail\ConsultaPublicaRegistrada;
+use App\Mail\PropuestaIntegradaAlAnexo;
+
 use App\Models\Cedula;
 use App\Models\ConsultaIndigena;
 use App\Models\User;
@@ -277,9 +282,10 @@ class AdministracionController extends Controller
 
     function guardarEvaluacionIntegracion(Request $request){
         
-        // if( Auth::check() && ( ( Auth::user()->rol != 'integracion_pgot' || Auth::user()->rol != 'integracion_pgd' ) && Auth::user()->rol != 'administracion') ) {
-        //     return redirect()->route('administracion.home')->with('status', 'No tiene permisos para visualizar este modulo!');
-        // }
+        if( !Auth::check()  ) {
+            // && ( ( Auth::user()->rol != 'integracion_pgot' || Auth::user()->rol != 'integracion_pgd' ) && Auth::user()->rol != 'administracion')
+            return redirect()->route('administracion.home')->with('status', 'No tiene permisos para visualizar este modulo!');
+        }
         
         $evaluador_pgd_fk = null;
         $evaluador_pgot_fk = null;
@@ -295,8 +301,9 @@ class AdministracionController extends Controller
                 })
                 ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
                 ->select('cedulas.id','cedulas.folio', 'cedulas.status', 'c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk')
+                ->selectRaw('CONCAT(cedulas.nombre,\' \',cedulas.primer_apellido) as nombre')
+                ->selectRaw('cedulas.correo')
                 ->where('cedulas.id', $request->consulta_fk)
-                // ->orderByDesc('cedulas.id')
                 ->first();
             
             $cedula = Cedula::find($request->consulta_fk);
@@ -313,6 +320,8 @@ class AdministracionController extends Controller
                 })
                 ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
                 ->select('consulta_indigena.id','consulta_indigena.folio', 'consulta_indigena.status', 'c_instrumento.descripcion as instrumento','evualuacion_integracion.evaluador_pgot_fk','evualuacion_integracion.evaluador_pgd_fk')
+                ->selectRaw('consulta_indigena.nombreCompleto as nombre')
+                ->selectRaw('consulta_indigena.correo')
                 ->where('consulta_indigena.id', $request->consulta_fk)
                 ->orderByDesc('id')
                 ->first();
@@ -321,56 +330,36 @@ class AdministracionController extends Controller
         }
 
 
-        if( Auth::check() && Auth::user()->rol == 'integracion_pgd' ) {
+        // Si la cedula es solo PGD, cambiamos el estado para que no sea visible por el resto
+        if( Auth::user()->rol == 'integracion_pgd' && $info_cedula->instrumento ==  'PGD') {
+            
             $evaluador_pgd_fk = Auth::user()->id;
-            
-            // Si la cedula es solo PGD, cambiamos el estado para que no sea visible por el resto
-            if( $info_cedula->instrumento ==  'PGD' ){
-                $cedula->status = 5;
-            }
-            
-        } elseif( Auth::check() && Auth::user()->rol == 'integracion_pgot' ) {
-            $evaluador_pgot_fk = Auth::user()->id;
+            $cedula->status = 5;
+            self::emailPropuestaIntegradaAlAnexo($cedula->folio,$cedula->correo,$cedula->nombre);
 
-            // Si la cedula es solo PGOT, cambiamos el estado para que no sea visible por el resto
-            if( $info_cedula->instrumento ==  'PGOT' ){
-                $cedula->status = 5;
-            }
-
-        } elseif( Auth::check() && Auth::user()->rol == 'administracion' ) {
+        // Si la cedula es solo PGOT, cambiamos el estado para que no sea visible por el resto
+        } elseif( Auth::user()->rol == 'integracion_pgot' && $info_cedula->instrumento ==  'PGOT') {
             $evaluador_pgot_fk = Auth::user()->id;
+            $cedula->status = 5;
+            self::emailPropuestaIntegradaAlAnexo($cedula->folio,$cedula->correo,$cedula->nombre);
+
+        } elseif( $info_cedula->instrumento ==  'PGD+PGOT' && Auth::user()->rol == 'integracion_pgd' && intval($info_cedula->evaluador_pgd_fk) == 0 ) {
             $evaluador_pgd_fk = Auth::user()->id;
 
+        } elseif( $info_cedula->instrumento ==  'PGD+PGOT' && Auth::user()->rol == 'integracion_pgot' && intval($info_cedula->evaluador_pgot_fk) == 0 ){
+            $evaluador_pgot_fk = Auth::user()->id;
+
+        // Si la cedula fue autorizada por un ADMIN
+        } elseif( Auth::user()->rol == 'administracion' ) {
+            
+            $evaluador_pgot_fk = Auth::user()->id;
+            $evaluador_pgd_fk = Auth::user()->id;
             $cedula->status = 5;
         }
 
-        if( $info_cedula->instrumento ==  'PGD+PGOT' 
-            && Auth::check() 
-            && (
-                (
-                    Auth::user()->rol == 'integracion_pgot' 
-                    && intval($info_cedula->evaluador_pgd_fk) > 0 
-                ) ||
-                (
-                    Auth::user()->rol == 'integracion_pgd' 
-                    && intval($info_cedula->evaluador_pgot_fk) > 0
-                )
-            ) ){
-            $cedula->status = 5;
-        }
-
-        // if( $info_cedula->instrumento ==  'PGD+PGOT' && intval( $info_cedula->evaluador_pgot_fk ) > 0 ){
-        //     $evaluador_pgot_fk = $info_cedula->evaluador_pgot_fk;
-        // }
-
-        // if( $info_cedula->instrumento ==  'PGD+PGOT' && intval($info_cedula->evaluador_pgd_fk) > 0 ){
-        //     $evaluador_pgd_fk = $info_cedula->evaluador_pgd_fk;
-        // }
         
-        $cedula->save();
         
         $count = EvaluacionIntegracion::where('consulta_fk', $request->consulta_fk)->count();
-        
         if( $count == 0) {
             if( Auth::check() && Auth::user()->rol == 'integracion_pgd' ) {
                 
@@ -419,7 +408,26 @@ class AdministracionController extends Controller
             
         }
 
+        $evaluacion_integracion = EvaluacionIntegracion::where('consulta_fk', $request->consulta_fk)->first();
+        if( $info_cedula->instrumento == 'PGD+PGOT' && intval($evaluacion_integracion->evaluador_pgd_fk) > 0 && intval($evaluacion_integracion->evaluador_pgot_fk) > 0 ){
+            $cedula->status = 5;
+            
+            self::emailPropuestaIntegradaAlAnexo($cedula->folio,$cedula->correo,$cedula->nombre);
+        }
+
+        $cedula->save();
+
         return response()->json(["exito"]);
+    }
+
+    function emailPropuestaIntegradaAlAnexo($folio, $correo, $nombre){
+        $details = [
+            'nombre' => $nombre,
+            'folio' => $folio
+        ];
+
+        \Mail::to( $correo )
+            ->send(new PropuestaIntegradaAlAnexo($details));
     }
     
     function obtenerEvaluacionJuridica(Request $request){

@@ -13,6 +13,8 @@ use Dompdf\Dompdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\Log;
 
 
 class ConsultaPublicaController extends Controller
@@ -153,8 +155,12 @@ class ConsultaPublicaController extends Controller
             'folio' => $request->folio
         ];
        
-        \Mail::to( $request->correo )
-        ->send(new ConsultaPublicaRegistrada($details));
+        try {
+            \Mail::to( $request->correo )
+            ->send(new ConsultaPublicaRegistrada($details));
+        } catch(\Exception $e){
+            Log::error($e);
+        }
 
         return response()->json([]);
 

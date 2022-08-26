@@ -27,26 +27,35 @@
                 <tbody class="list form-check-all" id="ticket-list-data">
                     <tr>
                         <th scope="row">
-                            1
+                            {{ $cedula->id }}
                         </th>
                         <td class="id">
                             <a href="javascript:void(0);" class="fw-medium link-primary ticket-id">{{ $cedula->folio }}</a>
                         </td>
                         <td class="tasks_name">
-                            <!-- 21/07/2022 -->
                             {{ $cedula->created_at }}
                         </td>
 
                         <td class="text-center">
-                            <span class="badge badge-soft-warning text-uppercase">
-                                Analizada
-                                {{ $cedula->created_at }}
-                            </span>
+                            @if( $cedula->status < 5 )
+                                <span class="badge rounded-pill bg-secondary">
+                                    Tu solicitud esta en valoración
+                                </span>
+                            @elseif( $cedula->status == 5 )
+                                <span class="badge rounded-pill bg-success">
+                                    Solicitud integrada al anexo público
+                                </span>
+                            @elseif( $cedula->status > 100 )
+                                <span class="badge rounded-pill bg-danger">
+                                    Solicitud rechazada
+                                </span>
+                            @endif
                         </td>
                         <td class="text-center seguimiento-folios">
                             <button class="edit-item-btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
+                            &nbsp;&nbsp;
                             <a href="{{ route('cedula.pdf',[
                                                                 'numero_folio' => $cedula->folio
                                                             ]) }}" class="edit-item-btn" download>

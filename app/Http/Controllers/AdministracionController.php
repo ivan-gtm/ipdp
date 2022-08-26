@@ -26,6 +26,7 @@ use App\Models\EvaluacionTecnicaRechazo;
 use App\Models\EvaluacionJuridica;
 use App\Models\EvaluacionAnalisisTemas;
 use App\Models\EvaluacionIntegracion;
+use Illuminate\Support\Facades\Log;
 
 class AdministracionController extends Controller
 {
@@ -426,8 +427,12 @@ class AdministracionController extends Controller
             'folio' => $folio
         ];
 
-        \Mail::to( $correo )
-            ->send(new PropuestaIntegradaAlAnexo($details));
+        try {
+            \Mail::to( $correo )
+                ->send(new PropuestaIntegradaAlAnexo($details));
+        } catch(\Exception $e){
+            Log::error($e);
+        }
     }
     
     function obtenerEvaluacionJuridica(Request $request){
@@ -477,7 +482,7 @@ class AdministracionController extends Controller
         } elseif( $request->tipo_documento == 'formato_interno' ) {
             $documento = ConsultaIndigena::where('id', $request->consulta_id)->first();
         }
-
+        $observacion = "";
         if( $documento->status == 4 ){
             $evaluacion_tecnica = EvaluacionTecnica::where('consulta_fk', $request->consulta_id)
                                 ->where('tipo_documento', $request->tipo_documento)
@@ -507,23 +512,23 @@ class AdministracionController extends Controller
         $perPage = 10;
         $estados_validos = [1, 101];
 
-        $filter_folio = 193495;
-        $filter_tipo_documento = 'formato';
+        // $filter_folio = 193495;
+        // $filter_tipo_documento = 'formato';
 
-        $query_filter = '1 = 1 ';
+        // $query_filter = '1 = 1 ';
         // $query_filter .= ' AND folio = '.$filter_folio;
         // $query_filter .= ' AND status = 101';
         // $query_filter .= ' AND tipo_documento LIKE \'%'.$filter_tipo_documento.'%\'';
 
         $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
-            ->whereRaw($query_filter)
+            // ->whereRaw($query_filter)
             ->select('id','folio' ,'created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
             ->selectRaw("tipoConsulta as tipo_consulta")
             ->selectRaw("'formato_interno' as tipo_documento")
             ->orderByDesc('id');
         
         $cedulas = Cedula::whereIn('status', $estados_validos)
-                    ->whereRaw($query_filter)
+                    // ->whereRaw($query_filter)
                     ->select('cedulas.id','cedulas.folio','cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido')
                     ->selectRaw("null as tipo_consulta")
                     ->selectRaw("'cedula' as tipo_documento")

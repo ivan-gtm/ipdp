@@ -614,7 +614,7 @@
     });
 
     function registrarCedula(){
-
+        $('#finalizarRegistro').hide();
         var inputNombre = $('[name="inputNombre"]').val();
         var inputPrimerApellido = $('[name="inputPrimerApellido"]').val();
         var inputSegundoApellido = $('[name="inputSegundoApellido"]').val();
@@ -713,6 +713,7 @@
 
                     $('.notification.alert').focus();
                     modalConsentimientoDatos.hide();
+                    $('#finalizarRegistro').show();
                 }
             });
 

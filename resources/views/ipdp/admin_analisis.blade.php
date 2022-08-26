@@ -12,7 +12,7 @@
             <div class="card-header border-0">
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">Folios por analizar</h5>
-                    <div class="flex-shrink-0">
+                    <div class="flex-shrink-0 d-none">
                         <input type="text" class="btn btn-danger add-btn" placeholder="Buscar por nombre, razon, numero">
                         <button class="btn btn-soft-danger" onclick="deleteMultiple()">
                             <i class="fa-solid fa-search"></i>
@@ -113,15 +113,9 @@
                                                     <!-- Aprobar -->
                                                 </button>
                                             </li>
-                                            <li>
-                                                <button type="button" class="remove-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="mostrarModalRechazo( this )" >
-                                                    <i class="fa-solid fa-circle-xmark"></i>
-                                                    <!-- Rechazar -->
-                                                </button>
-                                            </li>
                                         @endif
 
-                                        @if( $cedula->status == 101)
+                                        @if( $cedula->status == 12873612893712398123)
                                             <li>
                                                 <button type="button" class="remove-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="mostrarModalRechazo( this )" >
                                                     <i class="fa fa-history" aria-hidden="true"></i>

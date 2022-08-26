@@ -988,7 +988,9 @@
                 console.log( "errorThrown" );
                 console.log( errorThrown );
 
-                if( errorThrown == "Unprocessable Content" && textStatus == "error"){
+                if( ( jqXHR.status == 422 )
+                    || ( jqXHR.statusText == "Unprocessable Content" && jqXHR.status == 422 )
+                    || (errorThrown == "Unprocessable Content" && textStatus == "error") ){
                     
                     $('.notification.alert').show();
                     error_keys = Object.keys(jqXHR.responseJSON.errors);
@@ -1065,19 +1067,29 @@
     };
     const onUploadSuccess = (elForUploadedFiles) => (file, response) => {
         
-        // console.log("file");
-        // console.log(file);
-        // console.log(response);
 
-        const url = response.uploadURL
-        const fileName = file.name
+        const url = '/storage/'+response.body.uploadURL;
+        const fileName = file.name;
 
-        const li = document.createElement('li')
-        const a = document.createElement('a')
-        a.href = url
-        a.target = '_blank'
-        a.appendChild(document.createTextNode(fileName))
-        li.appendChild(a)
+        const li = document.createElement('li');
+        const button = document.createElement('button');
+        const a = document.createElement('a');
+        
+        var element_id_arr = file.id.match(/\w+/g);
+        const element_id = element_id_arr.join('');
+
+        a.href = url;
+        a.target = '_blank';
+        a.appendChild(document.createTextNode(fileName + "  "))
+
+        button.textContent = '(Eliminar Archivo)';
+        button.setAttribute("onclick","borrarArchivo('" + response.body.uploadURL + "','"+element_id+"','"+file.id+"')");
+        button.setAttribute("type","button");
+        button.style = 'background-color: transparent;border: none;color: #b9965c;';
+        
+        li.id = element_id;
+        li.appendChild(a);
+        li.appendChild(button);
 
         document.querySelector(elForUploadedFiles).appendChild(li);
 
@@ -1088,9 +1100,9 @@
         console.log(numero_documentos);
 
         // maxNumberOfFiles
-        if (numero_documentos == 3) {
-            uppy.close();
-        }
+        // if (numero_documentos == 3) {
+        //     uppy.close();
+        // }
 
     }
 
@@ -1203,5 +1215,41 @@
             $('.uploaded-files').fadeIn();
         }
     });
+
+    function borrarArchivo(file_path, element_id, uppy_file_id ){
+        var requestBody = {
+            "file_path": file_path
+        };
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('borrarArchivo') }}",
+            method: "POST",
+            data: requestBody,
+            dataType: 'json'
+        })
+        .done(function(data, textStatus, jqXHR) {
+            uppy.removeFile(uppy_file_id);
+            $("li#"+element_id).remove();
+            numero_documentos = $('div.uploaded-files ol>li').length;
+            $('#numeroDocumentos').val(numero_documentos);
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            
+            console.log( "jqXHR" );
+            console.log( jqXHR );
+            console.log( "textStatus" );
+            console.log( textStatus );
+            console.log( "errorThrown" );
+            console.log( errorThrown );
+
+        });
+
+    }
+
 </script>
 @endsection

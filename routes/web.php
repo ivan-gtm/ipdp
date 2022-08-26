@@ -9,12 +9,13 @@ use App\Http\Controllers\CustomAuthController;
 
 Route::get('/', [IPDPController::class, 'index'])->name('ipdp.home');
 Route::get('/obtener-colonias/{codigo_postal}', [ConsultaPublicaController::class, 'obtenerColonias'])->name('cedula.obtenerColonias');
-Route::post('/{tipo_consulta}/subir-archivo/{folio}', [ConsultaPublicaController::class, 'subirArchivo']);
 Route::post('/buscar-cedula', [ConsultaPublicaController::class, 'buscarCedula'])->name('cedula.buscarCedula');
 Route::get('/buscar-folio', [IPDPController::class, 'buscarFolio'])->name('ipdp.buscar_folio');
 Route::get('/recupera-contrasena', [IPDPController::class, 'recuperaContrasena'])->name('ipdp.recupera_contrasena');
 // Route::get('/seguimiento/{folio}', [ConsultaPublicaController::class, 'seguimientoFolios'])->name('ipdp.seguimiento_folios');
 
+Route::post('/{tipo_consulta}/subir-archivo/{folio}', [ConsultaPublicaController::class, 'subirArchivo']);
+Route::post('/borrar-archivo', [ConsultaPublicaController::class, 'borrarArchivo'])->name('borrarArchivo');
 /*
 |--------------------------------------------------------------------------
 | Consulta Publica

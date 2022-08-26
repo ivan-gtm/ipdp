@@ -106,6 +106,15 @@ class ConsultaPublicaController extends Controller
         }
     }
 
+    public function borrarArchivo(Request $request){
+        CedulaArchivo::where('file_path', '=', $request->file_path)->delete();
+        
+        $file_path = storage_path( 'app/public/'.$request->file_path );
+        unlink($file_path);
+
+        return response()->json([]);
+    }
+
     public function store(Request $request)
     {
         

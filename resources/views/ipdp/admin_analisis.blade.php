@@ -4,6 +4,7 @@
 @section('head')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @endsection
+
 @section('content')
 <div class="row">
     <div class="col-lg-12">
@@ -11,7 +12,7 @@
             <div class="card-header border-0">
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">Folios por analizar</h5>
-                    <div class="flex-shrink-0 d-none">
+                    <div class="flex-shrink-0">
                         <input type="text" class="btn btn-danger add-btn" placeholder="Buscar por nombre, razon, numero">
                         <button class="btn btn-soft-danger" onclick="deleteMultiple()">
                             <i class="fa-solid fa-search"></i>

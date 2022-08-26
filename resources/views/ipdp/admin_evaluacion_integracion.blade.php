@@ -245,7 +245,21 @@
             </div>
             <div class="modal-body">
                 <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="text-center">Valoración Técnica:</h4>
+                        <table class="table" id="evaluacion-juridica">
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        <strong>Observaciones Valoración Técnica:</strong>
+                        <p id="observaciones_tecnica"></p>
+                    </div>
                     <div class="col-12">
+                        <h4 class="text-center">INTEGRACIÓN:</h4>
+                        <input type="hidden" id="modal_cedula_id" name="modal_cedula_id">
+                        <input type="hidden" id="modal_tipo_documento" name="modal_tipo_documento">
                         <table class="table">
                             <tr>
                                 <td colspan="2" style="background-color: #9f2442; color: white;">
@@ -257,8 +271,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <input type="hidden" id="modal_cedula_id" name="modal_cedula_id">
-                        <input type="hidden" id="modal_tipo_documento" name="modal_tipo_documento">
+                        
                         <textarea class="form-control" name="eje_estrategia" id="eje_estrategia" rows="6" placeholder="Escriba aqui su propuesta" required></textarea>
                     </div>
                     <div class="col-12">
@@ -330,16 +343,95 @@
         $("table#evaluacion-juridica>tbody").append('<tr><td colspan="2">&nbsp;</td></tr>');
     }
 
+    function obtenerEvaluacion(tipo_documento,documento_id) {
+        requestBody = {
+            "tipo_documento": tipo_documento,
+            "consulta_id": documento_id
+        };
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+                url: "{{ route('administracion.obtenerEvaluacionJuridica') }}",
+                method: "POST",
+                data: JSON.stringify(requestBody),
+                contentType: 'application/json; charset=utf-8'
+            })
+            .done(function(result, textStatus, jqXHR) {
+            
+                // $("#folio_id").val( $(element).attr("data-documento-id") );
+                // $("#tipo_documento").val( $(element).attr("data-tipo-documento") );
+                // $("#observaciones_juridica").text("");
+
+                modalEvaluacionJuridica.show();
+
+                $("#observaciones_tecnica").text("");
+                $("table#evaluacion-juridica>tbody").html("");
+
+                evaluacion = result;
+
+                // console.log(evaluacion);
+                $("#observaciones_tecnica").text(evaluacion.comentario);
+                var numero_de_categorias = Object.keys(evaluacion.parametros).length;
+                for (let index = 1; index <= numero_de_categorias; index++) {
+                    const elemento = evaluacion.parametros[index];
+                    setTitulo(elemento.categoria.descripcion);
+
+                    var numero_de_parametros = Object.keys(elemento.parametros).length;
+                    console.log("numero_de_parametros");
+                    console.log(numero_de_parametros);
+
+                    for (let i = 0; i < numero_de_parametros; i++) {
+                        // console.log( elemento.parametros[i].descripcion );
+                        setParametro(elemento.parametros[i].descripcion);
+                    }
+                }
+
+                modalEvaluacionJuridica.show();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                if (console && console.log) {
+                    console.log("La solicitud a fallado: " + textStatus);
+                }
+            });
+    }
+
+    function setTitulo(titulo) {
+        $("table#evaluacion-juridica>tbody").append(getTituloHTML(titulo));
+    }
+
+    function getTituloHTML(titulo) {
+        return '<tr><td colspan="2" style="background-color: #9f2442; color: white;">{titulo}</td></tr>'.replace("{titulo}", titulo);
+    }
+
+    function setParametro(parametro) {
+        $("table#evaluacion-juridica>tbody").append(getParametroHTML(parametro));
+    }
+
+    function getParametroHTML(parametro) {
+        return '<tr><td>{parametro}</td></tr>'.replace("{parametro}", parametro);
+    }
+
+    function setEspacio() {
+        $("table#evaluacion-juridica>tbody").append('<tr><td colspan="2">&nbsp;</td></tr>');
+    }
+
     function abrirModalEvaluacionIntegracion(element) {
-        modalEvaluacionJuridica.show();
+        
 
         var cedula_id = $(element).attr("data-cedula-id");
         var cedula_folio = $(element).attr("data-cedula-folio");
         var tipo_documento = $(element).attr("data-tipo-documento");
-
+        
+        
         $("span#titulo_modal_aprobacion").text("Folio " + cedula_folio);
         $("#modal_cedula_id").val(cedula_id);
         $("#modal_tipo_documento").val(tipo_documento);
+        
+        obtenerEvaluacion(tipo_documento,cedula_id);
     }
 
     function aprobarFaseIntegracion() {

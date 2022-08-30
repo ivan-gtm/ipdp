@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\ConsultaPublicaRegistrada;
 
 class ConsultaIndigenaController extends Controller
 {
@@ -61,7 +62,7 @@ class ConsultaIndigenaController extends Controller
             'tipoFormato' => 'nullable',
             'fechaSolicitud' => 'date_format:"Y-m-d"|nullable',
             'nombreCompleto' => 'nullable',
-            'correo' => 'required|email|unique:consulta_indigena',
+            'correo' => 'nullable|email',
             'telefono' => 'nullable|digits:10',
             'tieneDatosParticipante' => ['nullable',Rule::in(['si','no'])],
             'esRepresentante' => ['nullable',Rule::in(['si','no'])],
@@ -77,7 +78,7 @@ class ConsultaIndigenaController extends Controller
             'edad' => 'nullable',
             'ocupacion' => 'nullable',
             'genero' => 'nullable',
-            'participanteCorreo' => 'nullable',
+            'participanteCorreo' => 'nullable|email',
             'celular' => 'nullable',
             'calle' => 'nullable',
             'numExterior' => 'nullable',
@@ -91,13 +92,30 @@ class ConsultaIndigenaController extends Controller
             'nombreActividad' => 'nullable',
             'fechaActividad' => 'nullable',
             'lugarActividad' => 'nullable',
-            'numeroDocumentos' => 'nullable'
+            'numeroDocumentos' => 'nullable',
+            'tipoDocumentos' => 'nullable'
         ]);
 
         // print_r($validatedData);
         // exit;
 
         $show = ConsultaIndigena::create($validatedData);
+
+        if( isset($request->participanteCorreo) && $request->participanteCorreo != null ){
+            $details = [
+                'title' => '¡Gracias por tu participación!',
+                'folio' => $request->folio,
+                'consulta_folio_url' => route('ipdp.buscar',['folio' => $request->folio])
+            ];
+           
+            try {
+                \Mail::to( $request->participanteCorreo )
+                ->send(new ConsultaPublicaRegistrada($details));
+            } catch(\Exception $e){
+                Log::error($e);
+            }
+        }
+
         return response()->json([]);
 
     }
@@ -169,7 +187,7 @@ class ConsultaIndigenaController extends Controller
             <table style="width:100%">
               <tr >
                 <td style="background-color:#00312d;color:white; padding:20px;text-align:center">
-                    CÉDULA PARA LA PRESENTACIÓN DE RECOMENDACIONES, OPINIONES O PROPUESTAS A LOS PROYECTOS DEL PLAN GENERAL DE DESARROLLO Y DEL PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL. AMBOS DE LA CIUDAD DE MÉXICO
+                    CONSULTA PÚBLICA Y CONSULTA INDÍGENA PARA EL PLAN GENERAL DE DESARROLLO Y PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA CIUDAD DE MÉXICO.
                 </td>
               </tr>
             </table>
@@ -183,6 +201,10 @@ class ConsultaIndigenaController extends Controller
                             <strong>Tipo de Consulta</strong>
                             <br>
                             '.$consulta_indigena->tipoConsulta.'
+                        </td>
+                        <td>
+                            <br>
+                            '.(isset($consulta_indigena->tipoFormato) ? $consulta_indigena->tipoFormato : '-').'
                         </td>
                         <td>
                             <strong>Fecha</strong>
@@ -202,7 +224,7 @@ class ConsultaIndigenaController extends Controller
             <table class="table">
                 <tbody>
                     <tr>
-                        <td colspan="2">
+                        <td>
                             <strong>Nombre Completo</strong>
                             <br>
                             '.$consulta_indigena->nombreCompleto.'
@@ -240,7 +262,7 @@ class ConsultaIndigenaController extends Controller
                         <strong>TIPO DE AUTORIDAD REPRESENTATIVA</strong>
                     </td>
                     <td class="text-center" style="background-color: #9f2442; color: white;">
-                        <strong>TIPO DE ORGANIZACIÓN</strong>
+                        <strong>NOMBRE</strong>
                     </td>
                 </tr>
                 <tr>
@@ -248,7 +270,25 @@ class ConsultaIndigenaController extends Controller
                         '.$consulta_indigena->tipoAutoridad.'
                     </td>
                     <td class="text-center">
+                        '.$consulta_indigena->nombrePuebloComunidad.'
+                    </td>
+                </tr>
+            </table>
+            <table class="table">
+                <tr>
+                    <td class="text-center" style="background-color: #9f2442; color: white;">
+                        <strong>TIPO ORGANIZACION</strong>
+                    </td>
+                    <td class="text-center" style="background-color: #9f2442; color: white;">
+                        <strong>NOMBRE ORGANIZACION</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">
                         '.$consulta_indigena->tipoOrganizacion.'
+                    </td>
+                    <td class="text-center">
+                        '.$consulta_indigena->nombreOrganizacion.'
                     </td>
                 </tr>
             </table>
@@ -370,7 +410,7 @@ class ConsultaIndigenaController extends Controller
             <table style="width:100%">
               <tr >
                 <td style="background-color:#00312d;color:white; padding:20px;text-align:center">
-                    CÉDULA PARA LA PRESENTACIÓN DE RECOMENDACIONES, OPINIONES O PROPUESTAS A LOS PROYECTOS DEL PLAN GENERAL DE DESARROLLO Y DEL PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL. AMBOS DE LA CIUDAD DE MÉXICO
+                    CONSULTA PÚBLICA Y CONSULTA INDÍGENA PARA EL PLAN GENERAL DE DESARROLLO Y PROGRAMA GENERAL DE ORDENAMIENTO TERRITORIAL DE LA CIUDAD DE MÉXICO.
                 </td>
               </tr>
             </table>

@@ -39,8 +39,14 @@ class IPDPController extends Controller
                         ->where('tipo_consulta','=',$tipo_documento)
                         ->get();
 
-        if($cedula != null){
+        if($cedula != null && $tipo_documento == 'consulta-publica'){
             return view('ipdp.seguimiento_folios', [
+                'numero_folio' => $cedula->folio,
+                'cedula' => $cedula,
+                'archivos' => $archivos
+            ]);
+        }elseif($cedula != null && $tipo_documento == 'consulta-indigena'){
+            return view('ipdp.seguimiento_formato_interno', [
                 'numero_folio' => $cedula->folio,
                 'cedula' => $cedula,
                 'archivos' => $archivos

@@ -17,7 +17,7 @@
     <h1>
         {{ $details['folio'] }}
     </h1>
-    <a href="https://www.consultas.cdmx.gob.mx/folio/1234">Click aqui para dar seguimiento</a>
+    <a href="{{ $details['consulta_folio_url'] }}">Click aqui para dar seguimiento</a>
     <br><br>
     <p>IPDP Instituto de Planeación Democrática y Prospectiva</p>
     S. Lorenzo 712, Primer Piso, Col del Valle Sur, Benito Juárez, 03100 Ciudad de México, CDMX

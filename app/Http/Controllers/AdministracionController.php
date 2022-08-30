@@ -119,7 +119,7 @@ class AdministracionController extends Controller
             'edad' => 'nullable|min:1|max:99',
             'ocupacion' => 'nullable',
             'genero' => ['nullable',Rule::in(['Masculino', 'Femenino','Otro'])],
-            'correo' => 'nullable|email|unique:cedulas',
+            'correo' => 'nullable|email',
             'celular' => 'nullable|digits:10',
             'calle' => 'nullable',
             'num_exterior' => 'nullable',
@@ -138,6 +138,22 @@ class AdministracionController extends Controller
 
         $validatedData['origen'] = 'interna';
         $show = Cedula::create($validatedData);
+
+        if( isset($request->correo) && $request->correo != null ){
+            $details = [
+                'title' => '¡Gracias por tu participación!',
+                'folio' => $request->folio,
+                'consulta_folio_url' => route('ipdp.buscar',['folio' => $request->folio])
+            ];
+           
+            try {
+                \Mail::to( $request->correo )
+                ->send(new ConsultaPublicaRegistrada($details));
+            } catch(\Exception $e){
+                Log::error($e);
+            }
+        }
+
         return response()->json([]);
 
     }

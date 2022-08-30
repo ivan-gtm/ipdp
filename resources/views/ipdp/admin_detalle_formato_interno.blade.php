@@ -44,74 +44,84 @@
 @section('content')
 <div class="row">
     <div class="col-12">
+        <h3 class="text-center">
+            <strong>FOLIO:</strong>
+            {{ isset($cedula->folio) ? $cedula->folio : '-' }}
+        </h3>
+        <hr>
         <h4 class="text-center">DATOS DEL ENLACE</h4>
         <table class="table">
             <tbody>
                 <tr>
                     <td>
-                        <strong>FOLIO:</strong>
-                        <br>
-                        {{ isset($cedula->folio) ? $cedula->folio : null }}
-                    </td>
-                    <td>
                         <strong>Tipo Consulta:</strong>
                         <br>
-                        {{ isset($cedula->tipoConsulta) ? $cedula->tipoConsulta : null }}
+                        {{ isset($cedula->tipoConsulta) ? $cedula->tipoConsulta : '-' }}
+                    </td>
+                    <td>
+                        <!-- <strong>Tipo Consulta:</strong> -->
+                        <br>
+                        {{ isset($cedula->tipoFormato) ? $cedula->tipoFormato : '-' }}
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                        <strong>NOMBRE COMPLETO:</strong>
+                    <td>
+                        <strong>Nombre Completo:</strong>
                         <br>
-                        {{ isset($cedula->nombreCompleto) ? $cedula->nombreCompleto : null }}
+                        {{ isset($cedula->nombreCompleto) ? $cedula->nombreCompleto : '-' }}
+                    </td>
+                    <td>
+                        <strong>Fecha:</strong>
+                        <br>
+                        {{ isset($cedula->fechaSolicitud) ? $cedula->fechaSolicitud : '-' }}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Correo Electrónico:</strong>
                         <br>
-                        {{ isset($cedula->correo) ? $cedula->correo : null }}
+                        {{ isset($cedula->correo) ? $cedula->correo : '-' }}
                     </td>
                     <td>
                         <strong>Telefono:</strong>
                         <br>
-                        {{ isset($cedula->telefono) ? $cedula->telefono : null }}
+                        {{ isset($cedula->telefono) ? $cedula->telefono : '-' }}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <strong>¿Se tienen datos de quien participa?</strong>
                         <br>
-                        {{ isset($cedula->tieneDatosParticipante) ? $cedula->tieneDatosParticipante : null }}
+                        {{ isset($cedula->tieneDatosParticipante) ? $cedula->tieneDatosParticipante : '-' }}
                     </td>
                     <td>
                         <strong>¿Es representante?</strong>
                         <br>
-                        {{ isset($cedula->esRepresentante) ? $cedula->esRepresentante : null }}
+                        {{ isset($cedula->esRepresentante) ? $cedula->esRepresentante : '-' }}
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <strong>AUTORIDAD REPRESENTATIVA</strong>
+                        <strong>Autoridad Representativa</strong>
                         <br>
-                        {{ isset($cedula->tipoAutoridad) ? $cedula->tipoAutoridad : null }}
+                        {{ isset($cedula->tipoAutoridad) ? $cedula->tipoAutoridad : '-' }}
                     </td>
                     <td>
                         <strong>Nombre:</strong>
                         <br>
-                        {{ isset($cedula->nombrePuebloComunidad) ? $cedula->nombrePuebloComunidad : null }}
+                        {{ isset($cedula->nombrePuebloComunidad) ? $cedula->nombrePuebloComunidad : '-' }}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Tipo Organizacion:</strong>
                         <br>
-                        {{ isset($cedula->tipoOrganizacion) ? $cedula->tipoOrganizacion : null }}
+                        {{ isset($cedula->tipoOrganizacion) ? $cedula->tipoOrganizacion : '-' }}
                     </td>
                     <td>
                         <strong>Nombre Organizacion:</strong>
                         <br>
-                        {{ isset($cedula->nombreOrganizacion) ? $cedula->nombreOrganizacion : null }}
+                        {{ isset($cedula->nombreOrganizacion) ? $cedula->nombreOrganizacion : '-' }}
                     </td>
                 </tr>
             </tbody>
@@ -128,46 +138,46 @@
                     <td>
                         <strong>Nombre</strong>
                         <br>
-                        {{ isset($cedula->nombre) ? $cedula->nombre : null }}
+                        {{ isset($cedula->nombre) ? $cedula->nombre : '-' }}
                     </td>
                     <td>
                         <strong>Primer Apellido</strong>
                         <br>
-                        {{ isset($cedula->primerApellido) ? $cedula->primerApellido : null }}
+                        {{ isset($cedula->primerApellido) ? $cedula->primerApellido : '-' }}
                     </td>
                     <td>
                         <strong>Segundo Apellido</strong>
                         <br>
-                        {{ isset($cedula->segundoApellido) ? $cedula->segundoApellido : null }}
+                        {{ isset($cedula->segundoApellido) ? $cedula->segundoApellido : '-' }}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Ocupación</strong>
                         <br>
-                        {{ isset($cedula->ocupacion) ? $cedula->ocupacion : null }}
+                        {{ isset($cedula->ocupacion) ? $cedula->ocupacion : '-' }}
                     </td>
                     <td>
                         <strong>Edad</strong>
                         <br>
-                        {{ isset($cedula->edad) ? $cedula->edad : null }}
+                        {{ isset($cedula->edad) ? $cedula->edad : '-' }}
                     </td>
                     <td>
                         <strong>Género</strong>
                         <br>
-                        {{ isset($cedula->genero) ? $cedula->genero : null }}
+                        {{ isset($cedula->genero) ? $cedula->genero : '-' }}
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <strong>Correo electrónico</strong>
                         <br>
-                        {{ isset($cedula->correo) ? $cedula->correo : null }}
+                        {{ isset($cedula->correo) ? $cedula->correo : '-' }}
                     </td>
                     <td>
                         <strong>Teléfono celular</strong>
                         <br>
-                        {{ isset($cedula->celular) ? $cedula->celular : null }}
+                        {{ isset($cedula->celular) ? $cedula->celular : '-' }}
                     </td>
                 </tr>
             </tbody>
@@ -183,39 +193,39 @@
                     <td>
                         <strong>Calle</strong>
                         <br>
-                        {{ isset($cedula->calle) ? $cedula->calle : null }}
+                        {{ isset($cedula->calle) ? $cedula->calle : '-' }}
                     </td>
                     <td>
                         <strong>Numero Exterior</strong>
                         <br>
-                        {{ isset($cedula->numExterior) ? $cedula->numExterior : null }}
+                        {{ isset($cedula->numExterior) ? $cedula->numExterior : '-' }}
                     </td>
                     <td>
                         <strong>Numero Interior</strong>
                         <br>
-                        {{ isset($cedula->numInterior) ? $cedula->numInterior : null }}
+                        {{ isset($cedula->numInterior) ? $cedula->numInterior : '-' }}
                     </td>
                     <td>
                         <strong>Manzana / Lote</strong>
                         <br>
-                        {{ isset($cedula->manzana) ? $cedula->manzana : null }}
+                        {{ isset($cedula->manzana) ? $cedula->manzana : '-' }}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Código Postal</strong>
                         <br>
-                        {{ isset($cedula->cp) ? $cedula->cp : null }}
+                        {{ isset($cedula->cp) ? $cedula->cp : '-' }}
                     </td>
                     <td>
                         <strong>Alcaldía</strong>
                         <br>
-                        {{ isset($cedula->alcaldia) ? $cedula->alcaldia : null }}
+                        {{ isset($cedula->alcaldia) ? $cedula->alcaldia : '-' }}
                     </td>
                     <td colspan="2">
                         <strong>Colonia, Pueblo o Barrio</strong>
                         <br>
-                        {{ isset($cedula->colonia) ? $cedula->colonia : null }}
+                        {{ isset($cedula->colonia) ? $cedula->colonia : '-' }}
                     </td>
                 </tr>
             </tbody>
@@ -230,9 +240,9 @@
                         <strong>FORMA DE PARTICIPACIÓN:</strong>
                         <br>
                         @if( isset($cedula->tipoParticipacion) )
-                            {{ isset($cedula->tipoParticipacion) ? $cedula->tipoParticipacion : null }}
+                            {{ isset($cedula->tipoParticipacion) ? $cedula->tipoParticipacion : '-' }}
                         @elseif( isset($cedula->participacionOtro) )
-                            {{ isset($cedula->participacionOtro) ? $cedula->participacionOtro : null }}
+                            {{ isset($cedula->participacionOtro) ? $cedula->participacionOtro : '-' }}
                         @endif
                     </td>
                 </tr>
@@ -247,17 +257,17 @@
                     <td style="text-align: center;">
                         <strong>NOMBRE DEL TALLER, FORO O ACTIVIDAD:</strong>
                         <br>
-                        {{ isset($cedula->nombreActividad) ? $cedula->nombreActividad : null }}
+                        {{ isset($cedula->nombreActividad) ? $cedula->nombreActividad : '-' }}
                     </td>
                     <td style="text-align: center;">
                         <strong>FECHA:</strong>
                         <br>
-                        {{ isset($cedula->fechaActividad) ? $cedula->fechaActividad : null }}
+                        {{ isset($cedula->fechaActividad) ? $cedula->fechaActividad : '-' }}
                     </td>
                     <td style="text-align: center;">
                         <strong>LUGAR:</strong>
                         <br>
-                        {{ isset($cedula->lugarActividad) ? $cedula->lugarActividad : null }}
+                        {{ isset($cedula->lugarActividad) ? $cedula->lugarActividad : '-' }}
                     </td>
                 </tr>
             </tbody>
@@ -278,9 +288,9 @@
                         @if( substr( $archivo->file_path , strrpos( $archivo->file_path ,".")+1, strlen( $archivo->file_path )) == 'jpg'
                         || substr( $archivo->file_path , strrpos( $archivo->file_path ,".")+1, strlen( $archivo->file_path )) == 'png'
                         || substr( $archivo->file_path , strrpos( $archivo->file_path ,".")+1, strlen( $archivo->file_path )) == 'jpeg')
-                        <img src="{{ asset('storage/'.$archivo->file_path) }}" class="card-img-top">
+                            <img src="{{ asset('storage/'.$archivo->file_path) }}" class="card-img-top">
                         @else
-                        <img src="https://via.placeholder.com/288x180.png/bc955c/fff?text={{ substr( $archivo->file_path , strrpos( $archivo->file_path ,".")+1, strlen( $archivo->file_path )) }}" class="card-img-top">
+                            <img src="https://via.placeholder.com/288x180.png/bc955c/fff?text={{ substr( $archivo->file_path , strrpos( $archivo->file_path ,".")+1, strlen( $archivo->file_path )) }}" class="card-img-top">
                         @endif
                     </a>
 

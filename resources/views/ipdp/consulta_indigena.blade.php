@@ -118,7 +118,7 @@
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1">Correo
                                             Electrónico</span>
-                                        <input type="text" class="form-control" id="inputCorreo" name="inputCorreo" required>
+                                        <input type="text" class="form-control" id="inputCorreo" name="inputCorreo">
                                         <div class="invalid-feedback">Indique su correo electronico</div>
                                     </div>
                                 </div>
@@ -268,7 +268,7 @@
                                             <label class="form-check-label" for="ningunaOrganizacion">Ninguna</label>
                                         </td>
                                         <td>
-                                            <input class="form-check-input" type="radio" name="opcionTipoOrganizacion" id="ningunaOrganizacion" value="ninguna" checked>
+                                            <input class="form-check-input" type="radio" name="opcionTipoOrganizacion" id="ningunaOrganizacion" value="NINGUNA" checked>
                                             <div class="invalid-feedback">Por favor indique el tipo de
                                                 autoridad.</div>
 
@@ -643,12 +643,12 @@
                                             <div class="col-md-12">
                                                 <strong>TIPO DE DOCUMENTOS:</strong>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="tipoParticipacion" id="opcionParticipacion" value="PARTICIPACION">
-                                                    <label class="form-check-label" for="opcionParticipacion">PARTICIPACIÓN</label>
+                                                    <input class="form-check-input" type="radio" name="tipoDocumentos" id="tipoDocumentoParticipacion" value="PARTICIPACION">
+                                                    <label class="form-check-label" for="tipoDocumentoParticipacion">PARTICIPACIÓN</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="tipoParticipacion" id="opcionSistematizacion" value="SISTEMATIZACIÓN">
-                                                    <label class="form-check-label" for="opcionSistematizacion">SISTEMATIZACIÓN</label>
+                                                    <input class="form-check-input" type="radio" name="tipoDocumentos" id="tipoDocumentoSistematizacion" value="SISTEMATIZACIÓN">
+                                                    <label class="form-check-label" for="tipoDocumentoSistematizacion">SISTEMATIZACIÓN</label>
 
                                                     <div class="invalid-feedback">Por favor indique el tipo de solicitud.</div>
                                                 </div>
@@ -914,6 +914,7 @@
         var nombreActividad = $('[name="nombreActividad"]').val();
         var fechaActividad = $('[name="fechaActividad"]').val();
         var lugarActividad = $('[name="lugarActividad"]').val();
+        var tipoDocumentos = $('[name="tipoDocumentos"]').val();
         
         var opcionIncluyeDocumentos = $('[name="opcionIncluyeDocumentos"]').val();
         var numeroDocumentos = $('[name="numeroDocumentos"]').val();
@@ -952,7 +953,8 @@
             "nombreActividad": nombreActividad,
             "fechaActividad": fechaActividad,
             "lugarActividad": lugarActividad,
-            "numeroDocumentos": numeroDocumentos
+            "numeroDocumentos": numeroDocumentos,
+            "tipoDocumentos": tipoDocumentos
         };
 
         console.warn(requestBody);

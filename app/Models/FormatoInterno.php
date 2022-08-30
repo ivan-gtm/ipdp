@@ -41,7 +41,8 @@ class FormatoInterno extends Model
         'nombreActividad',
         'fechaActividad',
         'lugarActividad',
-        'numeroDocumentos'
+        'numeroDocumentos',
+        'tipoDocumentos'
     ];
 
     use HasFactory;

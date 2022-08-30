@@ -25,7 +25,8 @@ Route::post('/borrar-archivo', [ConsultaPublicaController::class, 'borrarArchivo
     Route::get('/consulta-publica/registrar', [ConsultaPublicaController::class, 'registrar'])->name('cedula.registrar');
     Route::post('/consulta-publica', [ConsultaPublicaController::class, 'store'])->name('cedula.store');
     Route::get('/consulta-publica/confirmacion/{numero_folio}', [ConsultaPublicaController::class, 'confirmacion'])->name('cedula.confirmacion');
-    Route::get('/cedula/pdf/{numero_folio}', [ConsultaPublicaController::class, 'generarFormatoPDF'])->name('cedula.pdf');
+    Route::get('/consulta-publica/pdf/{numero_folio}', [ConsultaPublicaController::class, 'generarFormatoPDF'])->name('cedula.pdf');
+    Route::get('/formato-interno/pdf/{numero_folio}', [ConsultaIndigenaController::class, 'generarFormatoPDF'])->name('consulta_indigena.pdf');
     
 // ADMIN
     Route::get('/administracion', [AdministracionController::class, 'home'])->name('administracion.home')->middleware('auth');
@@ -34,7 +35,6 @@ Route::post('/borrar-archivo', [ConsultaPublicaController::class, 'borrarArchivo
     Route::get('/administracion/consulta-indigena', [ConsultaIndigenaController::class, 'registrar'])->name('consultaIndigena.registrar')->middleware('auth');
     Route::post('/administracion/consulta-indigena', [ConsultaIndigenaController::class, 'store'])->name('consultaIndigena.store')->middleware('auth');
     Route::get('/administracion/consulta-indigena/confirmacion/{numero_folio}', [ConsultaIndigenaController::class, 'confirmacion'])->name('consultaIndigena.confirmacion')->middleware('auth');
-    Route::get('/administracion/consulta-indigena/pdf/{numero_folio}', [ConsultaIndigenaController::class, 'generarFormatoPDF'])->name('consulta_indigena.pdf')->middleware('auth');
     Route::get('/administracion/consulta-indigena/detalle-consulta/{folio}', [AdministracionController::class, 'detalleFormatoInterno'])->name('administracion.detalleFormatoInterno')->middleware('auth');
     
     // CONSULTA PUBLICA

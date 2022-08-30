@@ -130,7 +130,7 @@ class ConsultaPublicaController extends Controller
             'edad' => 'nullable|min:1|max:99',
             'ocupacion' => 'nullable',
             'genero' => ['required',Rule::in(['Masculino', 'Femenino','Otro'])],
-            'correo' => 'required|email|unique:cedulas',
+            'correo' => 'required|email',
             'celular' => 'nullable|digits:10',
             'calle' => 'nullable',
             'num_exterior' => 'nullable',
@@ -152,7 +152,8 @@ class ConsultaPublicaController extends Controller
 
         $details = [
             'title' => '¡Gracias por tu participación!',
-            'folio' => $request->folio
+            'folio' => $request->folio,
+            'consulta_folio_url' => route('ipdp.buscar',['folio' => $request->folio])
         ];
        
         try {

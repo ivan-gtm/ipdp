@@ -67,9 +67,9 @@
                                 </td>
                                 <td>
                                     @if( $cedula->status == 2)
-                                    <span class="badge bg-success text-uppercase">Pendiente Valoración Técnica</span>
+                                        <span class="badge bg-success text-uppercase">Pendiente Valoración Técnica</span>
                                     @elseif( $cedula->status == 102)
-                                    <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
+                                        <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
                                     @endif
                                 </td>
                                 <td class="create_date">
@@ -179,7 +179,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="rechazoModalLabel">Rechazar Folio "342344"
+                <h5 class="modal-title" id="rechazoModalLabel">Rechazar Folio
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -201,7 +201,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">VALORACIÓN TÉCNICA</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -229,26 +229,30 @@
                         </table>
                         <table class="table evaluacionParametros">
                             @foreach ($parametros as $categoria)
-                            <tr>
-                                <td colspan="2">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" style="background-color: #9f2442; color: white;">
-                                    {{ $categoria['categoria']['descripcion'] }}
-                                </td>
-                            </tr>
-                            @foreach( $categoria['parametros'] as $prm )
-                            <tr>
-                                <td class="text-center">
-                                    <input class="form-check-input" type="radio" name="cat{{ $categoria['categoria']['id'] }}" data-categoria-id="{{ $categoria['categoria']['id'] }}" data-parametro-id="{{ $prm['id'] }}" id="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}" value="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
-                                </td>
-                                <td>
-                                    <label class="form-check-label" for="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
-                                        {{ $prm['descripcion'] }}
-                                    </label>
-                                </td>
-                            </tr>
-                            @endforeach
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="background-color: #9f2442; color: white;">
+                                        {{ $categoria['categoria']['descripcion'] }}
+                                    </td>
+                                </tr>
+                                @foreach( $categoria['parametros'] as $prm )
+                                <tr>
+                                    <td class="text-center">
+                                        @if($categoria['categoria']['descripcion'] == "Valoración Técnica")
+                                            <input class="form-check-input" type="radio" name="cat{{ $categoria['categoria']['id'] }}" data-categoria-id="{{ $categoria['categoria']['id'] }}" data-parametro-id="{{ $prm['id'] }}" id="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}" value="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
+                                        @else
+                                            <input class="form-check-input" type="checkbox" name="cat{{ $categoria['categoria']['id'] }}" data-categoria-id="{{ $categoria['categoria']['id'] }}" data-parametro-id="{{ $prm['id'] }}" id="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}" value="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <label class="form-check-label" for="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
+                                            {{ $prm['descripcion'] }}
+                                        </label>
+                                    </td>
+                                </tr>
+                                @endforeach
                             @endforeach
                         </table>
                     </div>
@@ -334,7 +338,7 @@
     function obtenerParametros() {
         parametros = [];
 
-        $('.evaluacionParametros input:radio:checked').each(function(index) {
+        $('.evaluacionParametros input:checked').each(function(index) {
             console.log(index + ": " + $(this).val());
             parametros.push($(this).val());
         });

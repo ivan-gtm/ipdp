@@ -113,15 +113,11 @@
                                                     <!-- Aprobar -->
                                                 </button>
                                             </li>
-                                        @endif
-
-                                        @if( $cedula->status == 12873612893712398123)
                                             <li>
-                                                <button type="button" class="remove-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="mostrarModalRechazo( this )" >
-                                                    <i class="fa fa-history" aria-hidden="true"></i>
-                                                    <!-- Rechazar -->
-                                                </button>
-                                            </li>
+                                            <button type="button" class="remove-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="mostrarModalRechazo( this )">
+                                                <!-- Rechazar -->
+                                            </button>
+                                        </li>
                                         @endif
                                     </ul>
                                 </td>
@@ -267,8 +263,9 @@
         $('#aprobarSolicitudId').val( $(elemento).attr("data-documento-id") );
         $('#tipoDocumento').val( $(elemento).attr("data-tipo-documento") );
     }
-
+    
     function mostrarModalRechazo( elemento ){
+        console.log( $(elemento).attr("data-documento-id") );
         $('#documentoIdRechazado').val( $(elemento).attr("data-documento-id") );
         $('#tipoDocumentoRechazado').val( $(elemento).attr("data-tipo-documento") );
         rechazoModal.show();

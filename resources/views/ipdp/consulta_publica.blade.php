@@ -620,7 +620,7 @@
         var inputSegundoApellido = $('[name="inputSegundoApellido"]').val();
         var inputEdad = $('[name="inputEdad"]').val();
         var inputOcupacion = $('[name="inputOcupacion"]').val();
-        var optionGenero = $('[name="optionGenero"]').val();
+        var optionGenero = $('[name="optionGenero"]:checked').val();
         var inputCorreo = $('[name="inputCorreo"]').val();
         var inputCelular = $('[name="inputCelular"]').val();
         var inputCalle = $('[name="inputCalle"]').val();
@@ -630,11 +630,11 @@
         var inputCP = $('[name="inputCP"]').val();
         var inputAlcaldia = $('[name="inputAlcaldia"]').val();
         var inputColonia = $('[name="inputColonia"]').val();
-        var optionRepresentante = $('[name="optionRepresentante"]').val();
+        var optionRepresentante = $('[name="optionRepresentante"]:checked').val();
         var textComentarios = $('[name="textComentarios"]').val();
-        var opcionIncluyeDocumentos = $('[name="opcionIncluyeDocumentos"]').val();
+        var opcionIncluyeDocumentos = $('[name="opcionIncluyeDocumentos"]:checked').val();
         var numeroDocumentos = $('[name="numeroDocumentos"]').val();
-        var conocimientoDatosPersonales = $('[name="conocimientoDatosPersonales"]').val();
+        var conocimientoDatosPersonales = $('[name="conocimientoDatosPersonales"]:checked').val();
         
         var valInstrumentoAObservar = [];
         $('[name="opcionInstrumentoObservar"]:checkbox:checked').each(function(i){

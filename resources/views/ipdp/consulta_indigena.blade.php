@@ -320,17 +320,6 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="form-check-label" for="ningunaOpcion">NINGUNA</label>
-                                        </td>
-                                        <td>
-                                            <input class="form-check-input" type="radio" name="opcionTipoOrganizacion" id="ningunaOpcion" value="NINGUNA">
-                                            <div class="invalid-feedback">
-                                                Por favor indique tipo de organizacion.
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
                                             <label class="form-check-label" for="otra">OTRA</label>
                                         </td>
                                         <td>

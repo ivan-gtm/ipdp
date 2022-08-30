@@ -498,8 +498,11 @@ class AdministracionController extends Controller
         } elseif( $request->tipo_documento == 'formato_interno' ) {
             $documento = ConsultaIndigena::where('id', $request->consulta_id)->first();
         }
+
+        // print_r( $documento->status );
+        // exit;
         $observacion = "";
-        if( $documento->status == 4 ){
+        if( $documento->status == 4 || $documento->status == 3 ){
             $evaluacion_tecnica = EvaluacionTecnica::where('consulta_fk', $request->consulta_id)
                                 ->where('tipo_documento', $request->tipo_documento)
                                 ->first();

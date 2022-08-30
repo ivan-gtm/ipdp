@@ -272,7 +272,19 @@
                 </tr>
             </tbody>
         </table>
-
+        <br>
+        <h4 class="text-center">ANEXOS</h4>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td style="text-align: center;">
+                        <strong>TIPO DE DOCUMENTOS:</strong>
+                        <br>
+                        {{ isset($cedula->tipoDocumentos) ? $cedula->tipoDocumentos : null }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

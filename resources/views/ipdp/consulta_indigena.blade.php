@@ -899,7 +899,7 @@
         var inputSegundoApellido = $('[name="inputSegundoApellido"]').val();
         var inputEdad = $('[name="inputEdad"]').val();
         var inputOcupacion = $('[name="inputOcupacion"]').val();
-        var optionGenero = $('[name="optionGenero"]').val();
+        var optionGenero = $('[name="optionGenero"]:checked').val();
         var inputParticipanteCorreo = $('[name="inputParticipanteCorreo"]').val();
         var inputCelular = $('[name="inputCelular"]').val();
         var inputCalle = $('[name="inputCalle"]').val();
@@ -909,14 +909,14 @@
         var inputCP = $('[name="inputCP"]').val();
         var inputAlcaldia = $('[name="inputAlcaldia"]').val();
         var inputColonia = $('[name="inputColonia"]').val();
-        var tipoParticipacion = $('[name="tipoParticipacion"]').val();
+        var tipoParticipacion = $('[name="tipoParticipacion"]:checked').val();
         var participacionOtro = $('[name="participacionOtro"]').val();
         var nombreActividad = $('[name="nombreActividad"]').val();
         var fechaActividad = $('[name="fechaActividad"]').val();
         var lugarActividad = $('[name="lugarActividad"]').val();
-        var tipoDocumentos = $('[name="tipoDocumentos"]').val();
+        var tipoDocumentos = $('[name="tipoDocumentos"]:checked').val();
         
-        var opcionIncluyeDocumentos = $('[name="opcionIncluyeDocumentos"]').val();
+        var opcionIncluyeDocumentos = $('[name="opcionIncluyeDocumentos"]:checked').val();
         var numeroDocumentos = $('[name="numeroDocumentos"]').val();
 
         var requestBody = {

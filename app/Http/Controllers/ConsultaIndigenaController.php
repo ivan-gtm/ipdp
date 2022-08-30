@@ -470,7 +470,7 @@ class ConsultaIndigenaController extends Controller
                     </td>
                     <td colspan="2" style="border:1px solid black;">
                         <strong>
-                            PARTICIPACION
+                            '.$consulta_indigena->tipoDocumentos.'
                         </strong><br>
                     </td>
                 </tr>

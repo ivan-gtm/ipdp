@@ -45,9 +45,9 @@
                                 </td>
                                 <td>
                                     @if( $cedula->tipo_documento == 'cedula' || ( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA PUBLICA') )
-                                        <span class="badge bg-info text-uppercase">Consulta Pública</span>
+                                    <span class="badge bg-info text-uppercase">Consulta Pública</span>
                                     @elseif( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA INDÍGENA' )
-                                        <span class="badge bg-dark text-uppercase">Consulta Indigena</span>
+                                    <span class="badge bg-dark text-uppercase">Consulta Indigena</span>
                                     @endif
                                 </td>
                                 <td>
@@ -55,11 +55,11 @@
                                 </td>
                                 <td class="text-center">
                                     @if( $cedula->tipo_documento == 'formato_interno' )
-                                        <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
+                                    <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
                                     @elseif( $cedula->tipo_documento == 'cedula' )
-                                        <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
-                                            CEDULA
-                                        </span>
+                                    <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
+                                        CEDULA
+                                    </span>
                                     @endif
                                 </td>
                                 <td>
@@ -67,9 +67,9 @@
                                 </td>
                                 <td>
                                     @if( $cedula->status == 2)
-                                        <span class="badge bg-success text-uppercase">Pendiente Valoración Técnica</span>
+                                    <span class="badge bg-success text-uppercase">Pendiente Valoración Técnica</span>
                                     @elseif( $cedula->status == 102)
-                                        <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
+                                    <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
                                     @endif
                                 </td>
                                 <td class="create_date">
@@ -207,6 +207,12 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
+                        <h5 class="modal-title" id="exampleModalLongTitle">RESULTADOS ANÁLISIS</h5>
+                        <table class="table" id="resultadosAnalisis"><tbody></tbody></table>
+                        <br><br>
+                    </div>
+                    <div class="col-md-12">
+                        <h5 class="modal-title" id="exampleModalLongTitle">VALORACIÓN TÉCNICA</h5>
                         <table class="table">
                             <tr>
                                 <td colspan="2" style="background-color: #9f2442; color: white;">
@@ -229,30 +235,30 @@
                         </table>
                         <table class="table evaluacionParametros">
                             @foreach ($parametros as $categoria)
-                                <tr>
-                                    <td colspan="2">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" style="background-color: #9f2442; color: white;">
-                                        {{ $categoria['categoria']['descripcion'] }}
-                                    </td>
-                                </tr>
-                                @foreach( $categoria['parametros'] as $prm )
-                                <tr>
-                                    <td class="text-center">
-                                        @if($categoria['categoria']['descripcion'] == "Valoración Técnica")
-                                            <input class="form-check-input" type="radio" name="cat{{ $categoria['categoria']['id'] }}" data-categoria-id="{{ $categoria['categoria']['id'] }}" data-parametro-id="{{ $prm['id'] }}" id="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}" value="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
-                                        @else
-                                            <input class="form-check-input" type="checkbox" name="cat{{ $categoria['categoria']['id'] }}" data-categoria-id="{{ $categoria['categoria']['id'] }}" data-parametro-id="{{ $prm['id'] }}" id="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}" value="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <label class="form-check-label" for="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
-                                            {{ $prm['descripcion'] }}
-                                        </label>
-                                    </td>
-                                </tr>
-                                @endforeach
+                            <tr>
+                                <td colspan="2">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="background-color: #9f2442; color: white;">
+                                    {{ $categoria['categoria']['descripcion'] }}
+                                </td>
+                            </tr>
+                            @foreach( $categoria['parametros'] as $prm )
+                            <tr>
+                                <td class="text-center">
+                                    @if($categoria['categoria']['descripcion'] == "Valoración Técnica")
+                                    <input class="form-check-input" type="radio" name="cat{{ $categoria['categoria']['id'] }}" data-categoria-id="{{ $categoria['categoria']['id'] }}" data-parametro-id="{{ $prm['id'] }}" id="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}" value="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
+                                    @else
+                                    <input class="form-check-input" type="checkbox" name="cat{{ $categoria['categoria']['id'] }}" data-categoria-id="{{ $categoria['categoria']['id'] }}" data-parametro-id="{{ $prm['id'] }}" id="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}" value="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
+                                    @endif
+                                </td>
+                                <td>
+                                    <label class="form-check-label" for="{{ $categoria['categoria']['id'].'-'.$prm['id'] }}">
+                                        {{ $prm['descripcion'] }}
+                                    </label>
+                                </td>
+                            </tr>
+                            @endforeach
                             @endforeach
                         </table>
                     </div>
@@ -280,14 +286,90 @@
     const rechazoModal = new bootstrap.Modal(document.getElementById('rechazoModal'));
 
     function aprobarSolicitudTecnica(elemento) {
-        $('#folio_id').val($(elemento).attr("data-documento-id"));
-        $('#tipoDocumento').val($(elemento).attr("data-tipo-documento"));
+        var folio_id = $(elemento).attr("data-documento-id");
+        var tipo_documento = $(elemento).attr("data-tipo-documento")
+
+        $('#folio_id').val(folio_id);
+        $('#tipoDocumento').val(tipo_documento);
+
+        obtenerResultadosEtapaAnalisis(folio_id, tipo_documento);
+        
+    }
+
+    function setTitulo(titulo, flujo) {
+        $("table#resultadosAnalisis>tbody").append(getTituloHTML(titulo));
+    }
+
+    function getTituloHTML(titulo) {
+        return '<tr><td colspan="2" style="background-color: #216e24; color: white;">{titulo}</td></tr>'.replace("{titulo}", titulo);
+    }
+    
+    function setParametro( descripcion ) {
+        var table_selector = "table#resultadosAnalisis>tbody";
+        $( table_selector ).append( getParametroHTML( descripcion ) );
+    }
+
+    function getParametroHTML( descripcion ) {
+        return '<tr><td>{descripcion_subtema}</td></tr>'.replaceAll("{descripcion_subtema}", descripcion);
+    }
+
+    function obtenerResultadosEtapaAnalisis(folio_id, tipo_documento) {
+        
+        requestBody = {
+            "folio_id": folio_id,
+            "tipo_documento": tipo_documento
+        };
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+                url: "{{ route('administracion.obtenerResultadosAnalisis') }}?id_consulta="+folio_id+"&tipo_documento="+tipo_documento,
+                method: "GET",
+                contentType: 'application/json; charset=utf-8'
+            })
+            .done(function(data, textStatus, jqXHR) {
+                popularResultadosAnalisis(data);
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                if (console && console.log) {
+                    console.log("La solicitud a fallado: " + textStatus);
+                }
+            });
+    }
+
+    function popularResultadosAnalisis(resultados){
+        var objResultados = JSON.parse(resultados);
+        console.log(objResultados);
+        $("table#resultadosAnalisis>tbody").html("");
+        
+        if( objResultados.temas.length > 0){
+            setTitulo("Temas")
+        }
+        // console.log(resultados.temas);
+        for (let index = 0; index < objResultados.temas.length; index++) {
+            const element = objResultados.temas[index];
+            setParametro(element.descripcion);
+        }
+        
+        if( objResultados.subtemas.length > 0){
+            setTitulo("Subtemas");
+        }
+        objResultados.subtemas.forEach(element => {
+            setParametro(element.descripcion);
+        });
+
+        setTitulo("Observaciones");
+        setParametro(objResultados.observaciones);
+
         modalEvaluacionTecnica.show();
     }
 
     function rechazarSolicitudTecnica(elemento) {
-        $('#documentoIdRechazo').val( $(elemento).attr("data-documento-id") );
-        $('#tipoDocumentoRechazo').val( $(elemento).attr("data-tipo-documento") );
+        $('#documentoIdRechazo').val($(elemento).attr("data-documento-id"));
+        $('#tipoDocumentoRechazo').val($(elemento).attr("data-tipo-documento"));
         rechazoModal.show();
     }
 

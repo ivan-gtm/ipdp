@@ -200,7 +200,7 @@ class ConsultaIndigenaController extends Controller
                         <td>
                             <strong>Tipo de Consulta</strong>
                             <br>
-                            '.$consulta_indigena->tipoConsulta.'
+                            '.(isset($consulta_indigena->tipoConsulta) ? $consulta_indigena->tipoConsulta : '-').'
                         </td>
                         <td>
                             <br>
@@ -209,7 +209,7 @@ class ConsultaIndigenaController extends Controller
                         <td>
                             <strong>Fecha</strong>
                             <br>
-                            '.$consulta_indigena->fechaSolicitud.'
+                            '.(isset($consulta_indigena->fechaSolicitud) ? $consulta_indigena->fechaSolicitud : '-').'
                         </td>
                     </tr>
                 </tbody>
@@ -227,31 +227,31 @@ class ConsultaIndigenaController extends Controller
                         <td>
                             <strong>Nombre Completo</strong>
                             <br>
-                            '.$consulta_indigena->nombreCompleto.'
+                            '.(isset($consulta_indigena->nombreCompleto) ? $consulta_indigena->nombreCompleto : '-').'
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Correo Electrónico</strong>
                             <br>
-                            '.$consulta_indigena->correo.'
+                            '.(isset($consulta_indigena->correo) ? $consulta_indigena->correo : '-').'
                         </td>
                         <td>
                             <strong>Telefono</strong>
                             <br>
-                            '.$consulta_indigena->telefono.'
+                            '.(isset($consulta_indigena->telefono) ? $consulta_indigena->telefono : '-').'
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>¿Se tienen datos de quien participa?</strong>
                             <br>
-                            '.$consulta_indigena->tieneDatosParticipante.'
+                            '.(isset($consulta_indigena->tieneDatosParticipante) ? $consulta_indigena->tieneDatosParticipante : '-').'
                         </td>
                         <td>
                             <strong>¿Es representante?</strong>
                             <br>
-                            '.$consulta_indigena->esRepresentante.'
+                            '.(isset($consulta_indigena->esRepresentante) ? $consulta_indigena->esRepresentante : '-').'
                         </td>
                     </tr>
                 </tbody>
@@ -267,10 +267,10 @@ class ConsultaIndigenaController extends Controller
                 </tr>
                 <tr>
                     <td class="text-center">
-                        '.$consulta_indigena->tipoAutoridad.'
+                        '.(isset($consulta_indigena->tipoAutoridad) ? $consulta_indigena->tipoAutoridad : '-').'
                     </td>
                     <td class="text-center">
-                        '.$consulta_indigena->nombrePuebloComunidad.'
+                        '.(isset($consulta_indigena->nombrePuebloComunidad) ? $consulta_indigena->nombrePuebloComunidad : '-').'
                     </td>
                 </tr>
             </table>
@@ -285,10 +285,10 @@ class ConsultaIndigenaController extends Controller
                 </tr>
                 <tr>
                     <td class="text-center">
-                        '.$consulta_indigena->tipoOrganizacion.'
+                        '.(isset($consulta_indigena->tipoOrganizacion) ? $consulta_indigena->tipoOrganizacion : '-').'
                     </td>
                     <td class="text-center">
-                        '.$consulta_indigena->nombreOrganizacion.'
+                        '.(isset($consulta_indigena->nombreOrganizacion) ? $consulta_indigena->nombreOrganizacion : '-').'
                     </td>
                 </tr>
             </table>
@@ -305,46 +305,46 @@ class ConsultaIndigenaController extends Controller
                         <td>
                             <strong>Nombre</strong>
                             <br>
-                            '.$consulta_indigena->nombre.'
+                            '.(isset($consulta_indigena->nombre) ? $consulta_indigena->nombre : '-').'
                         </td>
                         <td>
                             <strong>Primer Apellido</strong>
                             <br>
-                            '.$consulta_indigena->primerApellido.'
+                            '.(isset($consulta_indigena->primerApellido) ? $consulta_indigena->primerApellido : '-').'
                         </td>
                         <td>
                             <strong>Segundo Apellido</strong>
                             <br>
-                            '.$consulta_indigena->segundoApellido.'
+                            '.(isset($consulta_indigena->segundoApellido) ? $consulta_indigena->segundoApellido : '-').'
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Ocupación</strong>
                             <br>
-                            '.$consulta_indigena->ocupacion.'
+                            '.(isset($consulta_indigena->ocupacion) ? $consulta_indigena->ocupacion : '-').'
                         </td>
                         <td>
                             <strong>Edad</strong>
                             <br>
-                            '.$consulta_indigena->edad.'
+                            '.(isset($consulta_indigena->edad) ? $consulta_indigena->edad : '-').'
                         </td>
                         <td>
                             <strong>Género</strong>
                             <br>
-                            '.$consulta_indigena->genero.'
+                            '.(isset($consulta_indigena->genero) ? $consulta_indigena->genero : '-').'
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
                             <strong>Correo electrónico</strong>
                             <br>
-                            '.$consulta_indigena->correo.'
+                            '.(isset($consulta_indigena->participanteCorreo) ? $consulta_indigena->participanteCorreo : '-').'
                         </td>
                         <td>
                             <strong>Teléfono celular</strong>
                             <br>
-                            '.$consulta_indigena->celular.'
+                            '.(isset($consulta_indigena->celular) ? $consulta_indigena->celular : '-').'
                         </td>
                     </tr>
                 </tbody>
@@ -362,39 +362,39 @@ class ConsultaIndigenaController extends Controller
                         <td>
                             <strong>Calle</strong>
                             <br>
-                            '.$consulta_indigena->calle.'
+                            '.(isset($consulta_indigena->calle) ? $consulta_indigena->calle : '-').'
                         </td>
                         <td>
                             <strong>Numero Exterior</strong>
                             <br>
-                            '.$consulta_indigena->numExterior.'
+                            '.(isset($consulta_indigena->numExterior) ? $consulta_indigena->numExterior : '-').'
                         </td>
                         <td>
                             <strong>Numero Interior</strong>
                             <br>
-                            '.$consulta_indigena->numInterior.'
+                            '.(isset($consulta_indigena->numInterior) ? $consulta_indigena->numInterior : '-').'
                         </td>
                         <td>
                             <strong>Manzana / Lote</strong>
                             <br>
-                            '.$consulta_indigena->manzana.'
+                            '.(isset($consulta_indigena->manzana) ? $consulta_indigena->manzana : '-').'
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Código Postal</strong>
                             <br>
-                            '.$consulta_indigena->cp.'
+                            '.(isset($consulta_indigena->cp) ? $consulta_indigena->cp : '-').'
                         </td>
                         <td>
                             <strong>Alcaldía</strong>
                             <br>
-                            '.$consulta_indigena->alcaldia.'
+                            '.(isset($consulta_indigena->alcaldia) ? $consulta_indigena->alcaldia : '-').'
                         </td>
                         <td colspan="2">
                             <strong>Colonia, Pueblo o Barrio</strong>
                             <br>
-                            '.$consulta_indigena->colonia.'
+                            '.(isset($consulta_indigena->colonia) ? $consulta_indigena->colonia : '-').'
                         </td>
                     </tr>
                 </tbody>
@@ -425,7 +425,7 @@ class ConsultaIndigenaController extends Controller
                 </tr>
                 <tr>
                     <td style="border:1px solid black;">
-                        '.$consulta_indigena->tipoParticipacion.'
+                        '.(isset($consulta_indigena->tipoParticipacion) ? $consulta_indigena->tipoParticipacion : '-').'
                     </td>
                 </tr>
             </table>
@@ -443,7 +443,7 @@ class ConsultaIndigenaController extends Controller
                         <strong>
                             NOMBRE DEL TALLER, FORO O ACTIVIDAD:
                         </strong><br>
-                        '.$consulta_indigena->tipoParticipacion.'
+                        '.(isset($consulta_indigena->tipoParticipacion) ? $consulta_indigena->tipoParticipacion : '-').'
                     </td>
                 </tr>
                 <tr style="border-bottom:1px solid gray">
@@ -451,13 +451,13 @@ class ConsultaIndigenaController extends Controller
                         <strong>
                             FECHA
                         </strong><br>
-                        '.$consulta_indigena->fechaActividad.'
+                        '.(isset($consulta_indigena->fechaActividad) ? $consulta_indigena->fechaActividad : '-').'
                     </td>
                     <td>
                         <strong>
                             LUGAR
                         </strong><br>
-                        '.$consulta_indigena->lugarActividad.'
+                        '.(isset($consulta_indigena->lugarActividad) ? $consulta_indigena->lugarActividad : '-').'
                     </td>
                 </tr>
             </table>
@@ -470,7 +470,7 @@ class ConsultaIndigenaController extends Controller
                     </td>
                     <td colspan="2" style="border:1px solid black;">
                         <strong>
-                            '.$consulta_indigena->tipoDocumentos.'
+                            '.(isset($consulta_indigena->tipoDocumentos) ? $consulta_indigena->tipoDocumentos : '-').'
                         </strong><br>
                     </td>
                 </tr>

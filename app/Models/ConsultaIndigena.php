@@ -29,6 +29,7 @@ class ConsultaIndigena extends Model
         'edad',
         'ocupacion',
         'genero',
+        'participanteCorreo',
         'celular',
         'calle',
         'numExterior',

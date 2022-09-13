@@ -172,7 +172,7 @@
                     <td colspan="2">
                         <strong>Correo electrónico</strong>
                         <br>
-                        {{ isset($cedula->correo) ? $cedula->correo : '-' }}
+                        {{ isset($cedula->participanteCorreo) ? $cedula->participanteCorreo : '-' }}
                     </td>
                     <td>
                         <strong>Teléfono celular</strong>

@@ -73,11 +73,11 @@
                                     <!-- {{ $cedula->status }} -->
                                     <!-- {{ $cedula->evaluador_pgot_fk }} -->
                                     <!-- {{ $cedula->instrumento }} -->
-                                    @if( $rol_usuario == 'integracion_pgd' && ($cedula->instrumento == 'PGD' || $cedula->instrumento == 'PGD+PGOT') && $cedula->evaluador_pgd_fk == "")
+                                    @if( $rol_usuario == 'integracion_pgd' && $cedula->status == 4 && ($cedula->instrumento == 'PGD' || $cedula->instrumento == 'PGD+PGOT') && $cedula->evaluador_pgd_fk == "")
                                         <span class="badge badge-soft-warning text-uppercase">
                                             Pendiente de evaluación PDG
                                         </span>
-                                    @elseif( $rol_usuario == 'integracion_pgot' && ($cedula->instrumento == 'PGOT' || $cedula->instrumento == 'PGD+PGOT') && $cedula->evaluador_pgot_fk == "")
+                                    @elseif( $rol_usuario == 'integracion_pgot' && $cedula->status == 4 && ($cedula->instrumento == 'PGOT' || $cedula->instrumento == 'PGD+PGOT') && $cedula->evaluador_pgot_fk == "")
                                         <span class="badge badge-soft-warning text-uppercase">
                                             Pendiente de evaluación PGOT
                                         </span>
@@ -129,6 +129,7 @@
                                             ||
                                             ( Auth::user()->rol == 'integracion_pgot' && intval($cedula->evaluador_pgot_fk) == 0 ) 
                                         )
+                                            @if( $cedula->status == 4 || $cedula->status == 103)
                                             <li>
                                                 <button type="button" class="edit-item-btn" 
                                                     data-cedula-id="{{ $cedula->id }}" 
@@ -146,6 +147,7 @@
                                                     data-bs-toggle="modal" 
                                                     data-cedula-id="{{ $cedula->id }}" 
                                                     data-cedula-folio="{{ $cedula->folio }}" 
+                                                    data-tipo-documento="{{ $cedula->tipo }}" 
                                                     onclick="actualizarFolioIdRechazo(this)" 
                                                     data-bs-target="#rechazoModal">
                                                         
@@ -154,6 +156,7 @@
 
                                                 </button>
                                             </li>
+                                            @endif
                                         @endif
                                     </ul>
                                 </td>
@@ -223,6 +226,7 @@
             <div class="modal-body">
                 Escriba una breve descripción, con el motivo del rechazo:
                 <input type="hidden" name="folio_id_rechazo" id="folio_id_rechazo">
+                <input type="hidden" name="tipo_documento_rechazo" id="tipo_documento_rechazo">
                 <textarea class="form-control" name="motivo_rechazo" id="motivo_rechazo" rows="10"></textarea>
             </div>
             <div class="modal-footer">
@@ -426,7 +430,6 @@
         var cedula_folio = $(element).attr("data-cedula-folio");
         var tipo_documento = $(element).attr("data-tipo-documento");
         
-        
         $("span#titulo_modal_aprobacion").text("Folio " + cedula_folio);
         $("#modal_cedula_id").val(cedula_id);
         $("#modal_tipo_documento").val(tipo_documento);
@@ -474,14 +477,18 @@
             });
     }
 
-    function actualizarFolioIdRechazo(folio_id) {
-        $('#folio_id_rechazo').val(folio_id);
+    function actualizarFolioIdRechazo(element) {
+        var cedula_id = $(element).attr("data-cedula-id");
+        var tipo_documento = $(element).attr("data-tipo-documento");
+        $('#folio_id_rechazo').val(cedula_id);
+        $('#tipo_documento_rechazo').val(tipo_documento);
     }
 
     function rechazarSolicitud() {
         requestBody = {
             "consulta_id": $('#folio_id_rechazo').val(),
-            "motivo_rechazo": $('#motivo_rechazo').val()
+            "motivo_rechazo": $('#motivo_rechazo').val(),
+            "tipo_documento": $('#tipo_documento_rechazo').val()
         };
 
         $.ajaxSetup({
@@ -491,7 +498,7 @@
         });
 
         $.ajax({
-                url: "{{ route('administracion.guardarRechazoEvaluacionJuridica') }}",
+                url: "{{ route('administracion.guardarRechazoEvaluacionIntegracion') }}",
                 method: "POST",
                 data: JSON.stringify(requestBody),
                 contentType: 'application/json; charset=utf-8'

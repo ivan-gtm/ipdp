@@ -17,20 +17,16 @@
             <table class="table align-middle table-nowrap mb-0" id="ticketTable">
                 <thead>
                     <tr style="background-color: #f3f3f3;">
-                        <th>No.</th>
-                        <th>Folio<br>Solicitud</th>
-                        <th>Fecha</th>
-                        <th class="text-center">Situación</th>
-                        <th class="text-center">Acciones</th>
+                        <th  width="10">Folio<br>Solicitud</th>
+                        <th  width="20">Fecha</th>
+                        <th class="text-center" width="60">Situación</th>
+                        <th class="text-center"  width="10">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="list form-check-all" id="ticket-list-data">
                     <tr>
-                        <th scope="row">
-                            {{ $cedula->id }}
-                        </th>
                         <td class="id">
-                            <a href="javascript:void(0);" class="fw-medium link-primary ticket-id">{{ $cedula->folio }}</a>
+                            {{ $cedula->folio }}
                         </td>
                         <td class="tasks_name">
                             {{ $cedula->created_at }}
@@ -42,13 +38,29 @@
                                     Tu solicitud esta en valoración
                                 </span>
                             @elseif( $cedula->status == 5 )
-                                <span class="badge rounded-pill bg-success">
-                                    Solicitud integrada al anexo público
-                                </span>
-                            @elseif( $cedula->status > 100 )
-                                <span class="badge rounded-pill bg-danger">
-                                    Solicitud rechazada
-                                </span>
+                                <p>
+                                    Se informa que derivado de la valoración técnica y jurídica realizada a la Opinión/Propuesta, el presente folio será considerado en el Anexo de Participación del Proceso de la Consulta Pública.
+                                </p>
+                            @elseif( $cedula->status == 101)
+                                <p>
+                                    Se informa que derivado de la valoración realizada a la Recomendación/Propuesta en el Proceso de la Consulta Pública, la misma será integrada en lo conducente en el Anexo de Participación.
+                                </p>
+                            @elseif( $cedula->status == 102)
+                                <p>
+                                    Se informa que derivado de la valoración técnica realizada a la Recomendación/Propuesta en el Proceso de la Consulta Pública, la misma será integrada en lo conducente en el Anexo de Participación.
+                                </p>
+                            @elseif( $cedula->status > 100 && isset($instrumento->descripcion) && $instrumento->descripcion == 'PGD+PGOT')
+                                <p>
+                                    Se informa que derivado de la valoración técnica y jurídica realizada a la Recomendación/Propuesta en el Proceso de la Consulta Pública, la misma será integrada en lo conducente al instrumento de planeación correspondiente, así como en el Anexo de Participación.
+                                </p>
+                            @elseif( $cedula->status > 100 && isset($instrumento->descripcion) && $instrumento->descripcion == 'PGD')
+                                <p>
+                                    Se informa que derivado de la valoración técnica y jurídica realizada a la Recomendación/Propuesta en el Proceso de la Consulta Pública, la misma será integrada en lo conducente al Plan General de Desarrollo, así como en el Anexo de Participación.
+                                </p>
+                            @elseif( $cedula->status > 100 && isset($instrumento->descripcion) && $instrumento->descripcion == 'PGOT')
+                                <p>
+                                    Se informa que derivado de la valoración técnica y jurídica realizada a la Recomendación/Propuesta en el Proceso de la Consulta Pública, la misma será integrada en lo conducente al Programa General de Ordenamiento Territorial, así como en el Anexo de Participación.
+                                </p>
                             @endif
                         </td>
                         <td class="text-center seguimiento-folios">

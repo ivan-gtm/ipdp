@@ -46,9 +46,9 @@
                                 </td>
                                 <td>
                                     @if( $cedula->tipo_documento == 'cedula' || ( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA PUBLICA') )
-                                        <span class="badge bg-info text-uppercase">Consulta Pública</span>
+                                    <span class="badge bg-info text-uppercase">Consulta Pública</span>
                                     @elseif( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA INDÍGENA' )
-                                        <span class="badge bg-dark text-uppercase">Consulta Indigena</span>
+                                    <span class="badge bg-dark text-uppercase">Consulta Indigena</span>
                                     @endif
                                 </td>
                                 <td>
@@ -56,11 +56,11 @@
                                 </td>
                                 <td class="text-center">
                                     @if( $cedula->tipo_documento == 'formato_interno' )
-                                        <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
+                                    <span class="badge bg-success text-uppercase" style="background-color: #9f2442 !important;">FORMATO INTERNO</span>
                                     @elseif( $cedula->tipo_documento == 'cedula' )
-                                        <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
-                                            CEDULA
-                                        </span>
+                                    <span class="badge bg-success text-uppercase" style="background-color: #bc955c !important;">
+                                        CEDULA
+                                    </span>
                                     @endif
                                 </td>
                                 <td>
@@ -68,53 +68,54 @@
                                 </td>
                                 <td>
                                     @if( $cedula->status == 1)
-                                        <span class="badge bg-success text-uppercase">Pendiente Análisis de propuesta</span>
+                                    <span class="badge bg-success text-uppercase">Pendiente Análisis de propuesta</span>
                                     @elseif( $cedula->status == 101)
-                                        <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
+                                    <span class="badge bg-danger text-uppercase">Solicitud Rechazada</span>
                                     @endif
                                 </td>
                                 <td class="create_date">
                                     <ul class="panel-acciones">
                                         <li>
                                             @if( $cedula->tipo_documento == 'formato_interno' )
-                                                <a class="edit-item-btn" href="{{ route('administracion.detalleFormatoInterno',[
+                                            <a class="edit-item-btn" href="{{ route('administracion.detalleFormatoInterno',[
                                                                             'folio' => $cedula->folio
                                                                         ]) }}">
-                                                    <i class="fa-solid fa-folder-plus"></i>
-                                                    <!-- Detalles -->
-                                                </a>
+                                                <i class="fa-solid fa-folder-plus"></i>
+                                                <!-- Detalles -->
+                                            </a>
                                             @elseif( $cedula->tipo_documento == 'cedula' )
-                                                <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
+                                            <a class="edit-item-btn" href="{{ route('administracion.detalleConsulta',[
                                                                             'folio' => $cedula->folio
                                                                         ]) }}">
-                                                    <i class="fa-solid fa-folder-plus"></i>
-                                                    <!-- Detalles -->
-                                                </a>
+                                                <i class="fa-solid fa-folder-plus"></i>
+                                                <!-- Detalles -->
+                                            </a>
                                             @endif
-                                            
+
                                         </li>
                                         <li>
                                             @if( $cedula->tipo_documento == 'formato_interno' )
-                                                <a href="{{ route('consulta_indigena.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
-                                                    <i class="fa-solid fa-file-pdf"></i>
-                                                    <!-- Descargar como PDF -->
-                                                </a>
+                                            <a href="{{ route('consulta_indigena.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
+                                                <i class="fa-solid fa-file-pdf"></i>
+                                                <!-- Descargar como PDF -->
+                                            </a>
                                             @elseif( $cedula->tipo_documento == 'cedula' )
-                                                <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
-                                                    <i class="fa-solid fa-file-pdf"></i>
-                                                    <!-- Descargar como PDF -->
-                                                </a>
+                                            <a href="{{ route('cedula.pdf',['numero_folio' => $cedula->folio]) }}" class="edit-item-btn" download>
+                                                <i class="fa-solid fa-file-pdf"></i>
+                                                <!-- Descargar como PDF -->
+                                            </a>
                                             @endif
                                         </li>
                                         @if( $cedula->status == 1)
-                                            <li>
-                                                <button type="button" class="edit-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="aprobarSolicitud( this )">
-                                                    <i class="fa-solid fa-circle-check"></i>
-                                                    <!-- Aprobar -->
-                                                </button>
-                                            </li>
-                                            <li>
+                                        <li>
+                                            <button type="button" class="edit-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="aprobarSolicitud( this )">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                                <!-- Aprobar -->
+                                            </button>
+                                        </li>
+                                        <li>
                                             <button type="button" class="remove-item-btn" data-tipo-documento="{{ $cedula->tipo_documento }}" data-documento-id="{{ $cedula->id }}" onclick="mostrarModalRechazo( this )">
+                                                <i class="fa-solid fa-circle-xmark"></i>
                                                 <!-- Rechazar -->
                                             </button>
                                         </li>
@@ -179,7 +180,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="rechazoModalLabel">Rechazar Folio "342344"
+                <h5 class="modal-title" id="rechazoModalLabel">Rechazar Folio
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -187,19 +188,35 @@
                 <div class="mb-3">
                     <input type="hidden" name="documentoIdRechazado" id="documentoIdRechazado" value="0">
                     <input type="hidden" name="tipoDocumentoRechazado" id="tipoDocumentoRechazado">
-                    
-                    <label for="temaRechazo" class="form-label">Seleccione el tema:</label>
-                    <select class="form-select" 
-                        name="temasEvaluacion" id="temaRechazo"
-                        onchange="obtenerSubTemasEvaluacion( this )">
+
+                    <table class="table evaluacionRechazoTable">
+                        <tr>
+                            <td colspan="2" style="background-color: #9f2442; color: white;">
+                                Seleccione el tema
+                            </td>
+                        </tr>
                         @foreach ($temas as $tema)
-                            <option value="{{ $tema['id'] }}">{{ $tema['descripcion'] }}</option>
+                            <tr>
+                                <td class="text-center">
+                                    <input class="form-check-input" type="checkbox" name="temasRechazo" data-categoria-id="{{ $tema['id'] }}" id="temaRechazo{{ $tema['id'] }}" value="{{ $tema['id'] }}">
+                                </td>
+                                <td>
+                                    <label class="form-check-label" for="temaRechazo{{ $tema['id'] }}">
+                                        {{ $tema['descripcion'] }}
+                                    </label>
+                                </td>
+                            </tr>
                         @endforeach
-                    </select>
+                    </table>
                 </div>
                 <div class="mb-3">
-                    <label for="subtemaRechazo" class="form-label">Seleccione el tema:</label>
-                    <select class="form-select" aria-label="Default select example" name="subtemasEvaluacion" id="subtemaRechazo" disabled></select>
+                    <table class="table" id="subtemasRechazo">
+                        <tr>
+                            <td colspan="2" style="background-color: #9f2442; color: white;">
+                                Seleccione el subtema
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="mb-3">
                     Escriba una breve descripción, con el motivo del rechazo:
@@ -218,26 +235,42 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Aceptar Folio "<span id="noFolioAceptar"></span>"
-                </h5>
+                <h5 class="modal-title">Aceptar Folio</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
                     <input type="hidden" name="aprobarSolicitudId" id="aprobarSolicitudId" value="0">
                     <input type="hidden" name="tipoDocumento" id="tipoDocumento">
-                    <label for="temasEvaluacion" class="form-label">Seleccione el tema:</label>
-                    <select class="form-select" 
-                        name="temasEvaluacion" id="temasEvaluacion"
-                        onchange="obtenerSubTemasEvaluacion( this )">
+                    
+                    <table class="table evaluacionParametros">
+                        <tr>
+                            <td colspan="2" style="background-color: #9f2442; color: white;">
+                                Seleccione el tema
+                            </td>
+                        </tr>
                         @foreach ($temas as $tema)
-                        <option value="{{ $tema['id'] }}">{{ $tema['descripcion'] }}</option>
+                        <tr>
+                            <td class="text-center">
+                                <input class="form-check-input" type="checkbox" name="temasAprobacion" data-categoria-id="{{ $tema['id'] }}" id="tema{{ $tema['id'] }}" value="{{ $tema['id'] }}">
+                            </td>
+                            <td>
+                                <label class="form-check-label" for="tema{{ $tema['id'] }}">
+                                    {{ $tema['descripcion'] }}
+                                </label>
+                            </td>
+                        </tr>
                         @endforeach
-                    </select>
+                    </table>
                 </div>
                 <div class="mb-3">
-                    <label for="subtemasEvaluacion" class="form-label">Seleccione el tema:</label>
-                    <select class="form-select" aria-label="Default select example" name="subtemasEvaluacion" id="subtemasEvaluacion" disabled></select>
+                    <table class="table" id="subtemasEvaluacion">
+                        <tr>
+                            <td colspan="2" style="background-color: #9f2442; color: white;">
+                                Seleccione el subtema
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="mb-3">
                     <label for="txtObservaciones" class="form-label">Recomendaciones:</label>
@@ -258,24 +291,98 @@
     const aprobarSolicitudModal = new bootstrap.Modal(document.getElementById('aprobarSolicitudModal'));
     const rechazoModal = new bootstrap.Modal(document.getElementById('rechazoModal'));
 
-    function aprobarSolicitud( elemento ){
-        aprobarSolicitudModal.show();
-        $('#aprobarSolicitudId').val( $(elemento).attr("data-documento-id") );
-        $('#tipoDocumento').val( $(elemento).attr("data-tipo-documento") );
+    var arrayTemasAprobacion = [];
+    $('input[name="temasAprobacion"]').click(function () {
+        
+        arrayTemasAprobacion = [];
+        $('[name="temasAprobacion"]:checked').each(function () {
+            arrayTemasAprobacion.push( $(this).val());
+        });
+
+        $("table#subtemasEvaluacion>tbody").html("");
+        var temas_ids = arrayTemasAprobacion.join();
+        obtenerSubTemasEvaluacion(temas_ids, "aprobacion")
+    });
+    
+    
+    var arrayTemasRechazo = [];
+    $('input[name="temasRechazo"]').click(function () {
+        
+        arrayTemasRechazo = [];
+        $('[name="temasRechazo"]:checked').each(function () {
+            arrayTemasRechazo.push( $(this).val());
+        });
+
+        $("table#subtemasRechazo>tbody").html("");
+        var temas_ids = arrayTemasRechazo.join();
+        obtenerSubTemasEvaluacion(temas_ids, "rechazo")
+    });
+
+    function setTitulo(titulo, flujo) {
+        if( flujo == 'aprobacion' ){
+            $("table#subtemasEvaluacion>tbody").append(getTituloHTML(titulo));
+        } else {
+            $("table#subtemasRechazo>tbody").append(getTituloHTML(titulo));
+        }
+    }
+
+    function getTituloHTML(titulo) {
+        return '<tr><td colspan="2" style="background-color: #9f2442; color: white;">{titulo}</td></tr>'.replace("{titulo}", titulo);
     }
     
-    function mostrarModalRechazo( elemento ){
-        console.log( $(elemento).attr("data-documento-id") );
-        $('#documentoIdRechazado').val( $(elemento).attr("data-documento-id") );
-        $('#tipoDocumentoRechazado').val( $(elemento).attr("data-tipo-documento") );
+    function setParametro( subtema_id, descripcion, flujo ) {
+        if( flujo == 'aprobacion' ){
+            table_selector = "table#subtemasEvaluacion>tbody";
+        } else {
+            table_selector = "table#subtemasRechazo>tbody";
+        }
+        $(table_selector).append( getParametroHTML( subtema_id, descripcion, flujo ) );
+    }
+
+    function getParametroHTML( subtema_id, descripcion, flujo ) {
+        id_elemento = flujo + subtema_id;
+        if( flujo == 'aprobacion' ){
+            checkbox_selector = "subtemasAprobacion";
+        } else {
+            checkbox_selector = "subtemasRechazo";
+        }
+        return '<tr><td><input class="form-check-input" type="checkbox" name="'+ checkbox_selector +'" data-subtema-id="{subtemaid}" id="subtema{id_elemento}" value="{subtemaid}"></td><td><label class="form-check-label" for="subtema{id_elemento}">{descripcion_subtema}</label></td></tr>'.replaceAll("{subtemaid}", subtema_id).replaceAll("{descripcion_subtema}", descripcion).replaceAll("{id_elemento}", descripcion);
+    }
+
+    function aprobarSolicitud(elemento) {
+        aprobarSolicitudModal.show();
+        $('#aprobarSolicitudId').val($(elemento).attr("data-documento-id"));
+        $('#tipoDocumento').val($(elemento).attr("data-tipo-documento"));
+    }
+
+    function mostrarModalRechazo(elemento) {
+        console.log($(elemento).attr("data-documento-id"));
+        $('#documentoIdRechazado').val($(elemento).attr("data-documento-id"));
+        $('#tipoDocumentoRechazado').val($(elemento).attr("data-tipo-documento"));
         rechazoModal.show();
+    }
+
+    function obtenerEvaludacionTemas(){
+        var arrTemas = [];
+        $('[name="temasAprobacion"]:checked').each(function () {
+            arrTemas.push( $(this).val());
+        });
+        return arrTemas.join();
+    }
+    
+    function obtenerEvaludacionSubtemas(){
+        var arrSubtemas = [];
+        $('[name="subtemasAprobacion"]:checked').each(function () {
+            arrSubtemas.push( $(this).val());
+        });
+        return arrSubtemas.join();
     }
 
     function guardarAprobacion() {
         requestBody = {
             "consulta_id": $('#aprobarSolicitudId').val(),
-            "tema_evaluacion": $('#temasEvaluacion').val(),
-            "subtema_evaluacion": $('#subtemasEvaluacion').val(),
+            "tema_evaluacion": obtenerEvaludacionTemas(),
+            "subtema_evaluacion": obtenerEvaludacionSubtemas(),
             "tipo_documento": $('#tipoDocumento').val(),
             "observaciones": $('#txtObservaciones').val()
         };
@@ -304,12 +411,7 @@
             });
     }
 
-    function obtenerSubTemasEvaluacion( element ) {
-
-        $('[name="subtemasEvaluacion"]').find('option').remove().end();
-        
-        var tema_id = $(element).val();
-
+    function obtenerSubTemasEvaluacion(temas_ids, flujo) {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -317,43 +419,32 @@
         });
 
         $.ajax({
-                url: "{{ route('administracion.obtenerSubtemasAnalisis',['tema_id' => null]) }}" + "/" + tema_id,
+                url: "{{ route('administracion.obtenerSubtemasAnalisis') }}" + "?temas_ids=" + temas_ids,
                 method: "GET",
                 contentType: 'application/json; charset=utf-8'
             })
             .done(function(subtemas, textStatus, jqXHR) {
-                
+                $("table#subtemasEvaluacion>tbody").html("");
                 subtemasObj = JSON.parse(subtemas);
+                
                 var numero_de_subtemas = subtemasObj.length;
-                console.log("numero_de_subtemas");
-                console.log(numero_de_subtemas);
-
+                
+                setTitulo( "Seleccione el subtema", flujo );
+                
                 for (let index = 0; index < numero_de_subtemas; index++) {
                     const subtemaObj = subtemasObj[index];
-                    // console.log( subtemaObj.id );
-                    agregarOpcion(subtemaObj.id, subtemaObj.descripcion);
+                    setParametro(subtemaObj.id, subtemaObj.descripcion, flujo);
                 }
-                
-                $('[name="subtemasEvaluacion"]').removeAttr("disabled");
-
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 if (console && console.log) {
-                    console.log("La solicitud a fallado: " + textStatus);
+                    console.log("La solicitud a fallado: ");
                 }
-                $("#status").text("FAIL REQUEST").show();
             });
     }
 
-    function agregarOpcion(valueParameter, descriptionParameter) {
-        $('[name="subtemasEvaluacion"]').append($('<option>', {
-            value: valueParameter,
-            text: descriptionParameter
-        }));
-    }
+    function rechazarSolicitud(elemento) {
 
-    function rechazarSolicitud( elemento ) {
-        
         requestBody = {
             "consulta_id": $('#documentoIdRechazado').val(),
             "tipo_documento": $('#tipoDocumentoRechazado').val(),
@@ -361,7 +452,7 @@
             "subtema_evaluacion": $('#subtemaRechazo').val(),
             "motivo_rechazo": $('#motivo_rechazo').val()
         };
-        
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

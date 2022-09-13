@@ -46,11 +46,12 @@ Route::post('/borrar-archivo', [ConsultaPublicaController::class, 'borrarArchivo
     Route::get('/administracion/recepcion', [AdministracionController::class, 'evaluacionRecepcion'])->name('administracion.evaluacionRecepcion')->middleware('auth');
 
     // EVALUACION ANALISIS 
-    Route::get('/administracion/subtemas/{tema_id?}', [AdministracionController::class, 'obtenerSubtemasAnalisis'])->name('administracion.obtenerSubtemasAnalisis')->middleware('auth');
+    Route::get('/administracion/subtemas', [AdministracionController::class, 'obtenerSubtemasAnalisis'])->name('administracion.obtenerSubtemasAnalisis')->middleware('auth');
     Route::get('/administracion/analisis', [AdministracionController::class, 'evaluacionAnalisis'])->name('administracion.evaluacionAnalisis')->middleware('auth');
     Route::post('/administracion/analisis/guardar-evaluacion', [AdministracionController::class, 'guardarEvaluacionAnalisis'])->name('administracion.guardarEvaluacionAnalisis')->middleware('auth');
     Route::post('/administracion/analisis/rechazo', [AdministracionController::class, 'guardarRechazoAnalisisSolicitud'])->name('administracion.guardarRechazoAnalisisSolicitud')->middleware('auth');
     Route::get('/administracion/analisis/detalle-consulta/{folio}', [AdministracionController::class, 'detalleConsultaPublica'])->name('administracion.detalleConsulta')->middleware('auth');
+    Route::get('/administracion/analisis/obtener-resultados', [AdministracionController::class, 'obtenerResultadosAnalisis'])->name('administracion.obtenerResultadosAnalisis')->middleware('auth');
 
     // EVALUACION TECNICA
     Route::get('/administracion/evaluacion-tecnica', [AdministracionController::class, 'evaluacionTecnica'])->name('administracion.evaluacionTecnica')->middleware('auth');
@@ -66,7 +67,7 @@ Route::post('/borrar-archivo', [ConsultaPublicaController::class, 'borrarArchivo
     // EVALUACION INTEGRACION
     Route::get('/administracion/evaluacion-integracion', [AdministracionController::class, 'evaluacionIntegracion'])->name('administracion.evaluacionIntegracion')->middleware('auth');
     Route::post('/administracion/evaluacion-integracion/guardar', [AdministracionController::class, 'guardarEvaluacionIntegracion'])->name('administracion.guardarEvaluacionIntegracion')->middleware('auth');
-    // Route::post('/administracion/evaluacion-juridica/rechazo', [AdministracionController::class, 'guardarRechazoEvaluacionJuridica'])->name('administracion.guardarRechazoEvaluacionJuridica')->middleware('auth');
+    Route::post('/administracion/evaluacion-integracion/rechazo', [AdministracionController::class, 'guardarRechazoEvaluacionIntegracion'])->name('administracion.guardarRechazoEvaluacionIntegracion')->middleware('auth');
 
     // ANEXOS PARTICIPACION
     Route::get('/administracion/anexos-participacion', [AdministracionController::class, 'anexosParticipacion'])->name('administracion.anexosParticipacion')->middleware('auth');

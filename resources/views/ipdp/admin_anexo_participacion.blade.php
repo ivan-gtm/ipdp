@@ -48,10 +48,10 @@
                                     {{ $cedula->folio }}
                                 </td>
                                 <td>
-                                    @if( $cedula->origen == 'publica' )
-                                        <span class="badge bg-info text-uppercase">Pública</span>
-                                    @else
-                                        <span class="badge bg-dark text-uppercase">Indigena</span>
+                                    @if( $cedula->tipo_documento == 'cedula' || ( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA PUBLICA') )
+                                    <span class="badge bg-info text-uppercase">Consulta Pública</span>
+                                    @elseif( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA INDÍGENA' )
+                                    <span class="badge bg-dark text-uppercase">Consulta Indigena</span>
                                     @endif
                                 </td>
                                 <td>
@@ -73,13 +73,21 @@
                                     <!-- {{ $cedula->status }} -->
                                     <!-- {{ $cedula->evaluador_pgot_fk }} -->
                                     <!-- {{ $cedula->instrumento }} -->
-                                    @if( $rol_usuario == 'integracion_pgd' && ($cedula->instrumento == 'PGD' || $cedula->instrumento == 'PGD+PGOT') && $cedula->evaluador_pgd_fk == "")
-                                        <span class="badge badge-soft-warning text-uppercase">
+                                    @if( $cedula->status == 5)
+                                        <span class="badge text-bg-success text-uppercase">
                                             Pendiente de evaluación PDG
                                         </span>
-                                    @elseif( $rol_usuario == 'integracion_pgot' && ($cedula->instrumento == 'PGOT' || $cedula->instrumento == 'PGD+PGOT') && $cedula->evaluador_pgot_fk == "")
-                                        <span class="badge badge-soft-warning text-uppercase">
-                                            Pendiente de evaluación PGOT
+                                    @elseif( $cedula->status == 101)
+                                        <span class="badge bg-danger text-uppercase">
+                                            Solicitud Rechazada por equipo análisis
+                                        </span>
+                                    @elseif( $cedula->status == 102)
+                                        <span class="badge bg-danger text-uppercase">
+                                            Solicitud Rechazada en valoración Técnica
+                                        </span>
+                                    @elseif( $cedula->status == 103)
+                                        <span class="badge bg-danger text-uppercase">
+                                            Solicitud Rechazada en valoración Jurídica
                                         </span>
                                     @elseif( $cedula->status == 104)
                                         <span class="badge bg-danger text-uppercase">
@@ -123,12 +131,8 @@
                                                 </a>
                                             @endif
                                         </li>
-                                        {{-- // 4:: PGOT --}}
-                                        {{-- // 5:: PGD  --}}
-                                        @if( ( Auth::user()->rol == 'integracion_pgd' && intval($cedula->evaluador_pgd_fk) == 0 ) 
-                                            ||
-                                            ( Auth::user()->rol == 'integracion_pgot' && intval($cedula->evaluador_pgot_fk) == 0 ) 
-                                        )
+                                        
+                                        @if( ( Auth::user()->rol == 'integracion_pgddasds' && intval($cedula->evaluador_pgd_fk) == 0 )  )
                                             <li>
                                                 <button type="button" class="edit-item-btn" 
                                                     data-cedula-id="{{ $cedula->id }}" 
@@ -138,19 +142,6 @@
 
                                                         <i class="fa-solid fa-circle-check"></i>
                                                         <!-- Aprobar -->
-
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <button type="button" class="remove-item-btn" 
-                                                    data-bs-toggle="modal" 
-                                                    data-cedula-id="{{ $cedula->id }}" 
-                                                    data-cedula-folio="{{ $cedula->folio }}" 
-                                                    onclick="actualizarFolioIdRechazo(this)" 
-                                                    data-bs-target="#rechazoModal">
-                                                        
-                                                        <i class="fa-solid fa-circle-xmark"></i>
-                                                        <!-- Rechazar -->
 
                                                 </button>
                                             </li>

@@ -44,10 +44,12 @@ Route::post('/borrar-archivo', [ConsultaPublicaController::class, 'borrarArchivo
 
     // EVALUACION RECEPCION
     Route::get('/administracion/recepcion', [AdministracionController::class, 'evaluacionRecepcion'])->name('administracion.evaluacionRecepcion')->middleware('auth');
+    Route::get('/administracion/recepcion/buscar', [AdministracionController::class, 'evaluacionRecepcionBuscar'])->name('administracion.evaluacionRecepcionBuscar')->middleware('auth');
 
     // EVALUACION ANALISIS 
     Route::get('/administracion/subtemas', [AdministracionController::class, 'obtenerSubtemasAnalisis'])->name('administracion.obtenerSubtemasAnalisis')->middleware('auth');
     Route::get('/administracion/analisis', [AdministracionController::class, 'evaluacionAnalisis'])->name('administracion.evaluacionAnalisis')->middleware('auth');
+    Route::get('/administracion/analisis/buscar', [AdministracionController::class, 'evaluacionAnalisisBuscar'])->name('administracion.evaluacionAnalisisBuscar')->middleware('auth');
     Route::post('/administracion/analisis/guardar-evaluacion', [AdministracionController::class, 'guardarEvaluacionAnalisis'])->name('administracion.guardarEvaluacionAnalisis')->middleware('auth');
     Route::post('/administracion/analisis/rechazo', [AdministracionController::class, 'guardarRechazoAnalisisSolicitud'])->name('administracion.guardarRechazoAnalisisSolicitud')->middleware('auth');
     Route::get('/administracion/analisis/detalle-consulta/{folio}', [AdministracionController::class, 'detalleConsultaPublica'])->name('administracion.detalleConsulta')->middleware('auth');
@@ -55,30 +57,35 @@ Route::post('/borrar-archivo', [ConsultaPublicaController::class, 'borrarArchivo
 
     // EVALUACION TECNICA
     Route::get('/administracion/evaluacion-tecnica', [AdministracionController::class, 'evaluacionTecnica'])->name('administracion.evaluacionTecnica')->middleware('auth');
+    Route::get('/administracion/evaluacion-tecnica/buscar', [AdministracionController::class, 'evaluacionTecnicaBuscar'])->name('administracion.evaluacionTecnicaBuscar')->middleware('auth');
     Route::post('/administracion/evaluacion-tecnica/guardar', [AdministracionController::class, 'guardarEvaluacionTecnica'])->name('administracion.guardarEvaluacionTecnica')->middleware('auth');
     Route::post('/administracion/evaluacion-tecnica/rechazo', [AdministracionController::class, 'guardarRechazoEvaluacionTecnica'])->name('administracion.guardarRechazoEvaluacionTecnica')->middleware('auth');
     Route::post('/administracion/evaluacion-tecnica/consultar', [AdministracionController::class, 'obtenerEvaluacionJuridica'])->name('administracion.obtenerEvaluacionJuridica')->middleware('auth');
     
     // EVALUACION JURIDICA
     Route::get('/administracion/evaluacion-juridica', [AdministracionController::class, 'evaluacionJuridica'])->name('administracion.evaluacionJuridica')->middleware('auth');
+    Route::get('/administracion/evaluacion-juridica/buscar', [AdministracionController::class, 'evaluacionJuridicaBuscar'])->name('administracion.evaluacionJuridicaBuscar')->middleware('auth');        
     Route::post('/administracion/evaluacion-juridica/rechazo', [AdministracionController::class, 'guardarRechazoEvaluacionJuridica'])->name('administracion.guardarRechazoEvaluacionJuridica')->middleware('auth');
     Route::post('/administracion/evaluacion-juridica/guardar', [AdministracionController::class, 'guardarEvaluacionJuridica'])->name('administracion.guardarEvaluacionJuridica')->middleware('auth');
     
     // EVALUACION INTEGRACION
     Route::get('/administracion/evaluacion-integracion', [AdministracionController::class, 'evaluacionIntegracion'])->name('administracion.evaluacionIntegracion')->middleware('auth');
+    Route::get('/administracion/evaluacion-integracion/buscar', [AdministracionController::class, 'evaluacionIntegracionBuscar'])->name('administracion.evaluacionIntegracionBuscar')->middleware('auth');
     Route::post('/administracion/evaluacion-integracion/guardar', [AdministracionController::class, 'guardarEvaluacionIntegracion'])->name('administracion.guardarEvaluacionIntegracion')->middleware('auth');
     Route::post('/administracion/evaluacion-integracion/rechazo', [AdministracionController::class, 'guardarRechazoEvaluacionIntegracion'])->name('administracion.guardarRechazoEvaluacionIntegracion')->middleware('auth');
 
     // ANEXOS PARTICIPACION
     Route::get('/administracion/anexos-participacion', [AdministracionController::class, 'anexosParticipacion'])->name('administracion.anexosParticipacion')->middleware('auth');
+    Route::get('/administracion/formato-interno/pdf', [AdministracionController::class, 'generaPdfFormatoInterno'])->name('administracion.formatoInterno.pdf')->middleware('auth');
+    Route::get('/administracion/cedulas/pdf', [AdministracionController::class, 'generaPdfCedulas'])->name('administracion.cedulas.pdf')->middleware('auth');
 
 // USUARIOS SISTEMA
-    Route::get('/administracion/usuarios', [AdministracionController::class, 'usuariosSistema'])->name('usuariosSistema')->middleware('auth');
-    Route::get('/administracion/usuarios/registrar', [CustomAuthController::class, 'registration'])->name('administracion.registrarUsuario')->middleware('auth');
-    Route::get('/administracion/usuarios/editar/{usuario_id}', [CustomAuthController::class, 'editarUsuario'])->name('administracion.editarUsuario')->middleware('auth');
-    Route::post('/administracion/usuarios/editar', [CustomAuthController::class, 'actualizarUsuario'])->name('editar_usuario')->middleware('auth');
-    Route::post('custom-registration', [CustomAuthController::class, 'customRegistration'])->name('register.custom')->middleware('auth');
-    Route::get('/administracion/usuarios/borrar/{usuario_id}', [CustomAuthController::class, 'borrarUsuario'])->name('administracion.borrarUsuario')->middleware('auth');
+    Route::get('/administracion/usuarios', [AdministracionController::class, 'usuariosSistema'])->name('usuariosSistema');
+    Route::get('/administracion/usuarios/registrar', [CustomAuthController::class, 'registration'])->name('administracion.registrarUsuario');
+    Route::get('/administracion/usuarios/editar/{usuario_id}', [CustomAuthController::class, 'editarUsuario'])->name('administracion.editarUsuario');
+    Route::post('/administracion/usuarios/editar', [CustomAuthController::class, 'actualizarUsuario'])->name('editar_usuario');
+    Route::post('custom-registration', [CustomAuthController::class, 'customRegistration'])->name('register.custom');
+    Route::get('/administracion/usuarios/borrar/{usuario_id}', [CustomAuthController::class, 'borrarUsuario'])->name('administracion.borrarUsuario');
 
 /*
 |--------------------------------------------------------------------------

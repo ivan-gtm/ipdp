@@ -685,8 +685,8 @@
                 if (console && console.log) {
                     console.log("La solicitud se ha completado correctamente.");
                 }
+                window.location.href = data.confirmacion_url;
 
-                window.location.href = "{{ route('cedula.confirmacion',['numero_folio' => $numero_folio]) }}";
                 
             })
             .fail(function(jqXHR, textStatus, errorThrown) {

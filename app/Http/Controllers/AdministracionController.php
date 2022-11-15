@@ -26,13 +26,53 @@ use App\Models\EvaluacionTecnicaRechazo;
 use App\Models\EvaluacionJuridica;
 use App\Models\EvaluacionAnalisisTemas;
 use App\Models\EvaluacionIntegracion;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Log;
 
 class AdministracionController extends Controller
 {
+    function getFolio(){
+        $numero_folio = 0;
+        $folio_cedula = DB::select("select random_num from (
+                                        select floor(rand() * (1000000-100000)+100000) as random_num 
+                                        union
+                                        select floor(rand() * (1000000-100000)+100000) as random_num
+                                    ) as numbers
+                                    where numbers.random_num not in (select folio from cedulas)
+                                    limit 1;");
+        foreach ($folio_cedula as $folio) {
+            $numero_folio=$folio->random_num;
+        }                                    
+        return $numero_folio;
+    }
+
+    function getCountFolio($numero_folio){
+        return DB::table('cedulas')->where('folio',$numero_folio)->count();
+    }
+
+
     function home()
     {
-        return view('ipdp.admin_home');
+
+        $info_cedula = DB::select(" select count(*) as cuenta, origen
+                                    from cedulas
+                                    group by origen
+				    order by origen asc");
+
+	$cuenta_cedula = DB::select("select count(*)  as cuenta, status from cedulas
+                                    where status in (1,2,3,4,5,101,102)
+                                    group by status ");
+
+        $info_formato = DB::select("select count(*) as cuenta, status from consulta_indigena
+                                    where status in (1,2,3,4,5,101,102)
+                                    group by status");
+
+        return view('ipdp.admin_home', [
+            'info_cedula' => $info_cedula,
+            'cuenta_cedula' => $cuenta_cedula,
+            'info_formato' => $info_formato
+        ]);
     }
 
     function evaluacionTecnica()
@@ -62,6 +102,60 @@ class AdministracionController extends Controller
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
+        $currentPage = $cedulas->currentPage();
+        $first_page = ($currentPage-5 > 0) ? $currentPage-5 : 1;
+        if( ($currentPage+5) >= $page_number && $currentPage < $page_number ){
+            $last_page = $page_number;
+        } elseif($currentPage+5 < $page_number ){
+            $last_page = $currentPage+5;
+        } else {
+            $last_page = $page_number;
+        }
+
+        $parametros = self::obtenerParametrosValoracionTecnica();
+        $instrumentos = self::obtenerCatalogoInstrumentos();
+
+        return view('ipdp.admin_evaluacion_tecnica', [
+            'page_number' => $page_number,
+            'first_page' => $first_page,
+            'last_page' => $last_page,
+            'cedulas' => $cedulas,
+            'parametros' => $parametros,
+            'instrumentos' => $instrumentos
+        ]);
+    }
+
+    function evaluacionTecnicaBuscar(Request $request)
+    {
+
+        if (Auth::check() && (Auth::user()->rol != 'tecnica' && Auth::user()->rol != 'administracion')) {
+            return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
+        }
+
+        $perPage = 10;
+        $estados_validos = [2, 102];
+
+        $query_filter = ' folio LIKE \'%'.$request->numero_folio.'%\'';
+
+        $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
+            ->select('id', 'folio', 'created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
+            ->whereRaw($query_filter)
+            ->selectRaw("tipoConsulta as tipo_consulta")
+            ->selectRaw("'formato_interno' as tipo_documento")
+            ->orderByDesc('id');
+
+        $cedulas = Cedula::whereIn('status', $estados_validos)
+            ->whereRaw($query_filter)
+            ->select('cedulas.id', 'cedulas.folio', 'cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido')
+            ->selectRaw("null as tipo_consulta")
+            ->selectRaw("'cedula' as tipo_documento")
+            ->union($formatos_interno)
+            ->orderByDesc('id')
+            ->paginate($perPage);
+
+        $total = $cedulas->total();
+        $page_number = round($total / $perPage);
+
         $parametros = self::obtenerParametrosValoracionTecnica();
         $instrumentos = self::obtenerCatalogoInstrumentos();
 
@@ -69,7 +163,8 @@ class AdministracionController extends Controller
             'page_number' => $page_number,
             'cedulas' => $cedulas,
             'parametros' => $parametros,
-            'instrumentos' => $instrumentos
+            'instrumentos' => $instrumentos,
+            'numero_folio' => $request->numero_folio
         ]);
     }
 
@@ -100,19 +195,74 @@ class AdministracionController extends Controller
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
+        $currentPage = $cedulas->currentPage();
+        $first_page = ($currentPage-5 > 0) ? $currentPage-5 : 1;
+        if( ($currentPage+5) >= $page_number && $currentPage < $page_number ){
+            $last_page = $page_number;
+        } elseif($currentPage+5 < $page_number ){
+            $last_page = $currentPage+5;
+        } else {
+            $last_page = $page_number;
+        }
+
         $parametros = self::obtenerParametrosValoracionTecnica();
 
         return view('ipdp.admin_evaluacion_juridica', [
             'page_number' => $page_number,
+            'first_page' => $first_page,
+            'last_page' => $last_page,
             'cedulas' => $cedulas,
             'parametros' => $parametros
         ]);
     }
 
+    function evaluacionJuridicaBuscar(Request $request)
+    {
+
+        if (Auth::check() && (Auth::user()->rol != 'juridica' && Auth::user()->rol != 'administracion')) {
+            return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
+        }
+
+        $perPage = 10;
+        $estados_validos = [3, 102, 103];
+
+        $query_filter = ' folio LIKE \'%'.$request->numero_folio.'%\'';
+
+        $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
+            ->whereRaw($query_filter)
+            ->select('id', 'folio', 'created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
+            ->selectRaw("tipoConsulta as tipo_consulta")
+            ->selectRaw("'formato_interno' as tipo_documento")
+            ->orderByDesc('id');
+
+        $cedulas = Cedula::whereIn('status', $estados_validos)
+            ->whereRaw($query_filter)        
+            ->select('cedulas.id', 'cedulas.folio', 'cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido')
+            ->selectRaw("null as tipo_consulta")
+            ->selectRaw("'cedula' as tipo_documento")
+            ->union($formatos_interno)
+            ->orderByDesc('id')
+            ->paginate($perPage);
+
+        $total = $cedulas->total();
+        $page_number = round($total / $perPage);
+
+        $parametros = self::obtenerParametrosValoracionTecnica();
+
+        return view('ipdp.admin_evaluacion_juridica', [
+            'page_number' => $page_number,
+            'cedulas' => $cedulas,
+            'parametros' => $parametros,
+            'numero_folio' => $request->numero_folio
+        ]);
+    }   
+
     public function guardarConsultaPublica(Request $request)
     {
 
         App::setLocale('es');
+
+	$folio_num=$request->folio;
 
         $validatedData = $request->validate([
             'folio' => 'nullable|digits:6',
@@ -140,15 +290,22 @@ class AdministracionController extends Controller
         ]);
 
         $validatedData['origen'] = 'interna';
-        $show = Cedula::create($validatedData);
+
+        if((self::getCountFolio($folio_num))>0){
+            $folio_num=self::getFolio();
+            $validatedData['folio'] = $folio_num;
+	}
+
+	$show = Cedula::create($validatedData);
+
+        $details = [
+            'title' => '¡Gracias por tu participación!',
+            'folio' => $folio_num,
+            'consulta_folio_url' => route('ipdp.buscar', ['folio' => $folio_num]),
+            'confirmacion_url' => route('administracion.confirmacionConsultaPublica',['numero_folio' => $folio_num])
+        ];
 
         if (isset($request->correo) && $request->correo != null) {
-            $details = [
-                'title' => '¡Gracias por tu participación!',
-                'folio' => $request->folio,
-                'consulta_folio_url' => route('ipdp.buscar', ['folio' => $request->folio])
-            ];
-
             try {
                 \Mail::to($request->correo)
                     ->send(new ConsultaPublicaRegistrada($details));
@@ -157,7 +314,7 @@ class AdministracionController extends Controller
             }
         }
 
-        return response()->json([]);
+        return response()->json($details);
     }
 
     function registrarConsultaPublica()
@@ -234,10 +391,107 @@ class AdministracionController extends Controller
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
+        $currentPage = $cedulas->currentPage();
+        $first_page = ($currentPage-5 > 0) ? $currentPage-5 : 1;
+        if( ($currentPage+5) >= $page_number && $currentPage < $page_number ){
+            $last_page = $page_number;
+        } elseif($currentPage+5 < $page_number ){
+            $last_page = $currentPage+5;
+        } else {
+            $last_page = $page_number;
+        }
+
         return view('ipdp.admin_evaluacion_integracion', [
             'rol_usuario' => $rol_usuario,
             'page_number' => $page_number,
+            'first_page' => $first_page,
+            'last_page' => $last_page,
             'cedulas' => $cedulas
+        ]);
+    }
+
+    function evaluacionIntegracionBuscar(Request $request)
+    {
+        // echo Auth::user()->rol;
+        // exit;
+        if (Auth::check() && (Auth::user()->rol != 'integracion_pgot' && Auth::user()->rol != 'integracion_pgd' && Auth::user()->rol != 'administracion')) {
+            return redirect()->route('administracion.home')->with('status', 'No tiene permisos para visualizar este modulo!');
+        }
+
+        $rol_usuario = Auth::user()->rol;
+        $tipos_de_instrumentos_visibles = ['PGD+PGOT'];
+        // $where_raw = "( OR evaluador_pgd_fk IS NULL)";
+        $where_raw = "(";
+
+        $query_filter = ' folio LIKE \'%'.$request->numero_folio.'%\'';
+
+        if ($rol_usuario == 'administracion') {
+            array_push($tipos_de_instrumentos_visibles, 'PGD');
+            array_push($tipos_de_instrumentos_visibles, 'PGOT');
+            $where_raw .= "evaluador_pgot_fk IS NULL || evaluador_pgd_fk IS NULL";
+        } elseif ($rol_usuario == 'integracion_pgd') {
+            array_push($tipos_de_instrumentos_visibles, 'PGD');
+            $where_raw .= "evaluador_pgd_fk IS NULL";
+        } elseif ($rol_usuario == 'integracion_pgot') {
+            array_push($tipos_de_instrumentos_visibles, 'PGOT');
+            $where_raw .= "evaluador_pgot_fk IS NULL";
+        }
+        $where_raw .= ")";
+
+        $perPage = 10;
+
+
+        $formato_interno = FormatoInterno::leftJoin('evualuacion_integracion', 'consulta_indigena.id', '=', 'evualuacion_integracion.consulta_fk')
+            ->join('evualuacion_tecnica', function ($join) {
+                $join->on('consulta_indigena.id', '=', 'evualuacion_tecnica.consulta_fk');
+                $join->on('evualuacion_tecnica.tipo_documento', '=', DB::raw("'formato_interno'"));
+            })
+            ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
+            ->select('consulta_indigena.id', 'consulta_indigena.folio', 'consulta_indigena.created_at', 'consulta_indigena.status', 'consulta_indigena.nombre', 'consulta_indigena.primerApellido as primer_apellido', 'consulta_indigena.segundoApellido as segundo_apellido', 'c_instrumento.descripcion as instrumento', 'evualuacion_integracion.evaluador_pgot_fk', 'evualuacion_integracion.evaluador_pgd_fk', 'evualuacion_tecnica.tipo_documento as tipo')
+            ->selectRaw("tipoConsulta as tipo_consulta")
+            ->selectRaw("'formato_interno' as tipo_documento")
+            ->whereIn('consulta_indigena.status', [4, 104])
+            ->whereIn('c_instrumento.descripcion', $tipos_de_instrumentos_visibles)
+            ->whereRaw($where_raw)
+            ->whereRaw($query_filter);
+
+        $cedulas = Cedula::leftJoin('evualuacion_integracion', 'cedulas.id', '=', 'evualuacion_integracion.consulta_fk')
+            ->join('evualuacion_tecnica', function ($join) {
+                $join->on('cedulas.id', '=', 'evualuacion_tecnica.consulta_fk');
+                $join->on('evualuacion_tecnica.tipo_documento', '=', DB::raw("'cedula'"));
+            })
+            ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
+            ->select('cedulas.id', 'cedulas.folio', 'cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido', 'cedulas.segundo_apellido', 'c_instrumento.descripcion as instrumento', 'evualuacion_integracion.evaluador_pgot_fk', 'evualuacion_integracion.evaluador_pgd_fk', 'evualuacion_tecnica.tipo_documento as tipo')
+            ->selectRaw("null as tipo_consulta")
+            ->selectRaw("'cedula' as tipo_documento")
+            ->whereIn('cedulas.status', [4, 104])
+            ->whereIn('c_instrumento.descripcion', $tipos_de_instrumentos_visibles)
+            ->whereRaw($where_raw)
+            ->whereRaw($query_filter)
+            ->union($formato_interno)
+            ->orderByDesc('id')
+            ->paginate($perPage);
+
+        $total = $cedulas->total();
+        $page_number = round($total / $perPage);
+
+        $currentPage = $cedulas->currentPage();
+        $first_page = ($currentPage-5 > 0) ? $currentPage-5 : 1;
+        if( ($currentPage+5) >= $page_number && $currentPage < $page_number ){
+            $last_page = $page_number;
+        } elseif($currentPage+5 < $page_number ){
+            $last_page = $currentPage+5;
+        } else {
+            $last_page = $page_number;
+        }
+
+        return view('ipdp.admin_evaluacion_integracion', [
+            'rol_usuario' => $rol_usuario,
+            'page_number' => $page_number,
+            'first_page' => $first_page,
+            'last_page' => $last_page,
+            'cedulas' => $cedulas,
+            'numero_folio' => $request->numero_folio
         ]);
     }
 
@@ -249,42 +503,52 @@ class AdministracionController extends Controller
         }
 
         $rol_usuario = Auth::user()->rol;
-
-        
-
         $perPage = 10;
 
         $formato_interno = FormatoInterno::leftJoin('evualuacion_integracion', 'consulta_indigena.id', '=', 'evualuacion_integracion.consulta_fk')
-            ->join('evualuacion_tecnica', function ($join) {
+            ->leftjoin('evualuacion_tecnica', function ($join) {
                 $join->on('consulta_indigena.id', '=', 'evualuacion_tecnica.consulta_fk');
                 $join->on('evualuacion_tecnica.tipo_documento', '=', DB::raw("'formato_interno'"));
             })
-            ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
+            ->leftjoin('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
             ->select('consulta_indigena.id', 'consulta_indigena.folio', 'consulta_indigena.created_at', 'consulta_indigena.status', 'consulta_indigena.nombre', 'consulta_indigena.primerApellido as primer_apellido', 'consulta_indigena.segundoApellido as segundo_apellido', 'c_instrumento.descripcion as instrumento', 'evualuacion_integracion.evaluador_pgot_fk', 'evualuacion_integracion.evaluador_pgd_fk', 'evualuacion_tecnica.tipo_documento as tipo')
             ->selectRaw("tipoConsulta as tipo_consulta")
             ->selectRaw("'formato_interno' as tipo_documento")
             ->whereIn('consulta_indigena.status', [5,100,101,102,103,104]);
 
         $cedulas = Cedula::leftJoin('evualuacion_integracion', 'cedulas.id', '=', 'evualuacion_integracion.consulta_fk')
-            ->join('evualuacion_tecnica', function ($join) {
+            ->leftjoin('evualuacion_tecnica', function ($join) {
                 $join->on('cedulas.id', '=', 'evualuacion_tecnica.consulta_fk');
                 $join->on('evualuacion_tecnica.tipo_documento', '=', DB::raw("'cedula'"));
             })
-            ->join('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
+            ->leftjoin('c_instrumento', 'evualuacion_tecnica.instrumento_fk', '=', 'c_instrumento.id')
             ->select('cedulas.id', 'cedulas.folio', 'cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido', 'cedulas.segundo_apellido', 'c_instrumento.descripcion as instrumento', 'evualuacion_integracion.evaluador_pgot_fk', 'evualuacion_integracion.evaluador_pgd_fk', 'evualuacion_tecnica.tipo_documento as tipo')
             ->selectRaw("null as tipo_consulta")
             ->selectRaw("'cedula' as tipo_documento")
             ->whereIn('cedulas.status', [5,100,101,102,103,104])
             ->union($formato_interno)
-            ->orderByDesc('id')
+            ->orderBy('status')
+            ->orderByDesc('folio')
             ->paginate($perPage);
 
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
+        
+        $currentPage = $cedulas->currentPage();
+        $first_page = ($currentPage-5 > 0) ? $currentPage-5 : 1;
+        if( ($currentPage+5) >= $page_number && $currentPage < $page_number ){
+            $last_page = $page_number;
+        } elseif($currentPage+5 < $page_number ){
+            $last_page = $currentPage+5;
+        } else {
+            $last_page = $page_number;
+        }
 
         return view('ipdp.admin_anexo_participacion', [
             'rol_usuario' => $rol_usuario,
             'page_number' => $page_number,
+            'first_page' => $first_page,
+            'last_page' => $last_page,
             'cedulas' => $cedulas
         ]);
     }
@@ -546,6 +810,60 @@ class AdministracionController extends Controller
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
+        $currentPage = $cedulas->currentPage();
+        $first_page = ($currentPage-5 > 0) ? $currentPage-5 : 1;
+        if( ($currentPage+5) >= $page_number && $currentPage < $page_number ){
+            $last_page = $page_number;
+        } elseif($currentPage+5 < $page_number ){
+            $last_page = $currentPage+5;
+        } else {
+            $last_page = $page_number;
+        }
+
+        $temas = EvaluacionAnalisisTemas::get()->toArray();
+        $parametros = self::obtenerParametrosValoracionTecnica();
+
+        return view('ipdp.admin_analisis', [
+            'page_number' => $page_number,
+            'first_page' => $first_page,
+            'last_page' => $last_page,
+            'cedulas' => $cedulas,
+            'parametros' => $parametros,
+            'temas' => $temas
+        ]);
+    }
+
+    function evaluacionAnalisisBuscar(Request $request)
+    {
+
+        if (Auth::check() && (Auth::user()->rol != 'analisis' && Auth::user()->rol != 'administracion')) {
+            return redirect()->route('administracion.home')->with('status', 'Usuario Registrado con exito!');
+        }
+
+        $perPage = 10;
+        $estados_validos = [1, 101];
+
+        $query_filter = ' folio LIKE \'%'.$request->numero_folio.'%\'';
+        
+        $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
+            ->whereRaw($query_filter)
+            ->select('id', 'folio', 'created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
+            ->selectRaw("tipoConsulta as tipo_consulta")
+            ->selectRaw("'formato_interno' as tipo_documento")
+            ->orderByDesc('id');
+
+        $cedulas = Cedula::whereIn('status', $estados_validos)
+            ->whereRaw($query_filter)
+            ->select('cedulas.id', 'cedulas.folio', 'cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido')
+            ->selectRaw("null as tipo_consulta")
+            ->selectRaw("'cedula' as tipo_documento")
+            ->union($formatos_interno)
+            ->orderByDesc('id')
+            ->paginate($perPage);
+
+        $total = $cedulas->total();
+        $page_number = round($total / $perPage);
+
         $temas = EvaluacionAnalisisTemas::get()->toArray();
         $parametros = self::obtenerParametrosValoracionTecnica();
 
@@ -553,7 +871,8 @@ class AdministracionController extends Controller
             'page_number' => $page_number,
             'cedulas' => $cedulas,
             'parametros' => $parametros,
-            'temas' => $temas
+            'temas' => $temas,
+            'numero_folio' => $request->numero_folio
         ]);
     }
 
@@ -584,10 +903,58 @@ class AdministracionController extends Controller
         $total = $cedulas->total();
         $page_number = round($total / $perPage);
 
+        $currentPage = $cedulas->currentPage();
+        $first_page = ($currentPage-5 > 0) ? $currentPage-5 : 1;
+        if( ($currentPage+5) >= $page_number && $currentPage < $page_number ){
+            $last_page = $page_number;
+        } elseif($currentPage+5 < $page_number ){
+            $last_page = $currentPage+5;
+        } else {
+            $last_page = $page_number;
+        }
+
         return view('ipdp.admin_recepcion', [
             'page_number' => $page_number,
+            'first_page' => $first_page,
+            'last_page' => $last_page,
             'cedulas' => $cedulas
             // 'parametros' => $parametros
+        ]);
+    }
+
+    function evaluacionRecepcionBuscar(Request $request)
+    {
+
+        if (Auth::check() && (Auth::user()->rol != 'recepcion' && Auth::user()->rol != 'administracion')) {
+            return redirect()->route('administracion.home')->with('status', 'Usuario sin permisos para reproducir este modulo!');
+        }
+
+        $perPage = 10;
+        $estados_validos = [1, 101];
+
+        $formatos_interno = FormatoInterno::whereIn('status', $estados_validos)
+            ->select('id', 'folio', 'created_at', 'status', 'nombre', 'primerApellido as primer_apellido')
+            ->selectRaw("tipoConsulta as tipo_consulta")
+            ->selectRaw("'formato_interno' as tipo_documento")
+            ->where('folio','like','%'.$request->numero_folio.'%')
+            ->orderByDesc('id');
+
+        $cedulas = Cedula::whereIn('status', $estados_validos)
+            ->select('cedulas.id', 'cedulas.folio', 'cedulas.created_at', 'cedulas.status', 'cedulas.nombre', 'cedulas.primer_apellido')
+            ->selectRaw("null as tipo_consulta")
+            ->selectRaw("'cedula' as tipo_documento")
+            ->where('folio','like','%'.$request->numero_folio.'%')            
+            ->union($formatos_interno)
+            ->orderByDesc('id')
+            ->paginate($perPage);
+
+        $total = $cedulas->total();
+        $page_number = round($total / $perPage);
+
+        return view('ipdp.admin_recepcion', [
+            'page_number' => $page_number,
+            'cedulas' => $cedulas,
+            'numero_folio' => $request->numero_folio
         ]);
     }
 
@@ -752,7 +1119,7 @@ class AdministracionController extends Controller
         } elseif (isset($evaluacion_analisis->motivo_rechazo)) {
             $response['observaciones'] = $evaluacion_analisis->motivo_rechazo;
         } else {
-            abort(404);
+            $response['observaciones'] = '';
         }
 
         $temas = DB::select("SELECT
@@ -1027,5 +1394,257 @@ class AdministracionController extends Controller
         return view('ipdp.admin_consulta_publica_confirmacion', [
             'numero_folio' => $numero_folio
         ]);
+    }
+
+    function generaPdfFormatoInterno(){
+        $spreadsheet = new Spreadsheet();
+
+        $formato_interno = FormatoInterno::whereIn('status', [5,100,101,102,103,104,105])
+        ->orderBy('status')
+        ->orderByDesc('folio')
+        ->get();
+                    
+        // Set document properties
+        $spreadsheet->getProperties()->setCreator('Maarten Balliauw')
+            ->setLastModifiedBy('Daniel Gutierrez')
+            ->setTitle('Office 2007 XLSX Test Document')
+            ->setSubject('Office 2007 XLSX Test Document')
+            ->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')
+            ->setKeywords('office 2007 openxml php')
+            ->setCategory('Test result file');
+        
+        $row_number = 1;
+        $spreadsheet->setActiveSheetIndex(0)
+        ->setCellValue('A'.$row_number, "ID")
+        ->setCellValue('B'.$row_number, "FOLIO")
+        ->setCellValue('C'.$row_number, "STATUS")
+        ->setCellValue('D'.$row_number, "TIPO CONSULTA")
+        ->setCellValue('E'.$row_number, "FECHA SOLICITUD")
+        ->setCellValue('F'.$row_number, "NOMBRE COMPLETO")
+        ->setCellValue('G'.$row_number, "CORREO")
+        ->setCellValue('H'.$row_number, "TELEFONO")
+        ->setCellValue('I'.$row_number, "TIENE DATOS PARTICIPANTE")
+        ->setCellValue('J'.$row_number, "ES REPRESENTANTE")
+        ->setCellValue('K'.$row_number, "TIPO AUTORIDAD")
+        ->setCellValue('L'.$row_number, "NOMBRE PUEBLO COMUNIDAD")
+        ->setCellValue('M'.$row_number, "TIPO ORGANIZACION")
+        ->setCellValue('N'.$row_number, "NOMBRE ORGANIZACION")
+        ->setCellValue('O'.$row_number, "NOMBRE")
+        ->setCellValue('P'.$row_number, "PRIMER APELLIDO")
+        ->setCellValue('Q'.$row_number, "SEGUNDO APELLIDO")
+        ->setCellValue('R'.$row_number, "EDAD")
+        ->setCellValue('S'.$row_number, "OCUPACION")
+        ->setCellValue('T'.$row_number, "GENERO")
+        ->setCellValue('U'.$row_number, "CELULAR")
+        ->setCellValue('V'.$row_number, "CALLE")
+        ->setCellValue('W'.$row_number, "NUM EXTERIOR")
+        ->setCellValue('X'.$row_number, "NUM INTERIOR")
+        ->setCellValue('Y'.$row_number, "MANZANA")
+        ->setCellValue('Z'.$row_number, "CP")
+        ->setCellValue('AA'.$row_number, "ALCALDIA")
+        ->setCellValue('AB'.$row_number, "COLONIA")
+        ->setCellValue('AC'.$row_number, "TIPO PARTICIPACION")
+        ->setCellValue('AD'.$row_number, "PARTICIPACION OTRO")
+        ->setCellValue('AE'.$row_number, "NOMBRE ACTIVIDAD")
+        ->setCellValue('AF'.$row_number, "FECHA ACTIVIDAD")
+        ->setCellValue('AG'.$row_number, "LUGAR ACTIVIDAD")
+        ->setCellValue('AH'.$row_number, "NUMERO DOCUMENTOS")
+        ->setCellValue('AI'.$row_number, "TIPO DOCUMENTOS");
+        
+        $row_number++;
+
+        foreach ($formato_interno as $formato) {
+            
+            $spreadsheet->setActiveSheetIndex(0)
+                        ->setCellValue('A'.$row_number, $formato->id)
+                        ->setCellValue('B'.$row_number, $formato->folio)
+                        ->setCellValue('C'.$row_number, self::getEstadoSolicitud($formato->status))
+                        ->setCellValue('D'.$row_number, $formato->tipoConsulta)
+                        ->setCellValue('E'.$row_number, $formato->fechaSolicitud)
+                        ->setCellValue('F'.$row_number, $formato->nombreCompleto)
+                        ->setCellValue('G'.$row_number, $formato->correo)
+                        ->setCellValue('H'.$row_number, $formato->telefono)
+                        ->setCellValue('I'.$row_number, $formato->tieneDatosParticipante)
+                        ->setCellValue('J'.$row_number, $formato->esRepresentante)
+                        ->setCellValue('K'.$row_number, $formato->tipoAutoridad)
+                        ->setCellValue('L'.$row_number, $formato->nombrePuebloComunidad)
+                        ->setCellValue('M'.$row_number, $formato->tipoOrganizacion)
+                        ->setCellValue('N'.$row_number, $formato->nombreOrganizacion)
+                        ->setCellValue('O'.$row_number, $formato->nombre)
+                        ->setCellValue('P'.$row_number, $formato->primerApellido)
+                        ->setCellValue('Q'.$row_number, $formato->segundoApellido)
+                        ->setCellValue('R'.$row_number, $formato->edad)
+                        ->setCellValue('S'.$row_number, $formato->ocupacion)
+                        ->setCellValue('T'.$row_number, $formato->genero)
+                        ->setCellValue('U'.$row_number, $formato->celular)
+                        ->setCellValue('V'.$row_number, $formato->calle)
+                        ->setCellValue('W'.$row_number, $formato->numExterior)
+                        ->setCellValue('X'.$row_number, $formato->numInterior)
+                        ->setCellValue('Y'.$row_number, $formato->manzana)
+                        ->setCellValue('Z'.$row_number, $formato->cp)
+                        ->setCellValue('AA'.$row_number, $formato->alcaldia)
+                        ->setCellValue('AB'.$row_number, $formato->colonia)
+                        ->setCellValue('AC'.$row_number, $formato->tipoParticipacion)
+                        ->setCellValue('AD'.$row_number, $formato->participacionOtro)
+                        ->setCellValue('AE'.$row_number, $formato->nombreActividad)
+                        ->setCellValue('AF'.$row_number, $formato->fechaActividad)
+                        ->setCellValue('AG'.$row_number, $formato->lugarActividad)
+                        ->setCellValue('AH'.$row_number, $formato->numeroDocumentos)
+                        ->setCellValue('AI'.$row_number, $formato->tipoDocumentos);
+        
+            $row_number++;
+        }
+
+        
+        // Rename worksheet
+        $filename = "REGISTROS FORMATO INTERNO";
+        $spreadsheet->getActiveSheet()->setTitle('Simple');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $spreadsheet->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Xlsx)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+
+    }
+    
+    function generaPdfCedulas(){
+        $spreadsheet = new Spreadsheet();
+
+        $cedulas = Cedula::whereIn('status', [5,100,101,102,103,104,105])
+                    ->orderBy('status')
+                    ->orderByDesc('folio')
+                    ->get();
+                    
+        // Set document properties
+        $spreadsheet->getProperties()->setCreator('Maarten Balliauw')
+            ->setLastModifiedBy('Daniel Gutierrez')
+            ->setTitle('Office 2007 XLSX Test Document')
+            ->setSubject('Office 2007 XLSX Test Document')
+            ->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')
+            ->setKeywords('office 2007 openxml php')
+            ->setCategory('Test result file');
+        
+        $row_number = 1;
+        $spreadsheet->setActiveSheetIndex(0)
+                ->setCellValue('A'.$row_number, "ORIGEN")
+                ->setCellValue('B'.$row_number, "FOLIO")
+                ->setCellValue('C'.$row_number, "STATUS")
+                ->setCellValue('D'.$row_number, "NOMBRE")
+                ->setCellValue('E'.$row_number, "PRIMER APELLIDO")
+                ->setCellValue('F'.$row_number, "SEGUNDO APELLIDO")
+                ->setCellValue('G'.$row_number, "EDAD")
+                ->setCellValue('H'.$row_number, "OCUPACION")
+                ->setCellValue('I'.$row_number, "GENERO")
+                ->setCellValue('J'.$row_number, "CORREO")
+                ->setCellValue('K'.$row_number, "CELULAR")
+                ->setCellValue('L'.$row_number, "CALLE")
+                ->setCellValue('M'.$row_number, "NUM EXTERIOR")
+                ->setCellValue('N'.$row_number, "NUM INTERIOR")
+                ->setCellValue('O'.$row_number, "MANZANA")
+                ->setCellValue('P'.$row_number, "CP")
+                ->setCellValue('Q'.$row_number, "ALCALDIA")
+                ->setCellValue('R'.$row_number, "COLONIA")
+                ->setCellValue('S'.$row_number, "REPRESENTANTE")
+                ->setCellValue('T'.$row_number, "INSTRUMENTO OBSERVAR")
+                ->setCellValue('U'.$row_number, "COMENTARIOS")
+                ->setCellValue('V'.$row_number, "INCLUYE_DOCUMENTOS")
+                ->setCellValue('W'.$row_number, "NUMERO_DOCUMENTOS")
+                ->setCellValue('X'.$row_number, "CONOCIMIENTO_DATOS_PERSONALES");
+        
+        $row_number++;
+
+        foreach ($cedulas as $cedula) {
+            
+            $spreadsheet->setActiveSheetIndex(0)
+                        ->setCellValue('A'.$row_number, $cedula->origen)
+                        ->setCellValue('B'.$row_number, $cedula->folio)
+                        ->setCellValue('C'.$row_number, self::getEstadoSolicitud($cedula->status))
+                        ->setCellValue('D'.$row_number, $cedula->nombre)
+                        ->setCellValue('E'.$row_number, $cedula->primer_apellido)
+                        ->setCellValue('F'.$row_number, $cedula->segundo_apellido)
+                        ->setCellValue('G'.$row_number, $cedula->edad)
+                        ->setCellValue('H'.$row_number, $cedula->ocupacion)
+                        ->setCellValue('I'.$row_number, $cedula->genero)
+                        ->setCellValue('J'.$row_number, $cedula->correo)
+                        ->setCellValue('K'.$row_number, $cedula->celular)
+                        ->setCellValue('L'.$row_number, $cedula->calle)
+                        ->setCellValue('M'.$row_number, $cedula->num_exterior)
+                        ->setCellValue('N'.$row_number, $cedula->num_interior)
+                        ->setCellValue('O'.$row_number, $cedula->manzana)
+                        ->setCellValue('P'.$row_number, $cedula->cp)
+                        ->setCellValue('Q'.$row_number, $cedula->alcaldia)
+                        ->setCellValue('R'.$row_number, $cedula->colonia)
+                        ->setCellValue('S'.$row_number, $cedula->representante)
+                        ->setCellValue('T'.$row_number, $cedula->instrumento_observar)
+                        ->setCellValue('U'.$row_number, $cedula->comentarios)
+                        ->setCellValue('V'.$row_number, $cedula->incluye_documentos)
+                        ->setCellValue('W'.$row_number, $cedula->numero_documentos)
+                        ->setCellValue('X'.$row_number, $cedula->conocimiento_datos_personales);
+        
+            $row_number++;
+        }
+
+        
+        // Rename worksheet
+        $filename = "REGISTROS CONSULTA PUBLICA";
+        $spreadsheet->getActiveSheet()->setTitle('Simple');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $spreadsheet->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Xlsx)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+
+    }
+
+    function getEstadoSolicitud($estado_numerico){
+        if( $estado_numerico == 1 ){
+            $estado_solicitud = "En análisis";
+        } elseif( $estado_numerico == 2 ){
+            $estado_solicitud = "En revisión técnica";
+        } elseif( $estado_numerico == 3 ){
+            $estado_solicitud = "En revisión jurídica";
+        } elseif( $estado_numerico == 4 ){
+            $estado_solicitud = "Integrada";
+        } elseif( $estado_numerico == 5){
+            $estado_solicitud = "Anexo de Participación";
+        } elseif( $estado_numerico == 101){
+            $estado_solicitud = "Solicitud Rechazada por equipo análisis";                                        
+        } elseif( $estado_numerico == 102){
+            $estado_solicitud = "Solicitud Rechazada en valoración Técnica";
+        } elseif( $estado_numerico == 103){
+            $estado_solicitud = "Solicitud Rechazada en valoración Jurídica";
+        } elseif( $estado_numerico == 104){
+            $estado_solicitud = "Solicitud Rechazada por integrador";
+        }
+
+        return $estado_solicitud;
     }
 }

@@ -759,20 +759,22 @@
         personaParticipanteTab.show();
     });
 
-    $("#btnSigFormaParticipacion").click(function() {
-        if (!$("#formFormaParticipacion")[0].checkValidity()) {
-            $("#formFormaParticipacion")[0].classList.add('was-validated');
-            formaParticipacionTab.show();
-        } else if (!$("#formTipoConsulta")[0].checkValidity()) {
-            $("#formTipoConsulta")[0].classList.add('was-validated');
-            tipoConsultaTab.show();
-        } else if (!$("#frmTipoComunidadOrganizacion")[0].checkValidity()) {
-            $("#frmTipoComunidadOrganizacion")[0].classList.add('was-validated');
-            comunidadTab.show();
-        } else {
-            registrarConsulta();
-            // formaParticipacionTab.show();
-        }
+    $("#btnSigFormaParticipacion").click(function(event) {
+        if(!event.detail || event.detail == 1){
+	        if (!$("#formFormaParticipacion")[0].checkValidity()) {
+	            $("#formFormaParticipacion")[0].classList.add('was-validated');
+	            formaParticipacionTab.show();
+	        } else if (!$("#formTipoConsulta")[0].checkValidity()) {
+	            $("#formTipoConsulta")[0].classList.add('was-validated');
+	            tipoConsultaTab.show();
+	        } else if (!$("#frmTipoComunidadOrganizacion")[0].checkValidity()) {
+	            $("#frmTipoComunidadOrganizacion")[0].classList.add('was-validated');
+	            comunidadTab.show();
+	        } else {
+	            registrarConsulta();
+	            // formaParticipacionTab.show();
+		}
+        }		
     });
 
     $("#inputCP").change(function() {
@@ -946,8 +948,8 @@
             "tipoDocumentos": tipoDocumentos
         };
 
-        console.warn(requestBody);
-
+        //console.warn(requestBody);
+        showLoader();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -963,9 +965,9 @@
                 if (console && console.log) {
                     console.log("La solicitud se ha completado correctamente.");
                 }
+		hideLoader();
+		window.location.href = data.confirmacion_url;
 
-                window.location.href = "{{ route('consultaIndigena.confirmacion',['numero_folio' => $numero_folio ]) }}";
-                // $("#status").text("READY!");
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 if (console && console.log) {
@@ -1241,6 +1243,6 @@
         });
 
     }
-
+//showLoader();
 </script>
 @endsection

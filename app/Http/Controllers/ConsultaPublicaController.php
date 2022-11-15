@@ -19,11 +19,33 @@ use Illuminate\Support\Facades\Log;
 
 class ConsultaPublicaController extends Controller
 {
-    
+
+    function getFolio(){
+        $numero_folio = 0;
+        $folio_cedula = DB::select("select random_num from (
+                                        select floor(rand() * (1000000-100000)+100000) as random_num 
+                                        union
+                                        select floor(rand() * (1000000-100000)+100000) as random_num
+                                    ) as numbers
+                                    where numbers.random_num not in (select folio from cedulas)
+                                    limit 1;");
+        foreach ($folio_cedula as $folio) {
+            $numero_folio=$folio->random_num;
+        }                                    
+        return $numero_folio;
+    }
+
+    function getCountFolio($numero_folio){
+        return DB::table('cedulas')->where('folio',$numero_folio)->count();
+    }
+
+
     function registrar() {
         // Genera Numero de Folio
-        $numero_folio = mt_rand(100000, 999999);
-        return view('ipdp.consulta_publica', [
+        //($numero_folio = mt_rand(100000, 999999);
+        $numero_folio=self::getFolio();
+
+	return view('ipdp.consulta_publica', [
             'numero_folio' => $numero_folio
         ]);
     }
@@ -122,6 +144,8 @@ class ConsultaPublicaController extends Controller
         
         App::setLocale('es');
 
+        $folio_num=$request->folio;
+
         $validatedData = $request->validate([
             'folio' => 'required|digits:6',
             'nombre' => 'required',
@@ -148,12 +172,19 @@ class ConsultaPublicaController extends Controller
         ]);
 
         $validatedData['origen'] = 'publica';
-        $show = Cedula::create($validatedData);
+
+        if((self::getCountFolio($folio_num))>0){
+            $folio_num=self::getFolio();
+            $validatedData['folio'] = $folio_num;
+        }
+
+	$show = Cedula::create($validatedData);
 
         $details = [
             'title' => '¡Gracias por tu participación!',
-            'folio' => $request->folio,
-            'consulta_folio_url' => route('ipdp.buscar',['folio' => $request->folio])
+            'folio' => $folio_num,
+	    'consulta_folio_url' => route('ipdp.buscar',['folio' => $folio_num]),
+            'confirmacion_url' => route('cedula.confirmacion',['numero_folio' => $folio_num])	    
         ];
        
         try {
@@ -163,7 +194,7 @@ class ConsultaPublicaController extends Controller
             Log::error($e);
         }
 
-        return response()->json([]);
+        return response()->json($details);
 
     }
 

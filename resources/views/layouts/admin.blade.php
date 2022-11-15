@@ -49,6 +49,20 @@
             font-size: 23px;
         }
 
+        .ajax_loader{
+            --ldr-backdrop-zindex:1050;
+            --ldr-backdrop-bg:#000;
+            --ldr-backdrop-opacity:0.5;
+            position:fixed;
+            top:0;
+            left:0;
+            z-index:var(--ldr-backdrop-zindex);
+            width:100vw;
+            height:100vh;
+            background-color:var(--ldr-backdrop-bg);
+            opacity:var(--ldr-backdrop-opacity);        
+        }
+
     </style>
 
     @yield('head')
@@ -56,6 +70,11 @@
 
 <body>
 
+<div class="ajax_loader d-none d-flex justify-content-center" id="ajaxloader" name="ajaxloader">
+    <div class="spinner-border text-success " style="width: 6rem; height: 6rem; margin: auto;" role="status">
+    <span class="sr-only">Loading...</span>
+    </div>
+</div>
 
     <!-- Begin page -->
     <div id="layout-wrapper">
@@ -142,12 +161,12 @@
             <div class="navbar-brand-box">
                 
                 <!-- Light Logo-->
-                <a href="{{ route('administracion.home') }}" class="logo logo-light" style="background-color: white; padding: 10px;">
+                <a href="{{ route('administracion.home') }}" class="logo logo-light" style="padding: 10px;">
                     <span class="logo-sm">
-                        <img src="{{ asset('/imgs/adip-header2.svg') }}" alt="" height="200">
+                        <img src="{{ asset('/imgs/logo-light.svg') }}" alt="" height="200">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('/imgs/adip-header2.svg') }}" alt="" height="50">
+                        <img src="{{ asset('/imgs/logo-light.svg') }}" alt="" height="50">
                     </span>
                 </a>
                 <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
@@ -462,6 +481,14 @@
     <!-- JAVASCRIPT -->
     <script src="{{asset('css/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('css/jquery-3.6.0.min.js')}}"></script>
+    <script type="text/javascript">
+        function hideLoader(){
+            $("#ajaxloader").removeClass('d-inline').addClass('d-none');
+        }
+        function showLoader(){
+            $("#ajaxloader").removeClass('d-none').addClass('d-inline');
+        }
+    </script>
     @yield('js')
 </body>
 

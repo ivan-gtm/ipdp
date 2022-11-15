@@ -17,7 +17,7 @@
 <div class="row">
     <div class="col-12">
         <strong>
-            Instrucciones: Todos los campos marcados con () son obligatorios.
+            Instrucciones: Todos los campos marcados con (<label class="label-red">*</label>) son obligatorios.
         </strong>
     </div>
     <div class="col-12">
@@ -545,7 +545,8 @@
 
             $("#notification-center").html("").append(element).focus();
 
-        } else {
+	} else {
+            $("#finalizarRegistro").removeAttr("disabled");		
             modalConsentimientoDatos.show();
         }
     });
@@ -554,12 +555,15 @@
         datosGeneralesTab.show();
     });
 
-    $("#finalizarRegistro").click(function() {
-        if (!$("#conocimientoDatosPersonales")[0].checkValidity()) {
-            $("#conocimientoDatosPersonales")[0].classList.add('was-validated');
-        } else {
-            registrarCedula();
-        }
+    $("#finalizarRegistro").click(function(event) {
+        if(!event.detail || event.detail == 1){     
+	        if (!$("#conocimientoDatosPersonales")[0].checkValidity()) {
+	            $("#conocimientoDatosPersonales")[0].classList.add('was-validated');
+	        } else {
+	            $(this).attr("disabled", "disabled");
+    		    registrarCedula();
+		}
+	}
     });
 
     $("#inputCP").change(function() {
@@ -567,8 +571,8 @@
         var codigo_postal = $("#inputCP").val();
         var codigo_postal_url = base_url + codigo_postal;
 
-        console.warn("codigo_postal_url");
-        console.warn(codigo_postal_url);
+        //console.warn("codigo_postal_url");
+        //console.warn(codigo_postal_url);
 
         $.ajaxSetup({
             headers: {
@@ -585,9 +589,9 @@
                     .remove()
                     .end();
 
-                if (console && console.log) {
+                /* if (console && console.log) {
                     console.log("La solicitud se ha completado correctamente.");
-                }
+		}*/
 
                 if (typeof data.alcaldia != 'undefined' && data.alcaldia.length > 0) {
                     $('#inputAlcaldia').val(data.alcaldia);
@@ -602,7 +606,7 @@
                     });
                 }
 
-                console.log(data.alcaldia);
+               // console.log(data.alcaldia);
 
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
@@ -668,7 +672,9 @@
             "conocimiento_datos_personales": conocimientoDatosPersonales,
         };
 
-        console.warn(requestBody);
+        //console.warn(requestBody);
+        modalConsentimientoDatos.hide();
+        showLoader();
 
         $.ajaxSetup({
             headers: {
@@ -682,21 +688,22 @@
                 dataType: 'json'
             })
             .done(function(data, textStatus, jqXHR) {
-                if (console && console.log) {
+                /*if (console && console.log) {
                     console.log("La solicitud se ha completado correctamente.");
-                }
+		}*/
+                hideLoader();
+                window.location.href = data.confirmacion_url;
 
-                window.location.href = "{{ route('administracion.confirmacionConsultaPublica',['numero_folio' => $numero_folio]) }}";
-                
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
-                
+                /*
                 console.log( "jqXHR" );
                 console.log( jqXHR );
                 console.log( "textStatus" );
                 console.log( textStatus );
                 console.log( "errorThrown" );
-                console.log( errorThrown );
+		console.log( errorThrown );
+		*/
 
                 if( ( jqXHR.status == 422 )
                     || ( jqXHR.statusText == "Unprocessable Content" && jqXHR.status == 422 )
@@ -957,6 +964,8 @@
         });
 
     }
+
+//showLoader();
 
 </script>
 @endsection

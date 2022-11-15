@@ -8,6 +8,49 @@
 
 @section('content')
 <div class="row">
+
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-6">
+                <form action="{{ route('administracion.anexosParticipacion') }}" method="get">
+                    <div class="form-group"  style="display: none;">
+                        <label for="exampleFormControlSelect1">Example select</label>
+                        <select class="form-control" id="exampleFormControlSelect1" name="tipoSolicitud">
+                            <option value="5">
+                                Pendiente de evaluación PDG
+                            </option>
+                                        
+                            <option value="101">
+                                Solicitud Rechazada por equipo análisis
+                            </option>
+                                        
+                            <option value="102">
+                                Solicitud Rechazada en valoración Técnica
+                            </option>
+                                        
+                            <option value="103">
+                                Solicitud Rechazada en valoración Jurídica
+                            </option>
+                                        
+                            <option value="104">
+                                Solicitud Rechazada por integrador
+                            </option>
+                        </select>
+                    </div>
+                    <input type="submit" style="display: none;">
+                    <a href="{{ route('administracion.formatoInterno.pdf') }}" class="btn btn-success" download>
+                        <i class="fa-regular fa-file-excel"></i>
+                        FORMATO INTERNO
+                    </a>
+                    <a href="{{ route('administracion.cedulas.pdf') }}" class="btn btn-success" download>
+                        <i class="fa-regular fa-file-excel"></i>
+                        CONSULTA PUBLICA
+                    </a>
+                </form>
+            </div>
+        </div>
+        <br>
+    </div>
     <div class="col-lg-12">
         <div class="card" id="ticketsList">
             <div class="card-header border-0">
@@ -49,9 +92,9 @@
                                 </td>
                                 <td>
                                     @if( $cedula->tipo_documento == 'cedula' || ( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA PUBLICA') )
-                                    <span class="badge bg-info text-uppercase">Consulta Pública</span>
+                                        <span class="badge bg-info text-uppercase">Consulta Pública</span>
                                     @elseif( $cedula->tipo_documento == 'formato_interno' && $cedula->tipo_consulta == 'CONSULTA INDÍGENA' )
-                                    <span class="badge bg-dark text-uppercase">Consulta Indigena</span>
+                                        <span class="badge bg-dark text-uppercase">Consulta Indigena</span>
                                     @endif
                                 </td>
                                 <td>
@@ -75,7 +118,7 @@
                                     <!-- {{ $cedula->instrumento }} -->
                                     @if( $cedula->status == 5)
                                         <span class="badge text-bg-success text-uppercase">
-                                            Pendiente de evaluación PDG
+                                            Anexo de Participación
                                         </span>
                                     @elseif( $cedula->status == 101)
                                         <span class="badge bg-danger text-uppercase">
@@ -167,22 +210,22 @@
                 <div class="d-flex justify-content-end mt-2">
                     <div class="pagination-wrap hstack gap-2" style="display: flex;">
                         @if( $cedulas->onFirstPage() == false)
-                        <a class="page-item pagination-prev disabled" href="{{ $cedulas->previousPageUrl() }}">
-                            Anterior
-                        </a>
+                            <a class="page-item pagination-prev disabled" href="{{ $cedulas->previousPageUrl() }}">
+                                Anterior
+                            </a>
                         @endif
                         <ul class="pagination listjs-pagination mb-0">
-                            @for ($i = 1; $i <= $page_number; $i++) @if( $cedulas->currentPage() ==
-                                $i)
-                                <li class="active">
-                                    @else
-                                <li>
-                                    @endif
+                            @for($i = $first_page; $i <= $last_page; $i++) 
+                                @if( $cedulas->currentPage() == $i)
+                                    <li class="active">
+                                @else
+                                    <li>
+                                @endif
                                     <a class="page" href="{{ $cedulas->url($i) }}" data-i="1" data-page="8">
                                         {{ $i }}
                                     </a>
                                 </li>
-                                @endfor
+                            @endfor
                         </ul>
                         @if( $cedulas->hasMorePages() )
                         <a class="page-item pagination-next" href="{{ $cedulas->nextPageUrl() }}">

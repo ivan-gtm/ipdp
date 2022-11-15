@@ -15,28 +15,16 @@
                     <div class="carousel-item active">
                         <a href="https://www.ipdp.cdmx.gob.mx/">
                             <img class="d-block w-100" src="{{ asset('imgs/slider_1.jpeg') }}" alt="First slide" />
-                            <!-- <div class="carousel-caption d-none d-md-block">
-                                <h5>Noticia de Ejemplo 1</h5>
-                                <p>Contenido de ejempo para Slide 1.</p>
-                            </div> -->
                         </a>
                     </div>
                     <div class="carousel-item">
                         <a href="https://www.ipdp.cdmx.gob.mx/">
                             <img class="d-block w-100" src="{{ asset('imgs/slider_2.jpeg') }}" alt="Second slide" />
-                            <!-- <div class="carousel-caption d-none d-md-block">
-                                <h5>Noticia de Ejemplo 2</h5>
-                                <p>Contenido de ejempo para Slide 2.</p>
-                            </div> -->
                         </a>
                     </div>
                     <div class="carousel-item">
                         <a href="https://www.ipdp.cdmx.gob.mx/">
                             <img class="d-block w-100" src="{{ asset('imgs/slider_3.jpeg') }}" alt="Third slide" />
-                            <!-- <div class="carousel-caption d-none d-md-block">
-                                <h5>Noticia de Ejemplo 3</h5>
-                                <p>Contenido de ejempo para Slide 3.</p>
-                            </div> -->
                         </a>
                     </div>
                 </div>
@@ -55,14 +43,14 @@
     <div class="col-6">
         <div class="row" style="background-color: rgb(236, 236, 236);padding: 109px 0px;border-radius: 10px;margin: 10px;margin-bottom: 70px;">
             <div class="col-12 text-center" style="padding-bottom: 30px;">
-                <h3 class="text-center">REGISTRO DE CEDULA</h3>
+                <h3 class="text-center">REGISTRO DE C&Eacute;DULA</h3>
                 Presenta tus Recomendaciones, Opiniones o Propuestas y participa en la consulta ciudadana que la CDMX te ofrece.
                 <br>
-                Da click en "REGISTRAR CEDULA" para presentar tu propuesta.
+                Da click en "REGISTRAR C&Eacute;DULA" para presentar tu propuesta.
             </div>
             <div class="col-8 offset-md-2">
                 <div class="d-grid col-12">
-                    <a class="btn btn-primary" href="{{ route('cedula.registrar') }}">REGISTRAR CEDULA</a>
+                    <a class="btn btn-primary" href="{{ route('cedula.registrar') }}">REGISTRAR C&Eacute;DULA</a>
                 </div>
             </div>
         </div>
@@ -74,7 +62,7 @@
                     <h3>SEGUIMIENTO DE FOLIOS</h3>
                     Si ya tienes un folio capturado. Consulta en esta sección, el progreso de tu cedula.
                     @csrf
-                    <input name="numero_folio" class="form-control" type="number" placeholder="Ingresa el numero de folio" style="margin-bottom: 10px; padding: 15px;">
+                    <input name="numero_folio" class="form-control" type="number" placeholder="Ingresa el n&uacute;mero de folio" style="margin-bottom: 10px; padding: 15px;">
                 </div>
                 <div class="col-8 offset-md-2 text-center">
                     ó

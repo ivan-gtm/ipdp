@@ -10,6 +10,30 @@
 @section('content')
 <div class="row">
     <div class="col-lg-12">
+        <form method="GET" action="{{route('administracion.evaluacionRecepcionBuscar')}}">
+            <div class="row" style="background-color: rgb(236, 236, 236); padding: 16px 0px; border-radius: 10px; margin: 10px;">
+                <div class="col-2 text-center">
+                    B&uacute;squeda por folio      
+                </div>
+                <div class="col-3 text-center">
+                    @if( isset($numero_folio) )
+                        <input name="numero_folio" class="form-control" type="number" value="{{ $numero_folio }}" placeholder="Ingresa el n&uacute;mero de folio">
+                    @else
+                        <input name="numero_folio" class="form-control" type="number" placeholder="Ingresa el n&uacute;mero de folio">
+                    @endif
+                </div>
+                <div class="col-1 text-center">
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary" type="button">CONSULTAR</button>
+                    </div>
+                </div>
+            </div>
+        </form>        
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
         <div class="card" id="ticketsList">
             <div class="card-header border-0">
                 <div class="d-flex align-items-center">
@@ -128,22 +152,22 @@
                 <div class="d-flex justify-content-end mt-2">
                     <div class="pagination-wrap hstack gap-2" style="display: flex;">
                         @if( $cedulas->onFirstPage() == false)
-                        <a class="page-item pagination-prev disabled" href="{{ $cedulas->previousPageUrl() }}">
-                            Anterior
-                        </a>
+                            <a class="page-item pagination-prev disabled" href="{{ $cedulas->previousPageUrl() }}">
+                                Anterior
+                            </a>
                         @endif
                         <ul class="pagination listjs-pagination mb-0">
-                            @for ($i = 1; $i <= $page_number; $i++) @if( $cedulas->currentPage() ==
-                                $i)
-                                <li class="active">
-                                    @else
-                                <li>
-                                    @endif
+                            @for($i = $first_page; $i <= $last_page; $i++) 
+                                @if( $cedulas->currentPage() == $i)
+                                    <li class="active">
+                                @else
+                                    <li>
+                                @endif
                                     <a class="page" href="{{ $cedulas->url($i) }}" data-i="1" data-page="8">
                                         {{ $i }}
                                     </a>
                                 </li>
-                                @endfor
+                            @endfor
                         </ul>
                         @if( $cedulas->hasMorePages() )
                         <a class="page-item pagination-next" href="{{ $cedulas->nextPageUrl() }}">

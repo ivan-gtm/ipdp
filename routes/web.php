@@ -6,6 +6,7 @@ use App\Http\Controllers\ConsultaPublicaController;
 use App\Http\Controllers\AdministracionController;
 use App\Http\Controllers\ConsultaIndigenaController;
 use App\Http\Controllers\CustomAuthController;
+use App\Http\Controllers\ReportesController;
 
 Route::get('/', [IPDPController::class, 'index'])->name('ipdp.home');
 Route::get('/obtener-colonias/{codigo_postal}', [ConsultaPublicaController::class, 'obtenerColonias'])->name('cedula.obtenerColonias');
@@ -76,8 +77,10 @@ Route::post('/borrar-archivo', [ConsultaPublicaController::class, 'borrarArchivo
 
     // ANEXOS PARTICIPACION
     Route::get('/administracion/anexos-participacion', [AdministracionController::class, 'anexosParticipacion'])->name('administracion.anexosParticipacion')->middleware('auth');
-    Route::get('/administracion/formato-interno/pdf', [AdministracionController::class, 'generaPdfFormatoInterno'])->name('administracion.formatoInterno.pdf')->middleware('auth');
-    Route::get('/administracion/cedulas/pdf', [AdministracionController::class, 'generaPdfCedulas'])->name('administracion.cedulas.pdf')->middleware('auth');
+    
+    // Reportes Excel
+    Route::get('/administracion/formato-interno/excel/{estados_cedula}', [ReportesController::class, 'generaExcelFormatoInterno'])->name('reportes.excel.formatoInterno')->middleware('auth');
+    Route::get('/administracion/cedulas/excel/{estado_numerico}', [ReportesController::class, 'generaExcelCedulas'])->name('reportes.excel.cedulas')->middleware('auth');
 
 // USUARIOS SISTEMA
     Route::get('/administracion/usuarios', [AdministracionController::class, 'usuariosSistema'])->name('usuariosSistema');

@@ -10,20 +10,71 @@
 <div class="row">
     <div class="col-lg-12">
         <form method="GET" action="{{route('administracion.evaluacionJuridicaBuscar')}}">
-            <div class="row" style="background-color: rgb(236, 236, 236); padding: 16px 0px; border-radius: 10px; margin: 10px;">
-                <div class="col-2 text-center">
-                    B&uacute;squeda por folio      
+            <div class="row" style="background-color: rgb(236, 236, 236); padding: 16px 0px; border-radius: 10px; margin: 10px 0px;">
+                <div class="col-6 text-left">
+                    B&uacute;squeda por folio<br>
+                    <div class="row">
+                        <div class="col-8">
+                            @if( isset($numero_folio) )
+                                <input name="numero_folio" class="form-control" type="number" value="{{ $numero_folio }}" placeholder="Ingresa el n&uacute;mero de folio">
+                            @else
+                                <input name="numero_folio" class="form-control" type="number" placeholder="Ingresa el n&uacute;mero de folio">
+                            @endif
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary" type="button">CONSULTAR</button>
+                        </div>
+                    </div>
+                    
                 </div>
-                <div class="col-3 text-center">
-                    @if( isset($numero_folio) )
-                        <input name="numero_folio" class="form-control" type="number" value="{{ $numero_folio }}" placeholder="Ingresa el n&uacute;mero de folio">
-                    @else
-                        <input name="numero_folio" class="form-control" type="number" placeholder="Ingresa el n&uacute;mero de folio">
-                    @endif
-                </div>
-                <div class="col-1 text-center">
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary" type="button">CONSULTAR</button>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    Excel de Valoración Jurídica
+                                </div>
+                                <div class="col-12 text-center">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="{{ route('reportes.excel.formatoInterno','3-103') }}" class="btn btn-success" download>
+                                                <i class="fa-regular fa-file-excel"></i>
+                                                FORMATO INTERNO
+                                            </a>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="{{ route('reportes.excel.cedulas','3-103') }}" class="btn btn-success" download>
+                                                <i class="fa-regular fa-file-excel"></i>
+                                                CONSULTA PUBLICA
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    Historico Completo
+                                </div>
+                                <div class="col-12 text-center">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="{{ route('reportes.excel.formatoInterno','1-2-3-4-5-100-101-102-103-104-105') }}" class="btn btn-success" download>
+                                                <i class="fa-regular fa-file-excel"></i>
+                                                FORMATO INTERNO
+                                            </a>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="{{ route('reportes.excel.cedulas','1-2-3-4-5-100-101-102-103-104-105') }}" class="btn btn-success" download>
+                                                <i class="fa-regular fa-file-excel"></i>
+                                                CONSULTA PUBLICA
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

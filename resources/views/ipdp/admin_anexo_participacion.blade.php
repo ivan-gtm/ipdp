@@ -38,11 +38,11 @@
                         </select>
                     </div>
                     <input type="submit" style="display: none;">
-                    <a href="{{ route('administracion.formatoInterno.pdf') }}" class="btn btn-success" download>
+                    <a href="{{ route('reportes.excel.formatoInterno','5-100-101-102-103-104-105') }}" class="btn btn-success" download>
                         <i class="fa-regular fa-file-excel"></i>
                         FORMATO INTERNO
                     </a>
-                    <a href="{{ route('administracion.cedulas.pdf') }}" class="btn btn-success" download>
+                    <a href="{{ route('reportes.excel.cedulas','5-100-101-102-103-104-105') }}" class="btn btn-success" download>
                         <i class="fa-regular fa-file-excel"></i>
                         CONSULTA PUBLICA
                     </a>
